@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://code.alibabatech.com/schema/dubbo
+                           http://code.alibabatech.com/schema/dubbo/dubbo.xsd" default-lazy-init="false">
+
+
+    <!--备付金消费者-->
+    <!--&lt;!&ndash;备付金基本信息&ndash;&gt;-->
+    <!--<dubbo:reference id="reserveManage" timeout="10000" interface="com.oriental.reserve.manage.ReserveManage" check="false" retries="0"/>-->
+    <!--银行交易获取情况-->
+    <dubbo:reference id="bankTransDownManage" timeout="10000" interface="com.oriental.reserve.manage.BankTransObtainManage" check="false" retries="0"/>
+    <!--文件上传-->
+    <dubbo:reference id="bankTransResolveManageInterface" timeout="10000" interface="com.oriental.reserve.manage.BankTransResolveManageInterface" check="false" retries="0"/>
+    <!--报表信息-->
+    <dubbo:reference id="reportManage" timeout="10000" interface="com.oriental.reserve.manage.ReportManage" check="false" retries="0"/>
+    <!--银行真实交易管理-->
+    <dubbo:reference id="bankTransDetailInterface" timeout="10000" interface="com.oriental.reserve.api.trans.BankTransDetailInterface" check="false" retries="0"/>
+    <!--备付金银行上传信息-->
+    <dubbo:reference id="reportUploadInfoManage" timeout="10000" interface="com.oriental.reserve.manage.ReportUploadInfoManage" check="false" retries="0"/>
+    <!--备付金余额信息-->
+    <dubbo:reference id="reserveBalanceInterface" timeout="10000" interface="com.oriental.reserve.manage.ReserveBalanceInterface" check="false" retries="0"/>
+    <!--业务信息信息-->
+    <dubbo:reference id="periodCheckDetailInterface" timeout="10000" interface="com.oriental.reserve.api.trans.PeriodCheckDetailInterface" check="false" retries="0"/>
+
+    <!--预付卡信息-->
+    <dubbo:reference id="prepaidCardInterface" timeout="10000" interface="com.oriental.reserve.api.card.PrepaidCardInterface" check="false" retries="0"/>
+
+    <!--交易权限配置信息-->
+    <dubbo:reference id="accountTransTypeInterface" timeout="10000" interface="com.oriental.reserve.api.config.AccountTransTypeInterface" check="false" retries="0"/>
+
+    <!--账户和机构配置-->
+    <dubbo:reference id="accountOrgCodeInterface" timeout="10000" interface="com.oriental.reserve.api.config.AccountOrgCodeInterface" check="false" retries="0"/>
+
+    <!-- 实收实付查询接口 -->
+
+    <dubbo:reference id="paidQueryInterface" timeout="10000" interface="com.oriental.reserve.api.paid.PaidQueryInterface" check="false" retries="0"/>
+
+    <!--批次审核查询接口-->
+    <dubbo:reference id="messageBatchInterface" timeout="10000" interface="com.oriental.reserve.api.message.MessageBatchInterface" check="false" retries="0"/>
+    <!-- 银行信息录入 -->
+    <dubbo:reference id="bankAccountDetailInterfaceImpl" timeout="10000" interface="com.oriental.reserve.api.config.BankAccountDetailInterface" check="false" retries="0"/>
+
+    <!-- 数据下发申请接口 -->
+    <dubbo:reference id="messageApplyInterface" timeout="10000" interface="com.oriental.reserve.api.infoManagement.MessageApplyInterface" check="false" retries="0"/>
+
+    <!-- 季报实时上传接口 -->
+    <dubbo:reference id="reserveReportUploadInterface" timeout="10000" interface="com.oriental.reserve.api.report.ReserveReportUploadInterface" check="false" retries="0"/>
+    <!-- 季报实时查询接口 -->
+    <dubbo:reference id="reserverReportManageInterface" timeout="10000" interface="com.oriental.reserve.api.report.ReserverReportManageInterface" check="false" retries="0"/>
+
+    <!-- 投诉申请接口 -->
+    <dubbo:reference id="paymentComplaintInfoInterface" timeout="10000" interface="com.oriental.reserve.api.infoManagement.PaymentComplaintInfoInterface" check="false" retries="0"/>
+
+    <!-- 联系人接口 -->
+    <dubbo:reference id="paymentContactInfoInterface" timeout="10000" interface="com.oriental.reserve.api.infoManagement.PaymentContactInfoInterface" check="false" retries="0"/>
+
+    <!--支付机构基本信息查询-->
+    <dubbo:reference id="paymentBaseInfoInterface" timeout="10000" interface="com.oriental.reserve.api.infoManagement.PaymentBaseInfoInterface" check="false" retries="0"/>
+    <!--支付机构董高监信息管理-->
+    <dubbo:reference id="paymentManageInfoInterface" timeout="10000" interface="com.oriental.reserve.api.infoManagement.PaymentManageInfoInterface" check="false" retries="0"/>
+    <!--批次查询审核接口-->
+    <!--<dubbo:service interface="com.oriental.reserve.api.message.MessageBatchInterface" ref="messageBatchInterfaceImpl"/>-->
+    <!-- 商户信息查询 -->
+    <dubbo:reference id="businessWhiteListInterface" timeout="10000" interface="com.oriental.reserve.api.business.BusinessWhiteListInterface" check="false" retries="0"/>
+
+    <!--日切查询接口-->
+    <dubbo:reference id="dayCutInterface" timeout="10000" interface="com.oriental.reserve.api.sys.DayCutInterface" check="false" retries="0"/>
+
+    <!--日终异常重报申请接口-->
+    <dubbo:reference id="excepRestatementsInterface" timeout="10000" interface="com.oriental.reserve.api.sys.ExcepRestatementsInterface" check="false" retries="0"/>
+
+    <!--系统参与者接口-->
+    <dubbo:reference id="systParticipantsMsgInterface" timeout="10000" interface="com.oriental.reserve.api.sys.SystParticipantsMsgInterface" check="false" retries="0"/>
+
+    <!-- 系统通知 -->
+    <dubbo:reference id="reserveInformInterfaceImpl" timeout="10000" interface="com.oriental.reserve.api.inform.ReserveInformInterface"   check="false" retries="0"/>
+    <!--日终对账申请接口-->
+    <dubbo:reference id="aloneAccountInterface" timeout="10000" interface="com.oriental.reserve.api.sys.AloneAccountInterface" check="false" retries="0"/>
+
+    <!--重置服务-->
+    <dubbo:reference id="resetBusinessInterface" timeout="10000" interface="com.oriental.reserve.api.reset.ResetBusinessInterface" check="false" retries="0"/>
+
+    <!--查看日誌-->
+    <dubbo:reference id="payTransTaskInterface" timeout="10000" interface="com.oriental.reserve.api.paid.PayTransTaskInterface" check="false" retries="0"/>
+    <!--銀行信息錄入-->
+    <dubbo:reference id="bankAccountDetailInterface" timeout="10000"  interface="com.oriental.reserve.api.config.BankAccountDetailInterface" check="false" retries="0"/>
+
+    <!-- 通知-->
+    <dubbo:reference id="businessWhiteListInterface" timeout="10000" interface="com.oriental.reserve.api.business.BusinessWhiteListInterface" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> .theirs
+</beans>

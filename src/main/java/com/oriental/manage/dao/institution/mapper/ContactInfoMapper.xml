@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.institution.ContactInfoMapper">
+	<resultMap id="BaseResultMap" type="com.oriental.manage.pojo.institution.ContactInfo"
+			   extends="BaseMapper.BaseResultMap">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="CTT_TYPEn" property="cttType" jdbcType="VARCHAR" />
+		<result column="CTT_ROLE" property="cttRole" jdbcType="VARCHAR" />
+		<result column="CTT_NAME" property="cttName" jdbcType="VARCHAR" />
+		<result column="CTT_EMAIL" property="cttEmail" jdbcType="VARCHAR" />
+		<result column="CTT_PHONE" property="cttPhone" jdbcType="VARCHAR" />
+		<result column="CTT_FAX" property="cttFax" jdbcType="VARCHAR" />
+		<result column="CTT_STATUS" property="cttStatus" jdbcType="VARCHAR" />
+		<result column="COMPANY_TYPE" property="companyType" jdbcType="VARCHAR" />
+		<result column="COMPANY_CODE" property="companyCode" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+		<result column="CTT_MOBILE" property="cttMobile" jdbcType="VARCHAR" />
+		<result column="ACCEPT_NOTICE_EMAIL_FLAG" property="acceptNoticeEmailFlag" jdbcType="VARCHAR" />
+	</resultMap>
+
+    <sql id="Base_Column_List">
+        ID, CTT_TYPE, CTT_ROLE, CTT_NAME, CTT_EMAIL, CTT_PHONE,
+        CTT_FAX,
+        CTT_STATUS, COMPANY_TYPE,
+        COMPANY_CODE, CREATE_TIME,
+        LAST_UPD_TIME, CTT_MOBILE,
+        ACCEPT_NOTICE_EMAIL_FLAG
+    </sql>
+    <sql id="queryCondition">
+        <if test="companyType != null and companyType != ''">
+            AND CI.COMPANY_TYPE = #{companyType}
+        </if>
+        <if test="companyCode != null and companyCode != ''">
+            AND CI.COMPANY_CODE = #{companyCode}
+        </if>
+        <if test="cttType != null and cttType != ''">
+            AND CI.CTT_TYPE = #{cttType}
+        </if>
+        <if test="cttRole != null and cttRole != ''">
+            AND CI.CTT_ROLE = #{cttRole}
+        </if>
+        <if test="cttName != null and cttName != ''">
+            AND CI.CTT_NAME = #{cttName}
+        </if>
+        <if test="cttMobile != null and cttMobile != ''">
+            AND CI.CTT_MOBILE = #{cttMobile}
+        </if>
+        <if test="cttStatus != null and cttStatus != ''">
+            AND CI.CTT_STATUS = #{cttStatus}
+        </if>
+    </sql>
+
+	<select id="queryPage" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.institution.ContactInfo">
+		<include refid="BaseMapper.pageHead"/>
+		SELECT <include refid="Base_Column_List" />
+		  FROM T_CONTACT_INFO CI
+         WHERE 1 = 1 <include refid="queryCondition"/>
+         ORDER BY CI.COMPANY_CODE, CI.CTT_STATUS
+		<include refid="BaseMapper.pageFoot"/>
+	</select>
+
+    <insert id="insertContractInfo" parameterType="com.oriental.manage.pojo.institution.ContactInfo">
+	insert into T_CONTACT_INFO
+		(ID, CTT_TYPE, CTT_ROLE,
+		CTT_NAME, CTT_EMAIL, CTT_PHONE,
+		CTT_FAX,CTT_STATUS, COMPANY_TYPE,
+		COMPANY_CODE, CREATE_TIME, LAST_UPD_TIME,
+		CTT_MOBILE,ACCEPT_NOTICE_EMAIL_FLAG
+		)
+		values (#{id,jdbcType=VARCHAR},
+		#{cttType,jdbcType=VARCHAR},
+		#{cttRole,jdbcType=VARCHAR},
+		#{cttName,jdbcType=VARCHAR},
+		 #{cttEmail,jdbcType=VARCHAR},
+		#{cttPhone,jdbcType=VARCHAR},
+		#{cttFax,jdbcType=VARCHAR},
+		 #{cttStatus,jdbcType=VARCHAR},
+		#{companyType,jdbcType=VARCHAR},
+		#{companyCode,jdbcType=VARCHAR},
+		now(), now(),#{cttMobile,jdbcType=VARCHAR},
+		#{acceptNoticeEmailFlag,jdbcType=VARCHAR}
+		)
+    </insert>
+	<update id="updateContactInfo" parameterType="com.oriental.manage.pojo.institution.ContactInfo">
+		UPDATE T_CONTACT_INFO
+		<set>
+			<if test="cttType != null" >
+				CTT_TYPE = #{cttType},
+			</if>
+			<if test="cttRole != null">
+				CTT_ROLE = #{cttRole},
+			</if>
+			<if test="cttName != null">
+				CTT_NAME = #{cttName},
+			</if>
+			<if test="cttEmail != null">
+				CTT_EMAIL = #{cttEmail},
+			</if>
+			<if test="cttPhone != null">
+				CTT_PHONE = #{cttPhone},
+			</if>
+			<if test="cttFax != null">
+				CTT_FAX = #{cttFax},
+			</if>
+			<if test="cttMobile != null">
+				CTT_MOBILE=#{cttMobile},
+			</if>
+			<if test="cttStatus != null">
+				CTT_STATUS = #{cttStatus},
+			</if>
+			<if test="companyType != null">
+				COMPANY_TYPE = #{companyType},
+			</if>
+			<if test="companyCode != null">
+				COMPANY_CODE = #{companyCode},
+			</if>
+			<if test="acceptNoticeEmailFlag != null">
+				ACCEPT_NOTICE_EMAIL_FLAG = #{acceptNoticeEmailFlag},
+			</if>
+			LAST_UPD_TIME = now()
+		</set>
+		WHERE ID = #{id}
+	</update>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from T_CONTACT_INFO
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+
+
+</mapper>

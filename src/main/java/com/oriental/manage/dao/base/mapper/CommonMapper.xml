@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.base.CommonMapper">
+    <select id="getSeq" resultType="java.lang.String" parameterType="map">
+		select nextval(#{seqName})
+	</select>
+    <select id="getCommonId" resultType="java.lang.String" parameterType="map">
+		SELECT CONCAT(DATE_FORMAT(now(),'%Y%m%d%H%i%s'),nextval(#{seqName}))
+	</select>
+</mapper>

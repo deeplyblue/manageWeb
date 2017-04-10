@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.business.BusiChanStrategyCfgMapper">
+	<resultMap id="BaseResultMap" type="com.oriental.manage.pojo.business.BusiChanStrategyCfg">
+		<id column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="BID" property="bid" jdbcType="VARCHAR" />
+		<result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+        <result column="ENABLE_FLAG" property="enableFlag" jdbcType="VARCHAR" />
+        <result column="BANK_CODE" property="bankCode" jdbcType="VARCHAR"/>
+        <result column="BANK_DESC" property="bankDesc" jdbcType="VARCHAR"/>
+        <result column="TRANS_CODE" property="transCode" jdbcType="VARCHAR" />
+        <result column="TRANS_CODE_DESC" property="transCodeDesc" jdbcType="VARCHAR" />
+        <result column="PRIORITY_LEVEL" property="priorityLevel" jdbcType="VARCHAR" />
+        <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+        <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+        <result column="PP_FLAG" property="ppFlag" jdbcType="VARCHAR" />
+        <result column="CD_FLAG" property="cdFlag" jdbcType="VARCHAR" />
+        <result column="SIZE_LIMIT_FLAG" property="sizeLimitFlag" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID,
+        ORG_CODE,
+        TRANS_CODE,
+        BANK_CODE,
+        BANK_DESC,
+        CD_FLAG,
+        PP_FLAG,
+        SIZE_LIMIT_FLAG,
+        PRIORITY_LEVEL,
+        ENABLE_FLAG,
+        CREATOR,
+        CREATE_TIME,
+        MODIFIER,
+        LAST_UPD_TIME
+	</sql>
+    <sql id="Base_Column_List2">
+        T.ID,T.ORG_CODE,T.ENABLE_FLAG,T.BUSI_CHANNEL_DESC,T.BUSI_CHANNEL,T. TRANS_CODE,T.TRANS_CODE_DESC,T.CONN_CHANNEL,T. PRIORITY_LEVEL,T.
+        CREATOR,T. MODIFIER,T.CREATE_TIME,T.LAST_UPD_TIME ,T.CLASS_PATH , T.BUSI_FLAG,T.QUOTA_FLAG
+    </sql>
+    <sql id="condition">
+        <if test="id !=null and id !=''">
+            and t.id=#{id}
+        </if>
+        <if test="transCode != null and transCode != ''">
+            and t.TRANS_CODE = #{transCode}
+        </if>
+        <if test="orgCode != null and orgCode != ''">
+            and T.ORG_CODE = #{orgCode}
+        </if>
+        <if test="bankCode != null and bankCode != ''">
+            and t.BANK_CODE = #{bankCode}
+        </if>
+        <if test="priorityLevel != null and priorityLevel != ''">
+            and t.PRIORITY_LEVEL = #{priorityLevel}
+        </if>
+        <if test="enableFlag != null and enableFlag != ''">
+            and T.ENABLE_FLAG = #{enableFlag}
+        </if>
+        <if test="sizeLimitFlag != null and sizeLimitFlag != ''">
+            and t.SIZE_LIMIT_FLAG = #{sizeLimitFlag}
+        </if>
+        <if test="ppFlag != null and ppFlag != ''">
+            and t.PP_FLAG = #{ppFlag}
+        </if>
+    </sql>
+
+	<select id="queryPage" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.business.BusiChanStrategyCfg">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT
+            t.ID,
+            t.ORG_CODE,
+            t.TRANS_CODE,
+            t.BANK_CODE,
+            t.BANK_DESC,
+            t.CD_FLAG,
+            t.PP_FLAG,
+            t.SIZE_LIMIT_FLAG,
+            t.PRIORITY_LEVEL,
+            (
+            CASE
+            WHEN t.ENABLE_FLAG = '1' THEN
+            '1'
+            ELSE
+            '0'
+            END
+            ) AS ENABLE_FLAG,
+            t.CREATOR,
+            t.CREATE_TIME,
+            t.MODIFIER,
+            t.LAST_UPD_TIME
+        FROM
+            t_busi_chan_strategy_cfg AS t
+        WHERE
+            1 = 1
+            AND t.TRANS_CODE = '0011000'
+            <if test="orgCode != null and orgCode != ''">
+                and t.ORG_CODE = #{orgCode}
+            </if>
+            <if test="bankCode != null and bankCode != ''">
+                and t.BANK_CODE = #{bankCode}
+            </if>
+            <if test="enableFlag != null and enableFlag != ''">
+                and (T.ENABLE_FLAG = #{enableFlag}  or T.ENABLE_FLAG is null)
+            </if>
+            <if test="ppFlag != null and ppFlag != ''">
+                and t.PP_FLAG = #{ppFlag}
+            </if>
+            <if test="sizeLimitFlag != null and sizeLimitFlag != ''">
+                and t.SIZE_LIMIT_FLAG = #{sizeLimitFlag}
+            </if>
+        ORDER BY
+            t.BANK_CODE ASC,
+            t.CD_FLAG ASC,
+            t.PP_FLAG ASC,
+            t.SIZE_LIMIT_FLAG ASC,
+            t.PRIORITY_LEVEL ASC
+
+        <include refid="BaseMapper.pageFoot"/>
+	</select>
+
+    <insert id="insertBusiChanStrategyCfg" parameterType="com.oriental.manage.pojo.business.BusiChanStrategyCfg">
+		insert into T_BUSI_CHAN_STRATEGY_CFG
+		(
+		  <include refid="Base_Column_List"/>
+		)
+		values (
+		#{id}, #{orgCode},#{transCode}, #{bankCode}, #{bankDesc},
+		#{cdFlag}, #{ppFlag}, #{sizeLimitFlag}, #{priorityLevel},
+        #{enableFlag},
+		#{creator}, now(),#{modifier},now()
+		)
+	</insert>
+    <update id="updateBusiChanStrategyCfg" parameterType="com.oriental.manage.pojo.business.BusiChanStrategyCfg">
+		update T_BUSI_CHAN_STRATEGY_CFG t
+		set
+        t.ENABLE_FLAG = #{enableFlag},
+        t.PRIORITY_LEVEL = #{priorityLevel},
+        t.MODIFIER = #{modifier},
+        t.LAST_UPD_TIME = now()
+		where 1=1
+		and t.ID = #{id}
+	</update>
+
+    <delete id="delete" parameterType="list">
+        DELETE FROM T_BUSI_CHAN_STRATEGY_CFG
+        WHERE
+        ID =#{id}
+    </delete>
+
+</mapper>

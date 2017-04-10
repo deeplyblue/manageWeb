@@ -1,0 +1,19 @@
+查询结果的展示中常常伴随多个checkbox
+
+例：
+<thead>
+            <tr>
+                <th>
+                    <input type="checkbox" ng-model="_checkedAll" checkbox-all="vm.pagination.list">
+                </th>
+
+
+        作为全选、全不选的控制按钮
+        ng-model中给作用于添加指定属性_checkedAll来控制是否全选,checkbox-all指定遍历的对象
+---------------------------------------------------------------------------------------------------------------
+
+<tr ng-repeat="bean in vm.pagination.list track by $index">
+                  <td>
+                      <input name="check" type="checkbox" ng-model="bean._checked">
+
+   ng-model中给bean添加指定属性_checked来控制是否选中，并且发送后台时全局处理了该字段。使之不会发送后台。

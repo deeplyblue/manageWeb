@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    <!--securityManager是shiro的核心，初始化时协调各个模块运行-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!--单个realm使用realm,如果有多个realm，使用realms属性代替-->
+        <property name="realm" ref="leopardRealm"/>
+        <property name="cacheManager" ref="shiroEhcacheManager"/>
+        <property name="sessionManager" ref="sessionManager"/>
+    </bean>
+    <!--realm配置，realm是shiro的桥梁，它主要是用来判断subject是否可以登录及权限等-->
+    <bean id="leopardRealm" class="com.oriental.manage.core.authorize.UserRealm"/>
+    <!--shiro过滤器配置，bean的id值须与web中的filter-name的值相同-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 没有权限或者失败后跳转的页面 -->
+        <property name="loginUrl" value="/login.jsp"/>
+        <property name="successUrl" value="/views/home/home.jsp"/>
+        <property name="unauthorizedUrl" value="/login/unauthorized"/>
+
+        <property name="filters">
+            <util:map>
+                <entry key="timeout" value-ref="timeout"/>
+                <entry key="logout" value-ref="logout"/>
+            </util:map>
+        </property>
+
+        <property name="filterChainDefinitions">
+            <value>
+                /css/**/*.css=anon
+                /css/fonts/**/*=anon
+                /img/**/*.png=anon
+                /js/**/*.js=anon
+                /*.jsp=anon
+
+                /home/menuTree=anon
+                /login/logout=logout
+                /login/**=anon
+                /**=timeout,authc,rest
+            </value>
+        </property>
+    </bean>
+    <!-- 用户授权/认证信息Cache, 采用EhCache 缓存 -->
+    <bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile">
+            <value>classpath:config/shiro/ehcache.xml</value>
+        </property>
+    </bean>
+
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionDAO" ref="sessionDAO"/>
+        <!--session超时时间：默认30分钟-->
+        <property name="globalSessionTimeout" value="#{1000 * 60 * 30}"/>
+    </bean>
+
+    <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO"/>
+
+    <bean id="timeout" class="com.oriental.manage.core.authorize.TimeoutSessionControlFilter"/>
+    <bean id="logout" class="com.oriental.manage.core.authorize.LogoutFilter">
+        <property name="redirectUrl" value="/login.jsp"/>
+    </bean>
+
+    <!--shiro使用注解-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor"/>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+</beans>

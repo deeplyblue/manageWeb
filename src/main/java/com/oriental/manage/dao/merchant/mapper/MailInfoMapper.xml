@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.merchant.MailInfoMapper">
+	<resultMap id="BaseResultMap" type="com.oriental.manage.pojo.merchant.MailInfo"
+			   extends="BaseMapper.BaseResultMap">
+		<id     column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="USERNAME" property="username" jdbcType="VARCHAR" />
+		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
+		<result column="TELEPHONE" property="telephone" jdbcType="VARCHAR" />
+		<result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+		<result column="POST_ADDR" property="postAddr" jdbcType="VARCHAR" />
+		<result column="INVOICE_HEAD" property="invoiceHead" jdbcType="VARCHAR" />
+		<result column="ZIPCODE" property="zipcode" jdbcType="VARCHAR" />
+		<result column="USER_COMPANY" property="userCompany" jdbcType="VARCHAR" />
+		<result column="COMPANY_TYPE" property="companyType" jdbcType="VARCHAR" />
+		<result column="COMPANY_CODE" property="companyCode" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+		<result column="AREA_CODE" property="areaCode" jdbcType="VARCHAR" />
+		<result column="CITY_CODE" property="cityCode" jdbcType="VARCHAR" />
+		<result column="TAXPAYER_NO" property="taxpayerNo" jdbcType="VARCHAR" />
+		<result column="CERTIFICATE_ADDR" property="certificateAddr" jdbcType="VARCHAR" />
+		<result column="FINANCIAL_PHONE" property="financialPhone" jdbcType="VARCHAR" />
+		<result column="TAXPAYER_BANK_CODE" property="taxpayerBankCode" jdbcType="VARCHAR" />
+		<result column="TAXPAYER_BANK_ACCOUNT" property="taxpayerBankAccount" jdbcType="VARCHAR" />
+		<result column="AUDITOR" property="auditor" jdbcType="VARCHAR" />
+		<result column="AUDIT_DATE" property="auditDate" jdbcType="TIMESTAMP" />
+		<result column="AUDIT_STATUS" property="auditStatus" jdbcType="VARCHAR" />
+		<result column="TAXPAYER_NAME" property="taxpayerName" jdbcType="VARCHAR" />
+	</resultMap>
+
+    <sql id="Base_Column_List">
+        ID, USERNAME, EMAIL, TELEPHONE, MOBILE, POST_ADDR,COMPANY_TYPE, COMPANY_CODE,
+        INVOICE_HEAD, ZIPCODE,USER_COMPANY,CREATE_TIME, LAST_UPD_TIME,AREA_CODE,CITY_CODE,
+        TAXPAYER_NO,CERTIFICATE_ADDR,FINANCIAL_PHONE,TAXPAYER_BANK_CODE,
+        TAXPAYER_BANK_ACCOUNT,AUDITOR,AUDIT_DATE,AUDIT_STATUS,TAXPAYER_NAME
+    </sql>
+    <sql id="queryCondition">
+        <if test="companyCode != null and companyCode != ''">
+            AND MI.COMPANY_CODE = #{companyCode}
+        </if>
+        <if test="companyType != null and companyType != ''">
+            AND MI.COMPANY_TYPE = #{companyType}
+        </if>
+    </sql>
+
+	<insert id="insertMailInfo" parameterType="com.oriental.manage.pojo.merchant.MailInfo">
+		insert into T_MAIL_INFO
+		(ID, USERNAME, EMAIL,COMPANY_TYPE, COMPANY_CODE,
+		TELEPHONE, MOBILE,POST_ADDR,
+		INVOICE_HEAD,ZIPCODE, USER_COMPANY,AREA_CODE,CITY_CODE,
+		TAXPAYER_NO,CERTIFICATE_ADDR,FINANCIAL_PHONE,TAXPAYER_BANK_CODE,
+		TAXPAYER_BANK_ACCOUNT,AUDITOR,AUDIT_DATE,AUDIT_STATUS,TAXPAYER_NAME)
+		values (#{id,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},#{companyType,jdbcType=VARCHAR},#{companyCode},
+		#{telephone,jdbcType=VARCHAR},#{mobile,jdbcType=VARCHAR}, #{postAddr,jdbcType=VARCHAR},
+		#{invoiceHead,jdbcType=VARCHAR}, #{zipcode,jdbcType=VARCHAR},#{userCompany,jdbcType=VARCHAR},
+		#{areaCode,jdbcType=VARCHAR},#{cityCode,jdbcType=VARCHAR},#{taxpayerNo,jdbcType=VARCHAR},
+		#{certificateAddr,jdbcType=VARCHAR},#{financialPhone,jdbcType=VARCHAR},#{taxpayerBankCode,jdbcType=VARCHAR},
+		#{taxpayerBankAccount,jdbcType=VARCHAR},#{auditor,jdbcType=VARCHAR},now(),#{auditStatus,jdbcType=VARCHAR},
+		#{taxpayerName,jdbcType=VARCHAR})
+	</insert>
+
+	<select id="checkConfig" resultType="int" parameterType="com.oriental.manage.pojo.merchant.MailInfo">
+		select count(1) from T_MAIL_INFO where 1=1
+		<if test="companyCode != null and companyCode != ''">
+		 	and COMPANY_CODE = #{companyCode}
+		</if>
+		<if test="companyType != null and companyType != ''">
+			and COMPANY_TYPE = #{companyType}
+		</if>
+		<if test="username != null and username != ''">
+			and USERNAME = #{username}
+		</if>
+		<if test="id != null and id != ''">
+			and ID != #{id}
+		</if>
+	</select>
+	<select id="queryPage" resultMap="BaseResultMap">
+		<include refid="BaseMapper.pageHead"/>
+		SELECT <include refid="Base_Column_List" />
+		  FROM T_MAIL_INFO MI
+         WHERE 1 = 1 <include refid="queryCondition"/>
+		 ORDER BY MI.COMPANY_TYPE, MI.COMPANY_CODE
+		<include refid="BaseMapper.pageFoot"/>
+	</select>
+
+	<!-- 根据商户代码查看信息是否存在 -->
+	<select id="checkMchntCode" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.merchant.MailInfo">
+		select
+		ID
+		from T_MAIL_INFO where  1 = 1
+		<if test="companyCode != null and companyCode != ''">
+			and COMPANY_CODE = #{companyCode}
+		</if>
+		<if test="companyType != null and companyType != ''">
+			and COMPANY_TYPE = #{companyType}
+		</if>
+	</select>
+	<update id="updateMailInfo" parameterType="com.oriental.manage.pojo.merchant.MailInfo">
+		update T_MAIL_INFO
+		<set>
+			<if test="username != null" >
+				USERNAME = #{username,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null" >
+				EMAIL = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null" >
+				TELEPHONE = #{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null" >
+				MOBILE = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="postAddr != null" >
+				POST_ADDR = #{postAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceHead != null" >
+				INVOICE_HEAD = #{invoiceHead,jdbcType=VARCHAR},
+			</if>
+			<if test="zipcode != null" >
+				ZIPCODE = #{zipcode,jdbcType=VARCHAR},
+			</if>
+			<if test="userCompany != null" >
+				USER_COMPANY = #{userCompany,jdbcType=VARCHAR},
+			</if>
+			<if test="companyType != null" >
+				COMPANY_TYPE = #{companyType,jdbcType=VARCHAR},
+			</if>
+			<if test="companyCode != null" >
+				COMPANY_CODE = #{companyCode,jdbcType=VARCHAR},
+			</if>
+			<if test="areaCode != null" >
+				AREA_CODE = #{areaCode,jdbcType=VARCHAR},
+			</if>
+			<if test="cityCode != null" >
+				CITY_CODE = #{cityCode,jdbcType=VARCHAR},
+			</if>
+			<if test="taxpayerNo != null" >
+				TAXPAYER_NO = #{taxpayerNo,jdbcType=VARCHAR},
+			</if>
+			<if test="certificateAddr != null" >
+				CERTIFICATE_ADDR = #{certificateAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="financialPhone != null" >
+				FINANCIAL_PHONE = #{financialPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="taxpayerBankCode != null" >
+				TAXPAYER_BANK_CODE = #{taxpayerBankCode,jdbcType=VARCHAR},
+			</if>
+			<if test="taxpayerBankAccount != null" >
+				TAXPAYER_BANK_ACCOUNT = #{taxpayerBankAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="auditor != null" >
+				AUDITOR = #{auditor,jdbcType=VARCHAR},
+			</if>
+			<if test="auditDate != null" >
+				AUDIT_DATE = now(),
+			</if>
+			<if test="auditStatus != null" >
+				AUDIT_STATUS = #{auditStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="taxpayerName != null" >
+				TAXPAYER_NAME = #{taxpayerName,jdbcType=VARCHAR},
+			</if>
+			LAST_UPD_TIME = now()
+		</set>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	
+<delete id="deleteMailInfo" parameterType="com.oriental.manage.pojo.merchant.MailInfo">
+	 DELETE FROM T_MAIL_INFO WHERE  ID = #{id}
+</delete>
+
+</mapper>

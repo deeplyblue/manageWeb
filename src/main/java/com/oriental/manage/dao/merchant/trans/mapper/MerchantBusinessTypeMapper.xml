@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.merchant.trans.MerchantBusinessTypeMapper">
+
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.merchant.trans.MerchantBusinessType">
+        <id     column="ID"                property="id"                    jdbcType="VARCHAR"/>
+        <result column="MCHNT_CODE"        property="merchantCode"          jdbcType="VARCHAR"/>
+        <result column="BUSI_TYPE"         property="businessType"          jdbcType="VARCHAR"/>
+        <result column="BUSI_TYPE_DESC"    property="businessTypeDesc"      jdbcType="VARCHAR"/>
+        <result column="ENABLE_FLAG"       property="enableType"            jdbcType="VARCHAR"/>
+        <result column="CREATOR"           property="createUser"            jdbcType="VARCHAR"/>
+        <result column="MODIFIER"          property="modifierUser"          jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME"       property="createTime"            jdbcType="TIMESTAMP"/>
+        <result column="LAST_UPD_TIME"     property="lastUpdateTime"        jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID,MCHNT_CODE,BUSI_TYPE,BUSI_TYPE_DESC,ENABLE_FLAG,CREATOR,MODIFIER
+    </sql>
+
+
+    <sql id="queryCondition">
+        <if test="businessType != null">
+            AND T.BUSI_TYPE = #{businessType}
+        </if>
+        <if test="merchantCode != null ">
+            AND T.MCHNT_CODE = #{merchantCode}
+        </if>
+    </sql>
+
+
+    <select id="searchMerchantBusinessType" resultMap="BaseResultMap">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT <include refid="Base_Column_List" /> FROM T_MCHNT_BUSITYPE T WHERE 1=1
+        <include refid="queryCondition"/>
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <insert id="addMerchantBusinessType">
+        INSERT INTO T_MCHNT_BUSITYPE (MCHNT_CODE,BUSI_TYPE,BUSI_TYPE_DESC,ENABLE_FLAG,CREATOR,MODIFIER) VALUES
+        (#{merchantCode},#{businessType},#{businessTypeDesc},#{enableType},#{createUser},#{modifierUser})
+    </insert>
+
+    <update id="updateMerchantBusinessType">
+        UPDATE T_MCHNT_BUSITYPE T SET
+        T.MODIFIER = #{modifierUser},
+        T.LAST_UPD_TIME = CURRENT_TIMESTAMP,
+        T.ENABLE_FLAG = #{enableType}
+        WHERE T.ID = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.merchant.SeqNamesMapper" >
+	<resultMap id="BaseResultMap" type="com.oriental.manage.pojo.merchant.SeqNames"
+			   extends="BaseMapper.BaseResultMap">
+		<id     column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="PAY_ORG_CODE" property="payOrgCode" jdbcType="VARCHAR" />
+		<result column="SEQ_NAME" property="seqName" jdbcType="VARCHAR" />
+	</resultMap>
+   
+	<sql id="Base_Column_List" >
+	    ID, PAY_ORG_CODE, SEQ_NAME
+	</sql>
+    <sql id="queryCondition">
+        <if test="payOrgCode != null and payOrgCode != ''">
+            AND PAY_ORG_CODE = #{payOrgCode}
+        </if>
+    </sql>
+
+	
+	<select id="queryPage" resultMap="BaseResultMap">
+		<include refid="BaseMapper.pageHead"/>
+		SELECT <include refid="Base_Column_List" />
+		  FROM T_SEQ_NAMES
+         WHERE 1 = 1 <include refid="queryCondition"/>
+		 ORDER BY ID DESC
+		<include refid="BaseMapper.pageFoot"/>
+	</select>
+
+	<select id="queryByOrg" resultType="int">
+		SELECT  COUNT(*)
+		FROM T_SEQ_NAMES
+		WHERE 1 = 1
+		<if test="payOrgCode != null and payOrgCode != ''">
+			AND PAY_ORG_CODE = #{payOrgCode}
+		</if>
+
+	</select>
+
+	<delete id="delete" parameterType="com.oriental.manage.pojo.merchant.SeqNames" >
+		delete from T_SEQ_NAMES 
+		WHERE ID=#{id}
+
+	</delete>
+   
+	<insert id="insert" parameterType="com.oriental.manage.pojo.merchant.SeqNames" >
+		insert into T_SEQ_NAMES (ID, PAY_ORG_CODE, SEQ_NAME) values (#{id}, #{payOrgCode}, #{seqName})
+	</insert>
+  
+	<update id="updateByKey" parameterType="com.oriental.manage.pojo.merchant.SeqNames" >
+		update T_SEQ_NAMES
+		set
+		 PAY_ORG_CODE = #{payOrgCode,jdbcType=VARCHAR},
+		SEQ_NAME = #{seqName,jdbcType=VARCHAR}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

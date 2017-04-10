@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://code.alibabatech.com/schema/dubbo
+                           http://code.alibabatech.com/schema/dubbo/dubbo.xsd" default-lazy-init="false">
+
+    <!-- 交易dubbo接口 start -->
+    <!--代付接口-->
+    <dubbo:reference interface="com.oriental.paycenter.external.api.operations.TransferFacade"
+                     id="transferFacade" timeout="60000" retries="0" check="false" registry="payCenter"/>
+
+    <!--退款接口-->
+    <dubbo:reference interface="com.oriental.paycenter.external.api.operations.RefundFacade"
+                     id="refundFacade" timeout="60000" retries="0" check="false" registry="payCenter"/>
+
+    <!--退款接口-->
+    <dubbo:reference interface="com.oriental.paycenter.external.api.operations.ChkErrFacade"
+                     id="chkErrFacade" timeout="60000" retries="0" check="false" registry="payCenter"/>
+    <!-- 交易dubbo接口 end -->
+</beans>

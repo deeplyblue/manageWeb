@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://code.alibabatech.com/schema/dubbo
+                           http://code.alibabatech.com/schema/dubbo/dubbo.xsd" default-lazy-init="false">
+
+    <!-- 清结算前置dubbo接口 start -->
+    <!-- 银行交易明细服务 -->
+    <dubbo:reference interface="com.oriental.settlementfront.service.facade.manager.BankTransDetailFacade"
+                     id="bankTransDetailFacade" retries="0" timeout="60000" registry="check"/>
+    <!-- 商户交易明细服务 -->
+    <dubbo:reference interface="com.oriental.settlementfront.service.facade.manager.MchntTransDetailFacade"
+                     id="mchntTransDetailFacade" retries="0" timeout="60000" registry="check"/>
+    <!-- 清结算前置dubbo接口 end -->
+
+    <!-- 对账dubbo接口 start -->
+    <!-- 对账配置服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.manager.ChkCfgFacade"
+                     id="chkCfgFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 对账文件数据服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.manager.ChkFileDataCfgFacade"
+                     id="chkFileDataCfgFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 回滚对账数据服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.manager.RollBackChkDataFacade"
+                     id="rollBackChkDataFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 启动下载服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.redo.StartDownloadFacade"
+                     id="startDownloadFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 启动对账服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.redo.StartCheckFacade"
+                     id="startCheckFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 启动强制对账服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.redo.StartForceCheckFacade"
+                     id="startForceCheckFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 启动内部勾兑服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.redo.StartInnerCheckFacade"
+                     id="startInnerCheckFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 启动对账文件生成服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.redo.StartChkFileCreateFacade"
+                     id="startChkFileCreateFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 统计支付机构对账情况 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.manager.CountBankChkCompleteFacade"
+                     id="countBankChkCompleteFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 对账文件信息服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.manager.ChkFileInfoFacade"
+                     id="chkFileInfoFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 银行对账差异服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.err.BankChkErrFacade"
+                     id="bankChkErrFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 银行对账结果服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.manager.BankChkResultFacade"
+                     id="bankChkResultFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 商户对账差异服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.err.MchntChkErrFacade"
+                     id="mchntChkErrFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 商户对账结果服务 -->
+    <dubbo:reference interface="com.oriental.check.service.facade.manager.MchntChkResultFacade"
+                     id="mchntChkResultFacade" retries="0" timeout="10000" registry="check"/>
+    <!-- 对账dubbo接口 end -->
+</beans>

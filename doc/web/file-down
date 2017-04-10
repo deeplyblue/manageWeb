@@ -1,0 +1,15 @@
+方式一：
+
+<button down-file="${ctx}/settlement/report/daily/mchntRelation/download" params="vm.queryBean" down-file-type="xls">
+下载
+</button>
+
+通过ajax方式请求文件，立即下载
+
+方式二：
+
+<a target="_blank" href="${ctx}/base/dfsFileInfo/download?localFilename={{bean.localFilename}}&dfsFullFilename={{bean.dfsRemoteFilename}}&dfsGroupname={{bean.dfsGroupName}}">
+{{bean.localFilename}}
+</a>
+
+直接访问后台方法，调用dfs返回文件,立即下载

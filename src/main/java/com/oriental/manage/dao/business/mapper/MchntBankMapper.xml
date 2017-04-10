@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.business.MchntBankMapper">
+	<resultMap id="BaseResultMap" type="com.oriental.manage.pojo.business.MchntBank"
+			   extends="BaseMapper.BaseResultMap">
+		<id column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="MCHNT_CODE" property="mchntCode" jdbcType="VARCHAR" />
+		<result column="MCHNT_BR_CODE" property="mchntBrCode" jdbcType="VARCHAR" />
+		<result column="CONN_CHANNEL" property="connChannel" jdbcType="VARCHAR" />
+		<result column="ENABLE_FLAG" property="enableFlag" jdbcType="VARCHAR" />
+		<result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+		<result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+		
+		<result column="BANK_CODE" property="bankCode" jdbcType="VARCHAR" />
+		<result column="BANK_TYPE" property="bankType" jdbcType="VARCHAR" />
+		<result column="COMPANY_TYPE" property="companyType" jdbcType="VARCHAR" />
+		
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID, MCHNT_CODE, MCHNT_BR_CODE, CONN_CHANNEL,
+		ENABLE_FLAG,BANK_CODE,BANK_TYPE,
+		CREATOR, MODIFIER, CREATE_TIME, COMPANY_TYPE,
+		LAST_UPD_TIME
+	</sql>
+    <sql id="queryCondition">
+        <if test="companyType != null and companyType != ''">
+            AND MB.COMPANY_TYPE = #{companyType}
+        </if>
+        <if test="mchntCode != null and mchntCode != ''">
+            AND MB.MCHNT_CODE = #{mchntCode}
+        </if>
+        <if test="bankCode != null and bankCode != ''">
+            AND MB.BANK_CODE LIKE  CONCAT('%',#{bankCode}, '%')
+        </if>
+        <if test="connChannel != null and connChannel != ''">
+            AND MB.CONN_CHANNEL = #{connChannel}
+        </if>
+        <if test="enableFlag != null and enableFlag != ''">
+            AND MB.ENABLE_FLAG = #{enableFlag}
+        </if>
+    </sql>
+
+    <select id="queryPage" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.business.MchntBank">
+		<include refid="BaseMapper.pageHead"/>
+        SELECT <include refid="Base_Column_List" />
+          FROM T_MCHNT_BANK MB
+         WHERE 1 = 1 <include refid="queryCondition"/>
+         ORDER BY MB.MCHNT_CODE, MB.BANK_TYPE
+		<include refid="BaseMapper.pageFoot"/>
+	</select>
+
+
+	<delete id="deleteByMchntCode" parameterType="com.oriental.manage.pojo.business.MchntBank">
+		delete FROM T_MCHNT_BANK where ID = #{id}
+	</delete>
+
+
+
+	<insert id="insertMchntBank" parameterType="com.oriental.manage.pojo.business.MchntBank">
+		insert into T_MCHNT_BANK (ID,
+		MCHNT_CODE, MCHNT_BR_CODE,
+		CONN_CHANNEL,ENABLE_FLAG, CREATOR,MODIFIER,
+		CREATE_TIME, LAST_UPD_TIME,BANK_CODE,BANK_TYPE,COMPANY_TYPE)
+		values (#{id,jdbcType=VARCHAR},#{mchntCode,jdbcType=VARCHAR},
+		#{mchntBrCode,jdbcType=VARCHAR},#{connChannel,jdbcType=VARCHAR},
+		#{enableFlag,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR},
+		#{modifier,jdbcType=VARCHAR},now(), now(),
+		#{bankCode,jdbcType=VARCHAR},#{bankType,jdbcType=VARCHAR},
+		#{companyType,jdbcType=VARCHAR})
+	</insert>
+    <!--add update function-->
+    <update id="updateMchntBankByMchntCode" parameterType="com.oriental.manage.pojo.business.MchntBank">
+		update T_MCHNT_BANK
+		set ENABLE_FLAG = #{enableFlag},
+        MODIFIER = #{modifier},
+		LAST_UPD_TIME = now()
+		where
+		COMPANY_TYPE = #{companyType} AND MCHNT_CODE = #{mchntCode}
+        <if test="bankCode != null and bankCode != ''">
+            and BANK_CODE = #{bankCode}
+        </if>
+		<if test="id !=null and id!=''">
+			and ID=#{id}
+		</if>
+		<if test="connChannel !=null and connChannel !=''">
+			AND CONN_CHANNEL =#{connChannel}
+		</if>
+	</update>
+
+
+</mapper>

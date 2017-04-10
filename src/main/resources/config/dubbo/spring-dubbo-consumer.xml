@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://code.alibabatech.com/schema/dubbo
+                           http://code.alibabatech.com/schema/dubbo/dubbo.xsd" default-lazy-init="false">
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="manage-dubbo"/>
+
+    <!-- 使用zookeeper广播注册中心暴露服务地址 -->
+    <dubbo:registry id="check" protocol="zookeeper" address="zookeeper://${dubbo.zookeeper.address}"/>
+    <dubbo:registry id="settlement" protocol="zookeeper" address="zookeeper://${dubbo.zookeeper.address}"
+                    default="false"/>
+    <dubbo:registry id="payCenter" protocol="zookeeper" address="zookeeper://${dubbo.zookeeper.address}"
+                    default="false"/>
+    <dubbo:registry id="opcif" protocol="zookeeper" address="zookeeper://${dubbo.zookeeper.address}"
+                    default="false"/>
+    <dubbo:registry id="riskfront" protocol="zookeeper" address="zookeeper://${dubbo.zookeeper.address}"
+                    default="false"/>
+    <!-- 配置是否检查-->
+    <dubbo:consumer check="false"/>
+
+    <import resource="spring-dubbo-consumer-check.xml"/>
+    <import resource="spring-dubbo-consumer-settlement.xml"/>
+    <import resource="spring-dubbo-consumer-paycenter.xml"/>
+    <import resource="spring-dubbo-consumer-reserve.xml"/>
+    <import resource="spring-dubbo-consumer-opcif.xml"/>
+    <import resource="spring-dubbo-consumer-riskfront.xml"/>
+</beans>

@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- jedis配置 -->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="35"/>
+        <property name="maxIdle" value="10"/>
+        <property name="minIdle" value="0"/>
+        <property name="maxWaitMillis" value="1000"/>
+        <property name="numTestsPerEvictionRun" value="1"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="testOnReturn" value="true"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="timeBetweenEvictionRunsMillis" value="120000"/>
+        <property name="softMinEvictableIdleTimeMillis" value="100000"/>
+    </bean>
+
+    <bean id="jedisPool" class="redis.clients.jedis.ShardedJedisPool">
+        <constructor-arg index="0" ref="jedisPoolConfig"/>
+        <!--<constructor-arg index="1" value="${redis_host}"/>
+        <constructor-arg index="2" value="${redis_port}" type="int"/>
+        <constructor-arg index="3" value="${redis_timeout}" type="int"/>-->
+        <constructor-arg index="1">
+            <list>
+                <bean class="redis.clients.jedis.JedisShardInfo">
+                    <constructor-arg
+                            index="0"
+                            value="${redis1_host}"/>
+                    <constructor-arg
+                            index="1"
+                            value="${redis_port}"
+                            type="int"/>
+                    <constructor-arg
+                            index="2"
+                            value="${redis_timeout}"
+                            type="int"/>
+                </bean>
+                <bean class="redis.clients.jedis.JedisShardInfo">
+                    <constructor-arg
+                            index="0"
+                            value="${redis2_host}"/>
+                    <constructor-arg
+                            index="1"
+                            value="${redis_port}"
+                            type="int"/>
+                    <constructor-arg
+                            index="2"
+                            value="${redis_timeout}"
+                            type="int"/>
+                </bean>
+                <bean class="redis.clients.jedis.JedisShardInfo">
+                    <constructor-arg
+                            index="0"
+                            value="${redis3_host}"/>
+                    <constructor-arg
+                            index="1"
+                            value="${redis_port}"
+                            type="int"/>
+                    <constructor-arg
+                            index="2"
+                            value="${redis_timeout}"
+                            type="int"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+</beans>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://code.alibabatech.com/schema/dubbo
+                           http://code.alibabatech.com/schema/dubbo/dubbo.xsd" default-lazy-init="false">
+
+    <!-- 查询用户绑卡信息 -->
+	<dubbo:reference interface="com.oriental.opcif.product.facade.CustomerAgreementFacade"
+                     id="customerAgreementFacade" retries="0" timeout="10000" registry="opcif"/>
+
+
+    <!-- 查询用户身份信息 -->
+    <dubbo:reference interface="com.oriental.opcif.product.facade.CustomerOperatorFacade"
+                     id="customerOperatorFacade" check="false" retries="0" timeout="10000" registry="opcif"/>
+
+    <!-- 查询用户身份信息 -->
+    <!--<dubbo:reference interface="com.oriental.opcif.product.facade.CustomerInfoFacade"
+                     id="customerInfoFacade" retries="0" timeout="10000" registry="opcif"/>-->
+
+    <!-- 查询用户绑卡信息 -->
+    <dubbo:reference interface="com.oriental.opcif.product.facade.manager.CustomerBankInfoFacade"
+                     id="customerBankInfoFacade" retries="0" timeout="30000" registry="opcif"/>
+
+
+    <!-- 查询用户身份信息 -->
+    <dubbo:reference interface="com.oriental.opcif.product.facade.manager.UserBaseInfoFacade"
+                     id="userBaseInfoFacade" retries="0" timeout="10000" registry="opcif"/>
+
+    <!-- 查询用户认证申请信息 -->
+    <dubbo:reference interface="com.oriental.opcif.product.facade.manager.AuthapplyBankInfoFacade"
+                     id="authapplyBankInfoFacade" retries="0" timeout="10000" registry="opcif"/>
+
+    <!-- 主机构创建 -->
+    <dubbo:reference interface="com.oriental.opcif.product.facade.OrgCustomerFacade"
+                     id="orgCustomerFacade" retries="0" timeout="10000" registry="opcif"/>
+
+    <!-- 根据登入号查询账户号 -->
+    <dubbo:reference interface="com.oriental.opcif.product.account.CustomerAccountFacade"
+                     id="customerAccountFacade" retries="0" timeout="10000" registry="opcif"/>
+    <!-- 冻结操作员 -->
+    <dubbo:reference interface="com.oriental.opcif.product.facade.CustomerRiskControlFacade"
+                     id="customerRiskControlFacade" retries="0" timeout="10000" registry="opcif"/>
+    <!-- 客户密保问题列表 -->
+    <dubbo:reference interface="com.oriental.opcif.product.facade.CustomerSecurqaFacade"
+                     id="customerSecurqaFacade" retries="0" timeout="10000" registry="opcif"/>
+</beans>

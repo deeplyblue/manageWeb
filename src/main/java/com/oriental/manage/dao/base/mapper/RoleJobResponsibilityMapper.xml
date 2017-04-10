@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.base.RoleJobResponsibilityMapper">
+    <resultMap id="RoleJobResponsibility" type="com.oriental.manage.pojo.base.RoleJobResponsibility" >
+        <result column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR"/>
+        <result column="JOB_ID" property="jobId" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="DATE"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="DATE"/>
+
+    </resultMap>
+
+    <sql id="columns">
+        ID, ROLE_ID, JOB_ID, CREATE_TIME, UPDATE_TIME
+    </sql>
+
+    <select id="selectRoleJobResponsibility" resultMap="RoleJobResponsibility">
+
+        SELECT
+        <include refid="columns"/>
+        FROM t_role_job_relation T WHERE 1=1
+          <if test="null != jobId and jobId != ''">
+            AND T.JOB_ID = #{jobId}
+        </if>
+          <if test="null != roleId and roleId != ''">
+            AND T.ROLE_ID = #{roleId}
+        </if>
+        <if test="null != id and id != ''">
+            AND T.ID = #{id}
+        </if>
+
+    </select>
+
+    <update id="update">
+        UPDATE t_role_job_relation T
+        SET
+        <if test="null != jobId and jobId != ''">
+             T.JOB_ID = #{jobId}
+        </if>
+        <if test="null != roleId and roleId != ''">
+             T.ROLE_ID = #{roleId}
+        </if>
+        T.UPDATE_TIME=CURRENT_TIMESTAMP
+        WHERE 1=1
+        <if test="null != roleId and roleId != ''">
+          AND  T.ROLE_ID = #{roleId}
+        </if>
+        <if test="null != jobId and jobId != ''">
+            AND T.JOB_ID = #{jobId}
+        </if>
+        <if test="null != id and id != ''">
+            AND T.ID = #{id}
+        </if>
+    </update>
+
+
+    <!--<sql id="columns">-->
+        <!--ID, ROLE_ID, JOB_ID, ORG_TYPE, CREATE_TIME, UPDATE_TIME   CURRENT_TIMESTAMP-->
+    <!--</sql>-->
+    <insert id="insert">
+        INSERT INTO t_role_job_relation (<include refid="columns"/> ) VALUES
+        (#{id},#{roleId},#{jobId},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP )
+    </insert>
+
+    <delete id="delete">
+            DELETE FROM  t_role_job_relation WHERE 1=1
+        <if test="null != roleId and roleId != ''">
+            AND ROLE_ID = #{roleId}
+        </if>
+        <if test="null != jobId and jobId != ''">
+            AND JOB_ID = #{jobId}
+        </if>
+        <if test="null != id and id != ''">
+            AND ID = #{id}
+        </if>
+    </delete>
+
+</mapper>

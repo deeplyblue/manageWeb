@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.transaction.BizTransMapper">
+    <resultMap id="BizTransMap" type="com.oriental.manage.pojo.transaction.BizTrans" extends="BaseMapper.BaseResultMap">
+        <result property="busiNo"           column="BUSI_NO"            jdbcType="VARCHAR"/>
+        <result property="merchantCode"     column="MCHNT_CODE"         jdbcType="VARCHAR"/>
+        <result property="orderNo"          column="ORDER_NO"           jdbcType="VARCHAR"/>
+        <result property="orderDate"        column="ORDER_DATE"         jdbcType="TIMESTAMP"/>
+        <result property="channel"          column="CHANNEL"            jdbcType="VARCHAR"/>
+        <result property="ourTransNo"       column="OUR_TRANS_NO"       jdbcType="VARCHAR"/>
+        <result property="transCode"        column="TRANS_CODE"         jdbcType="VARCHAR"/>
+        <result property="transAmt"         column="TRANS_AMT"          jdbcType="DECIMAL"/>
+        <result property="transStatus"      column="TRANS_STATUS"       jdbcType="VARCHAR"/>
+        <result property="busiReqNo"        column="BUSI_REQ_NO"        jdbcType="VARCHAR"/>
+        <result property="busiReqDate"      column="BUSI_REQ_DATE"      jdbcType="TIMESTAMP"/>
+        <result property="busiRespNo"       column="BUSI_RESP_NO"       jdbcType="VARCHAR"/>
+        <result property="busiRespDate"     column="BUSI_RESP_DATE"     jdbcType="TIMESTAMP"/>
+        <result property="busiRespCode"     column="BUSI_RESP_CODE"     jdbcType="VARCHAR"/>
+        <result property="busiRespDesc"     column="BUSI_RESP_DESC"     jdbcType="VARCHAR"/>
+        <result property="settleDate"       column="SETTLE_DATE"        jdbcType="DATE"/>
+        <result property="settleStatus"     column="SETTLE_STATUS"      jdbcType="VARCHAR"/>
+        <result property="settleBatchNo"    column="SETTLE_BATCH_NO"    jdbcType="VARCHAR"/>
+        <result property="settleFlag"       column="SETTLE_FLAG"        jdbcType="VARCHAR"/>
+        <result property="chkStatus"        column="CHK_STATUS"         jdbcType="VARCHAR"/>
+        <result property="reverseFlag"      column="REVERSE_FLAG"       jdbcType="VARCHAR"/>
+        <result property="refundFlag"       column="REFUND_FLAG"        jdbcType="VARCHAR"/>
+        <result property="oldBusiNo"        column="OLD_BUSI_NO"        jdbcType="VARCHAR"/>
+        <result property="acceptSrvIp"      column="ACCEPT_SRV_IP"      jdbcType="VARCHAR"/>
+        <result property="mainBusiField"    column="MAIN_BUSI_FIELD"    jdbcType="VARCHAR"/>
+        <result property="deleteFlag"       column="DELETE_FLAG"        jdbcType="VARCHAR"/>
+        <result property="syncStatus" column="SYNC_STATUS" jdbcType="VARCHAR"/>
+        <result property="createTime"       column="CREATE_TIME"        jdbcType="TIMESTAMP"/>
+        <result property="lastUpdateTime"   column="LAST_UPD_TIME"      jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columns">
+        BUSI_NO,
+        MCHNT_CODE,
+        ORDER_NO,
+        ORDER_DATE,
+        CHANNEL,
+        OUR_TRANS_NO,
+        TRANS_CODE,
+        TRANS_AMT,
+        TRANS_STATUS,
+        BUSI_REQ_NO,
+        BUSI_REQ_DATE,
+        BUSI_RESP_NO,
+        BUSI_RESP_DATE,
+        BUSI_RESP_CODE,
+        BUSI_RESP_DESC,
+        SETTLE_DATE,
+        SETTLE_STATUS,
+        SETTLE_BATCH_NO,
+        SETTLE_FLAG,
+        CHK_STATUS,
+        REVERSE_FLAG,
+        REFUND_FLAG,
+        OLD_BUSI_NO,
+        ACCEPT_SRV_IP,
+        MAIN_BUSI_FIELD,
+        DELETE_FLAG,
+        SYNC_STATUS,
+        CREATE_TIME,
+        LAST_UPD_TIME
+    </sql>
+
+    <sql id="queryCondition">
+        <if test="merchantCode != null and merchantCode != ''">
+            AND T.MCHNT_CODE = #{merchantCode}
+        </if>
+        <if test="orderNo != null and orderNo != ''">
+            AND T.ORDER_NO = #{orderNo}
+        </if>
+        <if test="busiNo != null and busiNo != ''">
+            AND T.BUSI_NO = #{busiNo}
+        </if>
+        <if test="transStatus != null and transStatus != ''">
+            AND T.TRANS_STATUS = #{transStatus}
+        </if>
+        <if test="transCode != null and transCode != ''">
+            AND T.TRANS_CODE = #{transCode}
+        </if>
+        <if test="busiReqNo != null and busiReqNo != ''">
+            AND T.BUSI_REQ_NO = #{busiReqNo}
+        </if>
+        <if test="ourTransNo != null and ourTransNo != ''">
+            AND T.OUR_TRANS_NO = #{ourTransNo}
+        </if>
+        <if test="oldBusiNo != null and oldBusiNo != ''">
+            AND T.OLD_BUSI_NO = #{oldBusiNo}
+        </if>
+        <if test="reverseFlag != null and reverseFlag != ''">
+            AND T.REVERSE_FLAG = #{reverseFlag}
+        </if>
+        <if test="deleteFlag != null and deleteFlag != ''">
+            AND T.DELETE_FLAG = #{deleteFlag}
+        </if>
+        <if test="channel != null and channel != ''">
+            AND T.CHANNEL = #{channel}
+        </if>
+        <if test="beginOrderDate != null">
+            AND T.ORDER_DATE &gt;= #{beginOrderDate}
+        </if>
+        <if test="endOrderDate != null">
+            AND t.ORDER_DATE &lt;= DATE_ADD(#{endOrderDate}, INTERVAL 1 DAY)
+        </if>
+        <if test="beginSettleDate != null">
+            AND T.SETTLE_DATE &gt;= #{beginSettleDate}
+        </if>
+        <if test="endSettleDate != null">
+            AND T.SETTLE_DATE &lt;= #{endSettleDate}
+        </if>
+    </sql>
+
+    <select id="queryPage" resultMap="BizTransMap" parameterType="com.oriental.manage.pojo.transaction.BizTrans">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT <include refid="columns"/>
+        FROM T_BUSI_TRANS_DETAIL T
+        WHERE 1 = 1
+        <include refid="queryCondition"/>
+        ORDER BY T.CREATE_TIME DESC
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <select id="summaryBizTrans" resultType="Map" parameterType="com.oriental.manage.pojo.transaction.BizTrans">
+        SELECT COUNT(1) AS sumCount, SUM(T.TRANS_AMT) AS sumTotalAmt
+        FROM T_BUSI_TRANS_DETAIL T
+        WHERE 1 = 1
+        <include refid="queryCondition"/>
+    </select>
+
+    <select id="queryBizTransDetail" resultMap="BizTransMap" parameterType="com.oriental.manage.pojo.transaction.BizTrans">
+        SELECT <include refid="columns"/>
+        FROM T_BUSI_TRANS_DETAIL T
+        WHERE 1 = 1
+          AND T.BUSI_NO = #{busiNo}
+        <if test="merchantCode != null and merchantCode != ''">
+            AND T.MCHNT_CODE = #{merchantCode}
+        </if>
+    </select>
+
+    <select id="queryBizTrans" resultMap="BizTransMap" parameterType="com.oriental.manage.pojo.transaction.BizTrans">
+        SELECT <include refid="columns"/>
+        FROM T_BUSI_TRANS_DETAIL T
+        WHERE 1 = 1
+        AND T.OUR_TRANS_NO = #{ourTransNo}
+        AND T.DELETE_FLAG = '0'
+    </select>
+</mapper>

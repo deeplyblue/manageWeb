@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.transaction.PayTransMapper">
+    <resultMap id="PayTransMap" type="com.oriental.manage.pojo.transaction.PayTrans" extends="BaseMapper.BaseResultMap">
+        <result property="payTransNo" column="PAY_TRANS_NO" jdbcType="VARCHAR"/>
+        <result property="orderNo" column="ORDER_NO" jdbcType="VARCHAR"/>
+        <result property="orderDate" column="ORDER_DATE" jdbcType="TIMESTAMP"/>
+        <result property="channel" column="CHANNEL" jdbcType="VARCHAR"/>
+        <result property="ourTransNo" column="OUR_TRANS_NO" jdbcType="VARCHAR"/>
+        <result property="bankCode" column="BANK_CODE" jdbcType="VARCHAR"/>
+        <result property="bankType" column="BANK_TYPE" jdbcType="VARCHAR"/>
+        <result property="payOrgCode" column="PAY_ORG_CODE" jdbcType="VARCHAR"/>
+        <result property="orgBankCode" column="ORG_BANK_CODE" jdbcType="VARCHAR"/>
+        <result property="transCode" column="TRANS_CODE" jdbcType="VARCHAR"/>
+        <result property="transAmt" column="TRANS_AMT" jdbcType="DECIMAL"/>
+        <result property="transStatus" column="TRANS_STATUS" jdbcType="VARCHAR"/>
+        <result property="payReqNo" column="PAY_REQ_NO" jdbcType="VARCHAR"/>
+        <result property="payReqDate" column="PAY_REQ_DATE" jdbcType="VARCHAR"/>
+        <result property="payRespNo" column="PAY_RESP_NO" jdbcType="VARCHAR"/>
+        <result property="payRespDate" column="PAY_RESP_DATE" jdbcType="VARCHAR"/>
+        <result property="payRespCode" column="PAY_RESP_CODE" jdbcType="VARCHAR"/>
+        <result property="payRespDesc" column="PAY_RESP_DESC" jdbcType="VARCHAR"/>
+        <result property="paySettleDate" column="PAY_SETTLE_DATE" jdbcType="DATE"/>
+        <result property="authorizationCode" column="AUTHORIZATION_CODE" jdbcType="VARCHAR"/>
+        <result property="payUserName" column="PAY_USER_NAME" jdbcType="VARCHAR"/>
+        <result property="payUserMobile" column="PAY_USER_MOBILE" jdbcType="VARCHAR"/>
+        <result property="bankAccId" column="BANK_ACC_ID" jdbcType="VARCHAR"/>
+        <result property="bankAccPwd" column="BANK_ACC_PWD" jdbcType="VARCHAR"/>
+        <result property="phone" column="BANK_ACC_PHONE" jdbcType="VARCHAR"/>
+        <!--<result property="headBank" column="HEAD_BANK" jdbcType="VARCHAR"/>-->
+        <!--<result property="branchBank" column="BRANCH_BANK" jdbcType="VARCHAR"/>-->
+        <!--<result property="subBank" column="SUB_BANK" jdbcType="VARCHAR"/>-->
+        <result property="province" column="PROVINCE" jdbcType="VARCHAR"/>
+        <result property="city" column="CITY" jdbcType="VARCHAR"/>
+        <result property="ppFlag" column="PP_FLAG" jdbcType="VARCHAR"/>
+        <result property="cdFlag" column="CD_FLAG" jdbcType="VARCHAR"/>
+        <result property="validDate" column="VALID_DATE" jdbcType="VARCHAR"/>
+        <result property="cvv2" column="CVV2" jdbcType="VARCHAR"/>
+        <result property="certType" column="CERT_TYPE" jdbcType="VARCHAR"/>
+        <result property="certCode" column="CERT_CODE" jdbcType="VARCHAR"/>
+        <result property="certName" column="CERT_NAME" jdbcType="VARCHAR"/>
+        <result property="oldPayTransNo" column="OLD_PAY_TRANS_NO" jdbcType="VARCHAR"/>
+        <result property="settleDate" column="SETTLE_DATE" jdbcType="DATE"/>
+        <result property="settleStatus" column="SETTLE_STATUS" jdbcType="VARCHAR"/>
+        <result property="settleBatchNo" column="SETTLE_BATCH_NO" jdbcType="VARCHAR"/>
+        <result property="settleFlag" column="SETTLE_FLAG" jdbcType="VARCHAR"/>
+        <result property="reverseFlag" column="REVERSE_FLAG" jdbcType="VARCHAR"/>
+        <result property="chkStatus" column="CHK_STATUS" jdbcType="VARCHAR"/>
+        <result property="refundFlag" column="REFUND_FLAG" jdbcType="VARCHAR"/>
+        <result property="acceptSrvIp" column="ACCEPT_SRV_IP" jdbcType="VARCHAR"/>
+        <result property="digest" column="DIGEST" jdbcType="VARCHAR"/>
+        <result property="deleteFlag" column="DELETE_FLAG" jdbcType="VARCHAR"/>
+        <result property="syncStatus" column="SYNC_STATUS" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="lastUpdateTime" column="LAST_UPD_TIME" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columns">
+        T.PAY_TRANS_NO,
+        T.ORDER_NO,
+        T.ORDER_DATE,
+        T.CHANNEL,
+        T.OUR_TRANS_NO,
+        T.BANK_CODE,
+        T.BANK_TYPE,
+        T.PAY_ORG_CODE,
+        T.ORG_BANK_CODE,
+        T.TRANS_CODE,
+        T.TRANS_AMT,
+        T.TRANS_STATUS,
+        T.PAY_REQ_NO,
+        T.PAY_REQ_DATE,
+        T.PAY_RESP_NO,
+        T.PAY_RESP_DATE,
+        T.PAY_RESP_CODE,
+        T.PAY_RESP_DESC,
+        T.PAY_SETTLE_DATE,
+        T.AUTHORIZATION_CODE,
+        T.PAY_USER_NAME,
+        T.PAY_USER_MOBILE,
+        T.BANK_ACC_ID,
+        T.BANK_ACC_PWD,
+        T.BANK_ACC_PHONE,
+        /*T.HEAD_BANK,
+        T.BRANCH_BANK,
+        T.SUB_BANK,*/
+        T.PROVINCE,
+        T.CITY,
+        T.PP_FLAG,
+        T.CD_FLAG,
+        T.VALID_DATE,
+        T.CVV2,
+        T.CERT_TYPE,
+        T.CERT_CODE,
+        T.CERT_NAME,
+        T.OLD_PAY_TRANS_NO,
+        T.SETTLE_DATE,
+        T.SETTLE_STATUS,
+        T.SETTLE_BATCH_NO,
+        T.SETTLE_FLAG,
+        T.REVERSE_FLAG,
+        T.CHK_STATUS,
+        T.REFUND_FLAG,
+        T.ACCEPT_SRV_IP,
+        T.DIGEST,
+        T.DELETE_FLAG,
+        T.SYNC_STATUS,
+        T.CREATE_TIME,
+        T.LAST_UPD_TIME
+    </sql>
+
+    <sql id="queryCondition">
+        <if test="payOrgCode != null and payOrgCode != ''">
+            AND T.PAY_ORG_CODE = #{payOrgCode}
+        </if>
+        <if test="orderNo != null and orderNo != ''">
+            AND T.ORDER_NO = #{orderNo}
+        </if>
+        <if test="payTransNo != null and payTransNo != ''">
+            AND T.PAY_TRANS_NO = #{payTransNo}
+        </if>
+        <if test="transStatus != null and transStatus != ''">
+            AND T.TRANS_STATUS = #{transStatus}
+        </if>
+        <if test="payReqNo != null and payReqNo != ''">
+            AND T.PAY_REQ_NO = #{payReqNo}
+        </if>
+        <if test="ourTransNo != null and ourTransNo != ''">
+            AND T.OUR_TRANS_NO = #{ourTransNo}
+        </if>
+        <if test="oldPayTransNo != null and oldPayTransNo != ''">
+            AND T.OLD_PAY_TRANS_NO = #{oldPayTransNo}
+        </if>
+        <if test="channel != null and channel != ''">
+            AND T.CHANNEL = #{channel}
+        </if>
+        <if test="reverseFlag != null and reverseFlag != ''">
+            AND T.REVERSE_FLAG = #{reverseFlag}
+        </if>
+        <if test="deleteFlag != null and deleteFlag != ''">
+            AND T.DELETE_FLAG = #{deleteFlag}
+        </if>
+        <if test="transCode != null and transCode != ''">
+            AND T.TRANS_CODE = #{transCode}
+        </if>
+        <if test="beginOrderDate != null">
+            AND T.PAY_SETTLE_DATE &gt;= #{beginOrderDate}
+        </if>
+        <if test="endOrderDate != null">
+            AND T.PAY_SETTLE_DATE &lt;= #{endOrderDate}
+        </if>
+        <if test="beginSettleDate != null">
+            AND T.SETTLE_DATE &gt;= #{beginSettleDate}
+        </if>
+        <if test="endSettleDate != null">
+            AND T.SETTLE_DATE &lt;= #{endSettleDate}
+        </if>
+        <if test="certCode != null and certCode != ''">
+            AND T.CERT_CODE = #{certCode}
+        </if>
+        <if test="payUserMobile != null and payUserMobile!= ''">
+            AND T.PAY_USER_MOBILE = #{payUserMobile}
+        </if>
+        <if test="payRespNo != null and payRespNo != ''">
+            AND T.PAY_RESP_NO = #{payRespNo}
+        </if>
+    </sql>
+
+    <select id="queryPage" resultMap="PayTransMap" parameterType="com.oriental.manage.pojo.transaction.PayTrans">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT
+        <include refid="columns"/>
+        FROM T_PAY_TRANS_DETAIL T
+        WHERE 1 = 1
+        <include refid="queryCondition"/>
+        ORDER BY T.CREATE_TIME DESC
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <select id="summaryPayTrans" resultType="Map" parameterType="com.oriental.manage.pojo.transaction.PayTrans">
+        SELECT COUNT(1) AS sumCount, SUM(T.TRANS_AMT) AS sumTotalAmt
+        FROM T_PAY_TRANS_DETAIL T
+        WHERE 1 = 1
+        <include refid="queryCondition"/>
+    </select>
+
+    <select id="queryPay" resultMap="PayTransMap" parameterType="com.oriental.manage.pojo.transaction.PayTrans">
+        SELECT
+        <include refid="columns"/>
+        FROM T_PAY_TRANS_DETAIL T
+        WHERE 1 = 1
+        AND T.ORDER_NO = #{orderNo}
+        AND T.DELETE_FLAG = #{deleteFlag}
+    </select>
+
+    <select id="queryOrderMainDetail" resultMap="PayTransMap"
+            parameterType="com.oriental.manage.pojo.transaction.PayTrans">
+        SELECT
+        <include refid="columns"/>
+        FROM T_PAY_TRANS_DETAIL T
+        WHERE 1 = 1
+        AND T.PAY_TRANS_NO = #{payTransNo}
+    </select>
+
+    <select id="selectRecordByOurTransNo" resultMap="PayTransMap"
+            parameterType="com.oriental.manage.pojo.transaction.PayTrans">
+        SELECT
+        <include refid="columns"/>
+        FROM T_PAY_TRANS_DETAIL T
+        WHERE 1 = 1
+        AND T.OUR_TRANS_NO = #{ourTransNo}
+    </select>
+</mapper>

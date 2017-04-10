@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.merchant.itconfig.MerchantInterfaceMapper">
+
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.merchant.itconfig.MerchantInterface" extends="BaseMapper.BaseResultMap">
+        <id     column="ID"                         property="id"                               jdbcType="VARCHAR"/>
+        <result column="MCHNT_CODE"                 property="merchantCode"                     jdbcType="VARCHAR"/>
+        <result column="MCHNT_WS_URL"               property="merchantWsUrl"                    jdbcType="VARCHAR"/>
+        <result column="MCHNT_IP"                   property="merchantIp"                       jdbcType="VARCHAR"/>
+        <result column="MCHNT_CALLBACK_URL"         property="merchantCallbackUrl"              jdbcType="VARCHAR"/>
+        <result column="MCHNT_IVR_NO"               property="merchantIvrNo"                    jdbcType="VARCHAR"/>
+        <result column="CERT_PATH"                  property="certPath"                         jdbcType="VARCHAR"/>
+        <!--<result column="CREATE_TIME"                property="createTime"                       jdbcType="TIMESTAMP"/>-->
+        <!--<result column="LAST_UPD_TIME"              property="lastUpdTime"                      jdbcType="TIMESTAMP"/>-->
+        <result column="MCHNT_REFUND_IP"            property="merchantRefundIp"                 jdbcType="VARCHAR"/>
+        <result column="MCHNT_PREAUTH_URL"          property="merchantPreauthUrl"               jdbcType="VARCHAR"/>
+        <result column="IS_AUTO_CHECK_ORDER"        property="isAutoCheckOrder"                 jdbcType="VARCHAR"/>
+        <result column="DOMAIN_NAME"                property="domainName"                       jdbcType="VARCHAR"/>
+        <result column="MCHNT_REFUND_NOTIFY_URL"    property="merchantRefundNotifyUrl"          jdbcType="VARCHAR"/>
+        <result column="IS_IP_VAL"                  property="isIpVal"                          jdbcType="VARCHAR"/>
+        <result column="NOTIFY_DATE_TYPE"           property="companyType"                      jdbcType="VARCHAR"/>
+        <result column="BUS_REMARK"                 property="busRemark"                        jdbcType="VARCHAR"/>
+        <result column="CONSUMPTION_PATTERNS"       property="consumptionPatterns"              jdbcType="VARCHAR"/>
+        <result column="CLIENT_CHANNEL_INTERFACE"   property="clientChannelInterface"           jdbcType="VARCHAR"/>
+        <result column="MCHNT_CHECK_URL"            property="merchantCheckUrl"                 jdbcType="VARCHAR"/>
+        <result column="IS_REFUND_IP_VAL"           property="isRefundIpVal"                    jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID,MCHNT_CODE,MCHNT_WS_URL,MCHNT_IP,MCHNT_CALLBACK_URL,MCHNT_IVR_NO,CERT_PATH,
+        MCHNT_REFUND_IP,MCHNT_PREAUTH_URL,IS_AUTO_CHECK_ORDER,DOMAIN_NAME,MCHNT_REFUND_NOTIFY_URL,IS_IP_VAL,
+        NOTIFY_DATE_TYPE,BUS_REMARK,CONSUMPTION_PATTERNS,CLIENT_CHANNEL_INTERFACE,MCHNT_CHECK_URL,IS_REFUND_IP_VAL
+    </sql>
+
+
+    <sql id="queryCondition">
+        <if test="merchantCode != null and merchantCode != ''">
+            AND T.MCHNT_CODE = #{merchantCode}
+        </if>
+    </sql>
+
+    <select id="queryMerchantInterface" resultMap="BaseResultMap">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT <include refid="Base_Column_List" /> FROM T_MCHNT_INTERFACE T WHERE 1=1
+        <include refid="queryCondition"/>
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <insert id="createMerchantInterface">
+      INSERT INTO T_MCHNT_INTERFACE (<include refid="Base_Column_List"/> ) VALUES
+        (#{id},#{merchantCode},#{merchantWsUrl},#{merchantIp},#{merchantCallbackUrl},#{merchantIvrNo},
+        #{certPath},#{merchantRefundIp},#{merchantPreauthUrl},#{isAutoCheckOrder},#{domainName},#{merchantRefundNotifyUrl},
+        #{isIpVal},#{companyType},#{busRemark},#{consumptionPatterns},#{clientChannelInterface},#{merchantCheckUrl},
+        #{isRefundIpVal})
+    </insert>
+
+    <update id="updateMerchantInterface">
+        UPDATE T_MCHNT_INTERFACE T
+        <set>
+            <if test="merchantWsUrl != null">
+                T.MCHNT_WS_URL = #{merchantWsUrl},
+            </if>
+            <if test="merchantIp != null">
+                T.MCHNT_IP = #{merchantIp},
+            </if>
+            <if test="merchantCallbackUrl != null">
+                T.MCHNT_CALLBACK_URL = #{merchantCallbackUrl},
+            </if>
+            <if test="merchantIvrNo != null">
+                T.MCHNT_IVR_NO = #{merchantIvrNo},
+            </if>
+            <if test="certPath != null">
+                T.CERT_PATH = #{certPath},
+            </if>
+            <if test="merchantRefundIp != null">
+                T.MCHNT_REFUND_IP = #{merchantRefundIp},
+            </if>
+            <if test="merchantPreauthUrl != null">
+                T.MCHNT_PREAUTH_URL = #{merchantPreauthUrl},
+            </if>
+            <if test="isAutoCheckOrder != null">
+                T.IS_AUTO_CHECK_ORDER = #{isAutoCheckOrder},
+            </if>
+            <if test="domainName != null">
+                T.DOMAIN_NAME = #{domainName},
+            </if>
+            <if test="merchantRefundNotifyUrl != null">
+                T.MCHNT_REFUND_NOTIFY_URL = #{merchantRefundNotifyUrl},
+            </if>
+            <if test="isIpVal != null">
+                T.IS_IP_VAL = #{isIpVal},
+            </if>
+            <if test="companyType != null">
+                T.NOTIFY_DATE_TYPE = #{companyType},
+            </if>
+            <if test="busRemark != null">
+                T.BUS_REMARK = #{busRemark},
+            </if>
+            <if test="consumptionPatterns != null">
+                T.CONSUMPTION_PATTERNS = #{consumptionPatterns},
+            </if>
+            <if test="clientChannelInterface != null">
+                T.CLIENT_CHANNEL_INTERFACE = #{clientChannelInterface},
+            </if>
+            <if test="merchantCheckUrl != null">
+                T.MCHNT_CHECK_URL = #{merchantCheckUrl},
+            </if>
+            <if test="isRefundIpVal != null">
+                T.IS_REFUND_IP_VAL = #{isRefundIpVal},
+            </if>
+        </set>
+        WHERE T.MCHNT_CODE = #{merchantCode} AND T.ID = #{id}
+    </update>
+
+</mapper>

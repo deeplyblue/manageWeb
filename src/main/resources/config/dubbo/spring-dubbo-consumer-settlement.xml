@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://code.alibabatech.com/schema/dubbo
+                           http://code.alibabatech.com/schema/dubbo/dubbo.xsd" default-lazy-init="false">
+
+
+    <!--����-->
+    <dubbo:reference interface="com.oriental.clearDubbo.api.settle.sum.TransSumDetailInterface"
+                     id="transSumDetailInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.clear.detail.ManageClearInterface"
+                     id="manageClearInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.clear.day.ClearDayInterface"
+                     id="clearDayInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.clear.detail.ClearDetailInterface"
+                     id="clearDetailInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.clear.redo.RedoClearDetailInterface"
+                     id="redoClearDetailInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.settle.fee.FeeCfgTemplateInterface"
+                     id="feeCfgTemplateInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.clear.detail.AuditorClearInterface"
+                     id="auditorClearInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.settle.fee.FeeCfgInterface"
+                     id="feeCfgInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.settle.settle.SettleDetailInterface"
+                     id="settleDetailInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.clear.cfg.ClearCfgInterface"
+                     id="clearCfgInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.clear.report.ClearRelationInterface"
+                     id="clearRelationInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.clear.report.ReportDayInterface"
+                     id="reportDayInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.clear.report.FeeAccrueInterface"
+                     id="feeAccrueInterface" retries="0" timeout="10000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.clear.report.OrgTransDetailInterface"
+                     id="orgTransDetailInterface" retries="0" timeout="60000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.clear.detail.MchntManageClearInterface"
+                     id="mchntManageClearInterface" retries="0" timeout="60000" registry="settlement"/>
+    <dubbo:reference interface="com.oriental.clearDubbo.api.clear.report.ReportFormsInterface"
+                     id="reportFormsInterface" retries="0" timeout="60000" registry="settlement"/>
+</beans>

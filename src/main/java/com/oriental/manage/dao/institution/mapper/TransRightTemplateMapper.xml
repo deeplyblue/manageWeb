@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.institution.TransRightTemplateMapper">
+	<resultMap id="BaseResultMap" type="com.oriental.manage.pojo.institution.TransRightTemplate"
+			   extends="BaseMapper.BaseResultMap">
+		<result column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="TEMPLATE_NO" property="templateNo" jdbcType="VARCHAR" />
+		<result column="TEMPLATE_NAME" property="templateName" jdbcType="VARCHAR" />
+		<result column="CONN_CHANNEL" property="connChannel" jdbcType="VARCHAR" />
+		<result column="TRANS_CODE" property="transCode" jdbcType="VARCHAR" />
+		<result column="COMPANY_TYPE" property="companyType" jdbcType="VARCHAR" />
+		<result column="REFUND_FLAG" property="refundFlag" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+		<result column="USE_FLAG" property="useFlag" jdbcType="VARCHAR" />
+		<result column="ACQ_ORG_CODE" property="acqOrgCode" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID, TEMPLATE_NO, TEMPLATE_NAME, CONN_CHANNEL, TRANS_CODE, COMPANY_TYPE,
+		REFUND_FLAG, CREATE_TIME, LAST_UPD_TIME,USE_FLAG,ACQ_ORG_CODE
+	</sql>
+    <sql id="queryCondition">
+        <if test="companyType != null and companyType != ''">
+            AND TRT.COMPANY_TYPE = #{companyType}
+        </if>
+        <if test="templateName != null and templateName != ''">
+            AND TRT.TEMPLATE_NAME LIKE   CONCAT('%', #{templateName}, '%')
+        </if>
+        <if test="connChannel != null and connChannel != ''">
+            AND TRT.CONN_CHANNEL = #{connChannel}
+        </if>
+        <if test="transCode != null and transCode != ''">
+            AND TRT.TRANS_CODE = #{transCode}
+        </if>
+        <if test="useFlag != null and useFlag != ''">
+            AND TRT.USE_FLAG = #{useFlag}
+        </if>
+    </sql>
+	
+	<select id="checkConfig" resultType="int"
+		parameterType="com.oriental.manage.pojo.institution.TransRightTemplate">
+		select count(1)
+		from T_TRANS_RIGHT_TEMPLATE where 1=1
+		<if test="templateName != null and templateName != ''">
+			AND TEMPLATE_NAME = #{templateName}
+		</if>
+		<if test="templateNo != null and templateNo != ''">
+			AND TEMPLATE_NO != #{templateNo}
+		</if><!-- 
+		<if test="connChannel != null and connChannel != ''">
+			AND  CONN_CHANNEL=SUBSTR(#{connChannel},0,(INSTR(#{connChannel},':')-1))
+		</if> -->
+		<if test="companyType != null and companyType != ''">
+			AND  COMPANY_TYPE = #{companyType}
+		</if>
+	</select>
+	
+	<select id="searchByKey" resultMap="BaseResultMap"
+		parameterType="com.oriental.manage.pojo.institution.TransRightTemplate">
+		select
+		<include refid="Base_Column_List" />
+		from T_TRANS_RIGHT_TEMPLATE where TEMPLATE_NO = #{templateNo}
+	</select>
+	
+	<select id="queryPage" resultMap="BaseResultMap">
+		<include refid="BaseMapper.pageHead"/>
+		SELECT <include refid="Base_Column_List" />
+          FROM T_TRANS_RIGHT_TEMPLATE TRT
+         WHERE 1 = 1 <include refid="queryCondition"/>
+		 ORDER BY TRT.TEMPLATE_NO, TRT.CONN_CHANNEL, TRT.TRANS_CODE
+		<include refid="BaseMapper.pageFoot"/>
+	</select>
+
+	<select id="queryCount" parameterType="com.oriental.manage.pojo.institution.TransRightTemplate" resultType="int">
+		SELECT count(1)
+		FROM T_TRANS_RIGHT_TEMPLATE TRT
+		WHERE 1 = 1 <include refid="queryCondition"/>
+	</select>
+	
+	<select id="getAllTemplate" resultMap="BaseResultMap"
+		parameterType="com.oriental.manage.pojo.institution.TransRightTemplate">
+		
+		<!-- SELECT DISTINCT TEMPLATE_NO,TEMPLATE_NAME,COMPANY_TYPE,CONN_CHANNEL FROM T_TRANS_RIGHT_TEMPLATE WHERE 1=1 -->
+		SELECT TEMPLATE_NO,TEMPLATE_NAME,COMPANY_TYPE, CONN_CHANNEL FROM T_TRANS_RIGHT_TEMPLATE
+		WHERE ID IN ( select max(id) from T_TRANS_RIGHT_TEMPLATE GROUP BY TEMPLATE_NO )
+		<if test="companyType != null and companyType != ''">
+			AND COMPANY_TYPE = #{companyType}
+		</if>
+		<if test="useFlag != null and useFlag != ''">
+			AND USE_FLAG = #{useFlag}
+		</if>
+		ORDER BY TEMPLATE_NO DESC
+	</select>
+	
+	<insert id="insertTransRightTemplate"
+		parameterType="com.oriental.manage.pojo.institution.TransRightTemplate">
+		insert into T_TRANS_RIGHT_TEMPLATE (ID, TEMPLATE_NO, TEMPLATE_NAME,
+		CONN_CHANNEL, TRANS_CODE, COMPANY_TYPE,
+		REFUND_FLAG, CREATE_TIME,
+		LAST_UPD_TIME,USE_FLAG,ACQ_ORG_CODE)
+		values (#{id}, #{templateNo}, #{templateName},
+		#{connChannel}, #{transCode}, #{companyType}, #{refundFlag}, now(),
+		now(),#{useFlag},#{acqOrgCode})
+	</insert>
+	
+	<delete id="deleteByTemplateId"
+		parameterType="com.oriental.manage.pojo.institution.TransRightTemplate">
+		delete from T_TRANS_RIGHT_TEMPLATE WHERE TEMPLATE_NO = #{templateNo}
+	</delete>
+	
+	<select id="getAllTemplateByUserFlag" resultMap="BaseResultMap"
+		parameterType="com.oriental.manage.pojo.institution.TransRightTemplate">
+		SELECT TEMPLATE_NO,TEMPLATE_NAME FROM T_TRANS_RIGHT_TEMPLATE WHERE USE_FLAG = 1
+	</select>
+</mapper>

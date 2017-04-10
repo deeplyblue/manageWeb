@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.merchant.FeeCfgMapper">
+	<resultMap id="BaseResultMap" type="com.oriental.manage.pojo.merchant.FeeCfg"
+			   extends="BaseMapper.BaseResultMap">
+		<id column="FEE_CFG_NO" property="feeCfgNo" jdbcType="VARCHAR" />
+		<result column="FEE_METHOD" property="feeMethod" jdbcType="VARCHAR" />
+		<result column="FEE_UNIT" property="feeUnit" jdbcType="VARCHAR" />
+		<result column="FEE_TYPE" property="feeType" jdbcType="VARCHAR" />
+		<result column="FEE_CYCLE_TYPE" property="feeCycleType" jdbcType="VARCHAR" />
+		<result column="FEE_DATE" property="feeDate" jdbcType="TIMESTAMP" />
+		<result column="FEE_SEG_TYPE" property="feeSegType" jdbcType="VARCHAR" />
+		<result column="FEE_RCV_CYCLE" property="feeRcvCycle" jdbcType="VARCHAR" />
+		<result column="SEGMENT_FLAG" property="segmentFlag" jdbcType="VARCHAR" />
+		<result column="FEE_STANDRAD" property="feeStandrad" jdbcType="VARCHAR" />
+		<result column="ENABLE_FLAG" property="enableFlag" jdbcType="VARCHAR" />
+		<result column="DISCOUNT_BGN_DATE" property="discountBgnDate" jdbcType="VARCHAR" />
+		<result column="DISCOUNT_END_DATE" property="discountEndDate" jdbcType="VARCHAR" />
+		<result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+		<result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+		<result column="SYNC_STATE" property="syncState" jdbcType="VARCHAR" />
+		<result column="FEE_PRIORITY" property="feePriority" jdbcType="DECIMAL" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+		<result column="VALIDATE_BEGIN_DATE" property="validateBeginDate" jdbcType="TIMESTAMP" />
+		<result column="VALIDATE_END_DATE" property="validateEndDate" jdbcType="TIMESTAMP" />
+		<result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+		<result column="TRANS_CODE" property="transCode" jdbcType="VARCHAR" />
+		<result column="CONN_CHANNEL" property="connChannel" jdbcType="VARCHAR" />
+		<result column="COMPANY_TYPE" property="companyType" jdbcType="VARCHAR" />
+		<result column="ORG_BANK_CODE" property="orgBankCode" jdbcType="VARCHAR" />
+		<result column="SPLIT_FLAG" property="splitFlag" jdbcType="VARCHAR" />
+		<result column="RATE_ROUND_TYPE" property="rateRoundType" jdbcType="VARCHAR" />
+		<result column="PROTOCOL_MODE" property="protocolMode" jdbcType="VARCHAR" />
+		<result column="BANK_TYPE" property="bankType" jdbcType="VARCHAR" />
+		<result column="RE_FEE_FLAG" property="reFeeFlag" jdbcType="VARCHAR" />
+		<result column="FEE_LOW_LMT" property="feeLowLmt" jdbcType="VARCHAR" />
+		<result column="SEG_LOW_LMT" property="segLowLmt" jdbcType="DECIMAL" />
+		<result column="SEG_UPP_LMT" property="segUppLmt" jdbcType="VARCHAR" />
+		<result column="FEE_SEG_METHOD" property="feeSegMethod" jdbcType="VARCHAR" />
+		<result column="FIX_FEE" property="fixFee" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		FEE_CFG_NO,FEE_METHOD, FEE_UNIT, FEE_TYPE,
+		FEE_CYCLE_TYPE,RATE_ROUND_TYPE,SPLIT_FLAG,
+		date_format(FEE_DATE,'%Y%m%d') FEE_DATE,
+		FEE_SEG_TYPE, FEE_RCV_CYCLE, SEGMENT_FLAG,
+		FEE_STANDRAD, ENABLE_FLAG,
+		date_format(DISCOUNT_BGN_DATE,'%Y%m%d') DISCOUNT_BGN_DATE,
+		date_format(DISCOUNT_END_DATE,'%Y%m%d') DISCOUNT_END_DATE,
+		date_format(VALIDATE_BEGIN_DATE,'%Y%m%d') VALIDATE_BEGIN_DATE,
+		date_format(VALIDATE_END_DATE,'%Y%m%d') VALIDATE_END_DATE,
+		CREATOR, MODIFIER, SYNC_STATE, FEE_PRIORITY, CREATE_TIME,RE_FEE_FLAG,
+		LAST_UPD_TIME,ORG_CODE,TRANS_CODE,CONN_CHANNEL,COMPANY_TYPE,ORG_BANK_CODE,PROTOCOL_MODE,BANK_TYPE
+	</sql>
+	<sql id="Base_Column_List_One">
+		FC.FEE_CFG_NO, FC.FEE_METHOD, FC.FEE_UNIT, FC.FEE_TYPE,
+		FC.FEE_CYCLE_TYPE, FC.RATE_ROUND_TYPE, FC.SPLIT_FLAG,
+		date_format(FC.FEE_DATE, '%Y%m%d') AS FEE_DATE,
+		FC.FEE_SEG_TYPE, FC.FEE_RCV_CYCLE, FC.SEGMENT_FLAG,
+		FC.FEE_STANDRAD, FC.ENABLE_FLAG,
+		date_format(FC.DISCOUNT_BGN_DATE, '%Y%m%d') AS DISCOUNT_BGN_DATE,
+		date_format(FC.DISCOUNT_END_DATE, '%Y%m%d') AS DISCOUNT_END_DATE,
+		date_format(FC.VALIDATE_BEGIN_DATE, '%Y%m%d') AS VALIDATE_BEGIN_DATE,
+		date_format(FC.VALIDATE_END_DATE, '%Y%m%d') AS VALIDATE_END_DATE,
+		FC.CREATOR, FC.MODIFIER, FC.SYNC_STATE, FC.FEE_PRIORITY, FC.CREATE_TIME, FC.RE_FEE_FLAG,
+		FC.LAST_UPD_TIME, FC.ORG_CODE, FC.TRANS_CODE, FC.CONN_CHANNEL, FC.COMPANY_TYPE, FC.ORG_BANK_CODE,
+		FC.PROTOCOL_MODE, FC.BANK_TYPE,
+		FSR.FEE_LOW_LMT, FSR.SEG_LOW_LMT, FSR.SEG_UPP_LMT, FSR.FEE_SEG_METHOD, FSR.FIX_FEE
+	</sql>
+    <sql id="queryCondition">
+        <if test="connChannel != null and connChannel != ''">
+            AND (FC.CONN_CHANNEL = #{connChannel} OR FC.CONN_CHANNEL IS NULL)
+        </if>
+        <if test="transCode != null and transCode != ''">
+            AND (FC.TRANS_CODE = #{transCode} OR FC.TRANS_CODE IS NULL)
+        </if>
+        <if test="companyType != null and companyType != ''">
+            AND FC.COMPANY_TYPE = #{companyType}
+        </if>
+        <if test="orgCode != null and orgCode != ''">
+            AND FC.ORG_CODE = #{orgCode}
+        </if>
+        <if test="syncState != null and syncState != ''">
+            AND FC.SYNC_STATE = #{syncState}
+        </if>
+        <if test="enableFlag != null and enableFlag != ''">
+            AND FC.ENABLE_FLAG = #{enableFlag}
+        </if>
+    </sql>
+
+	<select id="queryPage" resultMap="BaseResultMap">
+		<include refid="BaseMapper.pageHead"/>
+		SELECT <include refid="Base_Column_List_One" />
+		  FROM T_FEE_CFG FC
+          LEFT JOIN T_FEE_SEG_RATE FSR ON FC.FEE_CFG_NO = FSR.FEE_CFG_NO
+         WHERE 1 = 1 <include refid="queryCondition"/>
+		 ORDER BY FC.ORG_CODE, FC.ORG_BANK_CODE, FC.CONN_CHANNEL, FC.TRANS_CODE
+		<include refid="BaseMapper.pageFoot"/>
+	</select>
+
+	<insert id="insertFeeCfg" parameterType="com.oriental.manage.pojo.merchant.FeeCfg">
+		insert into T_FEE_CFG
+		(FEE_CFG_NO, FEE_METHOD,FEE_CYCLE_TYPE,
+		FEE_UNIT, FEE_SEG_TYPE, FEE_RCV_CYCLE,
+		SEGMENT_FLAG, ENABLE_FLAG,CREATOR,SYNC_STATE,
+		ORG_CODE,COMPANY_TYPE,RATE_ROUND_TYPE,
+		VALIDATE_BEGIN_DATE,VALIDATE_END_DATE
+		<if test="transCode != null and transCode != ''">
+			,TRANS_CODE
+		</if>
+		<if test="connChannel != null and connChannel != ''">
+			,CONN_CHANNEL
+		</if>
+		<if test="orgBankCode != null and orgBankCode != ''">
+			,ORG_BANK_CODE
+		</if>
+		<if test="splitFlag != null and splitFlag != ''">
+			,SPLIT_FLAG
+		</if>
+		,PROTOCOL_MODE,BANK_TYPE,RE_FEE_FLAG) values
+		(#{feeCfgNo},
+		#{feeMethod},#{feeCycleType,jdbcType=VARCHAR},
+		#{feeUnit},
+		#{feeSegType},
+		#{feeRcvCycle,jdbcType=VARCHAR},
+		#{segmentFlag},
+		#{enableFlag},
+		#{creator},
+		#{syncState},#{orgCode}
+		,#{companyType},#{rateRoundType},#{validateBeginDate},#{validateEndDate}
+		<if test="transCode != null and transCode != ''">
+			,#{transCode}
+		</if>
+		<if test="connChannel != null and connChannel != ''">
+			,#{connChannel}
+		</if>
+		<if test="orgBankCode != null and orgBankCode != ''">
+			,#{orgBankCode}
+		</if>
+		<if test="splitFlag != null and splitFlag != ''">
+			,#{splitFlag,jdbcType=VARCHAR}
+		</if>
+		,#{protocolMode,jdbcType=VARCHAR},#{bankType,jdbcType=VARCHAR},#{reFeeFlag})
+	</insert>
+	<delete id="deleteFeeCfg" parameterType="com.oriental.manage.pojo.merchant.FeeCfg">
+		DELETE from T_FEE_CFG WHERE FEE_CFG_NO=#{feeCfgNo}
+
+	</delete>
+
+	<update id="updateFeeCfg" parameterType="com.oriental.manage.pojo.merchant.FeeCfg">
+		update T_FEE_CFG
+		set
+		FEE_METHOD = #{feeMethod},
+		FEE_UNIT = #{feeUnit},
+		FEE_SEG_TYPE = #{feeSegType},
+		FEE_RCV_CYCLE = #{feeRcvCycle},
+		SEGMENT_FLAG = #{segmentFlag},
+		ENABLE_FLAG = #{enableFlag},
+		RATE_ROUND_TYPE = #{rateRoundType},
+		TRANS_CODE = #{transCode},
+		CONN_CHANNEL = #{connChannel},
+		<if test="orgBankCode != null">
+			ORG_BANK_CODE = #{orgBankCode},
+		</if>
+		MODIFIER = #{modifier},
+		RE_FEE_FLAG = #{reFeeFlag},
+		FEE_CYCLE_TYPE = #{feeCycleType},
+		SYNC_STATE = #{syncState},
+		ORG_CODE = #{orgCode},
+		COMPANY_TYPE = #{companyType},
+		PROTOCOL_MODE = #{protocolMode},
+		BANK_TYPE = #{bankType},
+		VALIDATE_BEGIN_DATE = str_to_date(#{validateBeginDate},'%Y%m%d'),
+		VALIDATE_END_DATE = str_to_date(#{validateEndDate},'%Y%m%d')
+		where FEE_CFG_NO = #{feeCfgNo}
+	</update>
+
+</mapper>

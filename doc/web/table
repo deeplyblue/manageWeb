@@ -1,0 +1,13 @@
+通用的表格样式
+1、查询条件使用
+<table table-form>
+    ...
+</table>
+
+2、查询结果展示使用
+<table table-detail>
+    ...
+</table>
+
+3、新增 修改
+正常情况下，等等同于第一种

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oriental.manage.dao.bank.BankTypeRelationMapper">
+	<resultMap id="BaseResultMap" type="com.oriental.manage.pojo.bank.BankTypeRelation"
+               extends="BaseMapper.BaseResultMap">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="BANK_TYPE_CODE" jdbcType="VARCHAR" property="bankTypeCode" />
+		<result column="BANK_CODE" jdbcType="VARCHAR" property="bankCode" />
+		<result column="BANK_CODE_SUFFIX" jdbcType="VARCHAR" property="bankCodeSuffix" />
+		<result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="LAST_UPD_TIME" jdbcType="TIMESTAMP" property="lastUpdTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID, BANK_TYPE_CODE, BANK_CODE, BANK_CODE_SUFFIX,
+		CREATE_TIME, LAST_UPD_TIME
+	</sql>
+    <sql id="queryCondition">
+        <if test="bankTypeCode != null and bankTypeCode != ''">
+            AND BANK_TYPE_CODE = #{bankTypeCode}
+        </if>
+        <if test="bankCode != null and bankCode != ''">
+            AND BANK_CODE LIKE concat('%',#{bankCode},'%')
+        </if>
+    </sql>
+
+    <insert id="insertBankTypeRelation" parameterType="com.oriental.manage.pojo.bank.BankTypeRelation">
+        INSERT INTO T_BANK_TYPE_RELATION_INFO (
+            ID, BANK_TYPE_CODE, BANK_CODE,
+            BANK_CODE_SUFFIX, CREATE_TIME, LAST_UPD_TIME
+        ) VALUES (
+            #{id}, #{bankTypeCode}, #{bankCode},
+            concat('_',#{bankCode}), now(), now()
+        )
+    </insert>
+
+	<delete id="deleteBankTypeRelation" parameterType="com.oriental.manage.pojo.bank.BankTypeRelation">
+		DELETE FROM T_BANK_TYPE_RELATION_INFO WHERE BANK_TYPE_CODE = #{bankTypeCode}
+	</delete>
+
+    <update id="updateBankTypeRelation" parameterType="com.oriental.manage.pojo.bank.BankTypeRelation">
+        UPDATE T_BANK_TYPE_RELATION_INFO
+        <set>
+            <if test="id != null">
+                ID = #{id},
+            </if>
+            <if test="bankTypeCode != null">
+                BANK_TYPE_CODE = #{bankTypeCode},
+            </if>
+            <if test="bankCode != null">
+                BANK_CODE = #{bankCode},
+            </if>
+        </set>
+         WHERE ID = #{id}
+    </update>
+
+
+	<select id="queryPage" resultMap="BaseResultMap">
+        <include refid="BaseMapper.pageHead"/>
+		SELECT <include refid="Base_Column_List" />
+		  FROM T_BANK_TYPE_RELATION_INFO
+         WHERE 1 = 1 <include refid="queryCondition"/>
+		 ORDER BY BANK_TYPE_CODE
+        <include refid="BaseMapper.pageFoot"/>
+	</select>
+
+	<select id="searchAll" parameterType="com.oriental.manage.pojo.bank.BankTypeRelation" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/> 
+    from T_BANK_TYPE_RELATION_INFO
+  </select>
+
+    <select id="getBankCode" resultMap="BaseResultMap">
+        SELECT DISTINCT BANK_CODE
+        FROM T_BANK_TYPE_RELATION_INFO
+        ORDER BY BANK_CODE
+    </select>
+
+    <select id="checkBankType" resultType="int" >
+        SELECT COUNT( BANK_TYPE_CODE)
+        FROM t_bank_type_relation_info WHERE BANK_TYPE_CODE=#{bankTypeCode}
+
+    </select>
+
+</mapper>

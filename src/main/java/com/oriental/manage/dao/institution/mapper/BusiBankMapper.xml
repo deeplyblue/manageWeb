@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.institution.BusiBankMapper">
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.institution.BusiBank"
+               extends="BaseMapper.BaseResultMap">
+
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="BANK_CODE" property="bankCode" jdbcType="VARCHAR"/>
+        <result column="BANK_TYPE" property="bankType" jdbcType="VARCHAR"/>
+        <result column="busi_type" property="busiType" jdbcType="VARCHAR"/>
+        <result column="ENABLE_FLAG" property="enableFlag" jdbcType="VARCHAR"/>
+        <result column="CREATOR" property="creator" jdbcType="VARCHAR"/>
+        <result column="MODIFIER" property="modifier" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP"/>
+        <result column="BANK_CODE_DESC" property="bankCodeDesc" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, BANK_CODE,BANK_TYPE, busi_type, ENABLE_FLAG, CREATOR, MODIFIER,
+        CREATE_TIME,LAST_UPD_TIME,BANK_CODE_DESC
+    </sql>
+
+    <select id="queryPage" resultMap="BaseResultMap"
+            parameterType="com.oriental.manage.pojo.institution.BusiBank">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_busitype_bank T
+        WHERE 1=1
+        <if test="busiType != null and busiType != ''">
+            and busi_type =#{busiType}
+        </if>
+        <if test="bankCode != null and bankCode != ''">
+            and bank_code =#{bankCode}
+        </if>
+        <if test="bankType != null and bankType != ''">
+            and bank_type =#{bankType}
+        </if>
+        ORDER BY ID
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <select id="queryList" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.institution.BusiBank">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_busitype_bank T
+        WHERE 1=1
+        <if test="busiType != null and busiType != ''">
+            and busi_type =#{busiType}
+        </if>
+        <if test="bankType != null and bankType != ''">
+            and bank_type =#{bankType}
+        </if>
+        ORDER BY ID
+    </select>
+
+
+    <insert id="insertBusiBank" parameterType="com.oriental.manage.pojo.institution.BusiBank">
+        insert into t_busitype_bank
+        (BANK_CODE,BANK_TYPE, BUSI_TYPE,
+        ENABLE_FLAG, CREATOR, CREATE_TIME, LAST_UPD_TIME,BANK_CODE_DESC,MODIFIER)
+        values (#{bankCode}, #{bankType},#{busiType}, #{enableFlag},
+        #{creator},CURRENT_TIMESTAMP ,CURRENT_TIMESTAMP,#{bankCodeDesc},#{modifier})
+    </insert>
+
+    <delete id="deleteBusiBank" parameterType="com.oriental.manage.pojo.institution.BusiBank">
+        delete FROM t_busitype_bank WHERE
+        ID = #{id}
+    </delete>
+
+</mapper>

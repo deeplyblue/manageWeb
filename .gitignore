@@ -1,0 +1,10 @@
+/target
+/.idea
+
+
+/managerweb.iml
+/out/*
+
+/*.iml
+*.iml
+/node_modules

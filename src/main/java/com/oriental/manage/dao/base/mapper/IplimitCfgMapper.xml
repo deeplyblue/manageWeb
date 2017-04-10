@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.base.IplimitCfgMapper">
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.base.IplimitCfg">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="CLIENT_IP" property="clientIp" jdbcType="VARCHAR"/>
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR"/>
+        <result column="IP_TYPE" property="ipType" jdbcType="VARCHAR"/>
+        <result column="ENABLE_FLAG" property="enableFlag" jdbcType="VARCHAR"/>
+        <result column="IP_BEGIN_TIME" property="ipBeginTime" jdbcType="TIMESTAMP"/>
+        <result column="IP_END_TIME" property="ipEndTime" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, CLIENT_IP, USER_ID, IP_TYPE, ENABLE_FLAG, IP_BEGIN_TIME, IP_END_TIME, CREATE_TIME,
+        LAST_UPD_TIME
+    </sql>
+    <sql id="condition">
+    <if test="userId != null and userId != ''">
+        AND info.USER_ID = #{userId,jdbcType=VARCHAR}
+    </if>
+        <if test="enableFlag != null and enableFlag != ''">
+            AND info.ENABLE_FLAG = #{enableFlag,jdbcType=VARCHAR}
+        </if>
+        <if test="ipType != null and ipType != ''">
+            AND info.IP_TYPE = #{ipType,jdbcType=VARCHAR}
+        </if>
+        <if test="ipEndTime != null and ipEndTime != ''">
+            AND info.IP_END_TIME = #{ipEndTime,jdbcType=VARCHAR}
+        </if>
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_iplimit_cfg
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        DELETE FROM t_iplimit_cfg
+        WHERE ID = #{id,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.oriental.manage.pojo.base.IplimitCfg">
+        INSERT INTO t_iplimit_cfg (ID, CLIENT_IP, USER_ID,
+                                   IP_TYPE, ENABLE_FLAG, IP_BEGIN_TIME,
+                                   IP_END_TIME, CREATE_TIME, LAST_UPD_TIME
+        )
+        VALUES (#{id,jdbcType=VARCHAR}, #{clientIp,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
+                #{ipType,jdbcType=VARCHAR}, #{enableFlag,jdbcType=VARCHAR}, #{ipBeginTime,jdbcType=TIMESTAMP},
+                #{ipEndTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{lastUpdTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.oriental.manage.pojo.base.IplimitCfg" >
+        insert into t_iplimit_cfg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="clientIp != null">
+                CLIENT_IP,
+            </if>
+            <if test="userId != null">
+                USER_ID,
+            </if>
+            <if test="ipType != null">
+                IP_TYPE,
+            </if>
+            <if test="enableFlag != null">
+                ENABLE_FLAG,
+            </if>
+            <if test="ipBeginTime != null">
+                IP_BEGIN_TIME,
+            </if>
+            <if test="ipEndTime != null">
+                IP_END_TIME,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+            <if test="lastUpdTime != null">
+                LAST_UPD_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="clientIp != null">
+                #{clientIp,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="ipType != null">
+                #{ipType,jdbcType=VARCHAR},
+            </if>
+            <if test="enableFlag != null">
+                #{enableFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="ipBeginTime != null">
+                #{ipBeginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ipEndTime != null">
+                #{ipEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdTime != null">
+                #{lastUpdTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.oriental.manage.pojo.base.IplimitCfg">
+        update t_iplimit_cfg
+        <set>
+            <if test="clientIp != null">
+                CLIENT_IP = #{clientIp,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="ipType != null">
+                IP_TYPE = #{ipType,jdbcType=VARCHAR},
+            </if>
+            <if test="enableFlag != null">
+                ENABLE_FLAG = #{enableFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="ipBeginTime != null">
+                IP_BEGIN_TIME = #{ipBeginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ipEndTime != null">
+                IP_END_TIME = #{ipEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdTime != null">
+                LAST_UPD_TIME = #{lastUpdTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.oriental.manage.pojo.base.IplimitCfg">
+        UPDATE t_iplimit_cfg
+        SET CLIENT_IP     = #{clientIp,jdbcType=VARCHAR},
+            USER_ID       = #{userId,jdbcType=VARCHAR},
+            IP_TYPE       = #{ipType,jdbcType=VARCHAR},
+            ENABLE_FLAG   = #{enableFlag,jdbcType=VARCHAR},
+            IP_BEGIN_TIME = #{ipBeginTime,jdbcType=TIMESTAMP},
+            IP_END_TIME   = #{ipEndTime,jdbcType=TIMESTAMP},
+            CREATE_TIME   = #{createTime,jdbcType=TIMESTAMP},
+            LAST_UPD_TIME = #{lastUpdTime,jdbcType=TIMESTAMP}
+        WHERE ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectIp" parameterType="com.oriental.manage.pojo.base.IplimitCfg"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        FROM T_IPLIMIT_CFG ipInfo
+        where 1=1
+        AND ipInfo.USER_ID = #{userId, jdbcType=VARCHAR}
+        AND ipInfo.ENABLE_FLAG = #{enableFlag,jdbcType=VARCHAR}
+        AND ipInfo.IP_END_TIME &gt;= #{ipEndTime,jdbcType=TIMESTAMP}
+
+    </select>
+
+    <select id="selectIplimit" parameterType="com.oriental.manage.pojo.base.IplimitCfg"
+            resultMap="BaseResultMap">
+        <include refid="BaseMapper.pageHead"/>
+        select
+        <include refid="Base_Column_List"/>
+        FROM T_IPLIMIT_CFG info
+        where 1=1
+        <include refid="condition"/>
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <select id="selectByUser" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.base.IplimitCfg">
+        <include refid="BaseMapper.pageHead"/>
+        select
+        <include refid="Base_Column_List"/>
+        from t_iplimit_cfg
+        where 1=1
+        AND USER_ID = #{userId,jdbcType=VARCHAR}
+        AND ENABLE_FLAG = '1'
+        AND IP_END_TIME &gt; #{createTime,jdbcType=TIMESTAMP}
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+</mapper>

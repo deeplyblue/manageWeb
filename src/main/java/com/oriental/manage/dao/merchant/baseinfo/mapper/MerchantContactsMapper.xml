@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.merchant.baseinfo.MerchantContactsMapper">
+
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.merchant.baseinfo.MerchantContactInfo"
+               extends="BaseMapper.BaseResultMap">
+        <id     column="ID"                         property="id"                       jdbcType="DECIMAL" />
+        <result column="CTT_TYPE"                   property="cttType"                  jdbcType="VARCHAR" />
+        <result column="CTT_ROLE"                   property="cttRole"                  jdbcType="VARCHAR" />
+        <result column="CTT_NAME"                   property="cttName"                  jdbcType="VARCHAR" />
+        <result column="CTT_EMAIL"                  property="cttEmail"                 jdbcType="VARCHAR" />
+        <result column="CTT_PHONE"                  property="cttPhone"                 jdbcType="VARCHAR" />
+        <result column="CTT_FAX"                    property="cttFax"                   jdbcType="VARCHAR" />
+        <result column="CTT_STATUS"                 property="cttStatus"                jdbcType="VARCHAR" />
+        <result column="COMPANY_TYPE"               property="companyType"              jdbcType="VARCHAR" />
+        <result column="COMPANY_CODE"               property="companyCode"              jdbcType="VARCHAR" />
+        <result column="CREATE_TIME"                property="createTime"               jdbcType="TIMESTAMP" />
+        <result column="LAST_UPD_TIME"              property="lastUpdTime"              jdbcType="TIMESTAMP" />
+        <result column="CTT_MOBILE"                 property="cttMobile"                jdbcType="VARCHAR" />
+        <result column="ACCEPT_NOTICE_EMAIL_FLAG"   property="acceptNoticeEmailFlag"    jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <sql id="Base_Column_List" >
+        ID,CTT_TYPE,CTT_ROLE,CTT_NAME,CTT_EMAIL,CTT_PHONE,CTT_FAX,CTT_STATUS,COMPANY_TYPE,COMPANY_CODE,CREATE_TIME,
+        LAST_UPD_TIME,CTT_MOBILE,ACCEPT_NOTICE_EMAIL_FLAG
+    </sql>
+
+
+    <sql id="queryCondition">
+
+        <if test="companyCode != null and companyCode != ''" >
+            AND T.COMPANY_CODE = #{companyCode}
+        </if>
+        <if test="cttType != null and cttType != '' ">
+            AND T.CTT_TYPE = #{cttType}
+        </if>
+        <if test="cttRole != null and cttRole != '' ">
+            AND T.CTT_ROLE = #{cttRole}
+        </if>
+        <if test="cttName != null and cttName != ''">
+            AND T.CTT_NAME = #{cttName}
+        </if>
+        <if test="cttMobile != null and cttMobile != ''" >
+            AND T.CTT_MOBILE = #{cttMobile}
+        </if>
+        <if test="cttStatus != null and cttStatus != ''">
+            AND T.CTT_STATUS = #{cttStatus}
+        </if>
+    </sql>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT <include refid="Base_Column_List"/>
+        FROM T_CONTACT_INFO T
+        WHERE 1 = 1 AND T.COMPANY_TYPE = #{companyType}  <include refid="queryCondition"/>
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <insert id="createMerchantContactInfo" >
+        INSERT INTO T_CONTACT_INFO ( <include refid="Base_Column_List"/> ) VALUES
+        (#{id},#{cttType},#{cttRole},#{cttName},#{cttEmail},#{cttPhone},#{cttFax},#{cttStatus},#{companyType},#{companyCode},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,#{cttMobile},#{acceptNoticeEmailFlag})
+    </insert>
+
+
+    <update id="updateMerchantContactInfo">
+        UPDATE T_CONTACT_INFO T
+        <set>
+            <if test="cttType != null">
+                T.CTT_TYPE = #{cttType},
+            </if>
+            <if test="cttRole != null">
+                T.CTT_ROLE = #{cttRole},
+            </if>
+            <if test="cttName != null">
+                T.CTT_NAME = #{cttName},
+            </if>
+            <if test="cttEmail != null">
+                T.CTT_EMAIL = #{cttEmail},
+            </if>
+            <if test="cttPhone != null">
+                T.CTT_PHONE = #{cttPhone},
+            </if>
+            <if test="cttFax != null">
+                T.CTT_FAX = #{cttFax},
+            </if>
+            <if test="cttStatus != null">
+                T.CTT_STATUS = #{cttStatus},
+            </if>
+            <if test="companyType != null">
+                T.COMPANY_TYPE = #{companyType},
+            </if>
+            <if test="companyCode != null">
+                T.COMPANY_CODE = #{companyCode},
+            </if>
+            <if test="createTime != null">
+                T.CREATE_TIME = #{createTime},
+            </if>
+            T.LAST_UPD_TIME = CURRENT_TIMESTAMP,
+            <if test="cttMobile != null">
+                T.CTT_MOBILE = #{cttMobile},
+            </if>
+            <if test="acceptNoticeEmailFlag != null">
+                T.ACCEPT_NOTICE_EMAIL_FLAG = #{acceptNoticeEmailFlag},
+            </if>
+        </set>
+        WHERE T.ID = #{id}
+    </update>
+
+</mapper>

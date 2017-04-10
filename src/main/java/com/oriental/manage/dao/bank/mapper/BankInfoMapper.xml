@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.bank.BankInfoMapper">
+	<resultMap id="BaseResultMap" type="com.oriental.manage.pojo.bank.BankInfo"
+               extends="BaseMapper.BaseResultMap">
+		<id     column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="BANK_CODE" property="bankCode" jdbcType="VARCHAR" />
+		<result column="BANK_NAME" property="bankName" jdbcType="VARCHAR" />
+		<result column="BANK_LOGO" property="bankLogo" jdbcType="VARCHAR" />
+		<result column="BANK_MEMO" property="bankMemo" jdbcType="VARCHAR" />
+		<result column="SPARE1" property="spare1" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+		<result column="BANK_CARD_TYPE" property="bankCardType" jdbcType="VARCHAR" />
+		<result column="ENABLE_FLAG" property="enableFlag" jdbcType="VARCHAR" />
+		<result column="OLD_BANK_CODE" property="oldBankCode" jdbcType="VARCHAR" />
+		<result column="BANK_ABBR_NAME" property="bankAbbrName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID, BANK_CODE, BANK_NAME, BANK_LOGO, BANK_MEMO, SPARE1,
+		CREATE_TIME, LAST_UPD_TIME,BANK_CARD_TYPE,ENABLE_FLAG,OLD_BANK_CODE,BANK_ABBR_NAME
+	</sql>
+    <sql id="queryCondition">
+        <if test="bankCode != null and bankCode != ''">
+            AND BANK_CODE LIKE  CONCAT('%', #{bankCode}, '%')
+        </if>
+        <if test="bankName != null and bankName != ''">
+            AND BANK_NAME LIKE CONCAT('%', #{bankName}, '%')
+        </if>
+    </sql>
+
+	<delete id="deleteBankInfo" parameterType="com.oriental.manage.pojo.bank.BankInfo" >
+	    delete from T_BANK_INFO
+	    where ID = #{id}
+	  </delete>
+
+	<select id="queryPage" resultMap="BaseResultMap">
+		<include refid="BaseMapper.pageHead"/>
+		SELECT <include refid="Base_Column_List" />
+		  FROM T_BANK_INFO
+         WHERE 1 = 1 <include refid="queryCondition"/>
+		 ORDER BY BANK_CODE
+		<include refid="BaseMapper.pageFoot"/>
+	</select>
+	<select id="queryCount" parameterType="com.oriental.manage.pojo.bank.BankInfo" resultType="int">
+		SELECT count(1)
+		FROM T_BANK_INFO
+		WHERE 1 = 1 <include refid="queryCondition"/>
+	</select>
+	<select id="searchByParams" resultMap="BaseResultMap"
+		parameterType="com.oriental.manage.pojo.bank.BankInfo">
+		select
+		<include refid="Base_Column_List" />
+		from T_BANK_INFO t where 1=1
+		<if test="bankCode != null and bankCode != ''">
+			AND t.BANK_CODE= #{bankCode}
+		</if>
+	</select>
+	<select id="getOrgBankInfo" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.bank.BankInfo">
+		SELECT T.ID,
+		T.BANK_NAME,
+		T.BANK_CARD_TYPE,
+		T.ENABLE_FLAG,
+		group_concat(T1.ORG_CODE,':',T2.ORG_NAME) BANK_MEMO
+		FROM T_BANK_INFO T, T_ORG_BANK T1,T_ORGANIZE_INFO T2
+		WHERE T.BANK_CODE = T1.BANK_CODE
+		AND T1.ORG_CODE = T2.ORG_CODE
+		GROUP BY T.ID, T.BANK_NAME, T.BANK_CARD_TYPE
+	</select>
+	<select id="queryAllBankInfo" resultMap="BaseResultMap"
+		parameterType="com.oriental.manage.pojo.bank.BankInfo">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM T_BANK_INFO T 
+		ORDER BY ID
+	</select>
+	<select id="searchByKey" resultMap="BaseResultMap"
+		parameterType="com.oriental.manage.pojo.bank.BankInfo">
+		select
+		<include refid="Base_Column_List" />
+		from T_BANK_INFO
+		where ID = #{id}
+	</select>
+	<select id="checkBankCodeTwo" resultType="int" parameterType="com.oriental.manage.pojo.bank.BankInfo">
+		 
+		SELECT case when (
+	        SELECT COUNT(1) FROM T_BANK_INFO WHERE BANK_CODE = #{bankCode} 
+			<if test="id != null and id != ''">
+			AND ID != #{id}
+			</if>
+			) &lt; 1
+	        and ( select count(1) from T_BANK_INFO where old_bank_code = #{oldBankCode} 
+	       	<if test="id != null and id != ''">
+			AND ID != #{id}
+			</if>
+	      	) &lt; 1 then 0 
+	        when ( SELECT COUNT(1) FROM T_BANK_INFO WHERE BANK_CODE = #{bankCode} 
+	      	<if test="id != null and id != ''">
+			AND ID != #{id}
+			</if>
+	        )>0 then 1 
+	        when ( select count(1) from T_BANK_INFO where old_bank_code = #{oldBankCode} 
+	        <if test="id != null and id != ''">
+			AND ID != #{id}
+			</if>
+	        )>0 then 2   
+		 else 3 end  from  DUAL
+	</select>
+	<select id="checkBankCode" resultType="int" parameterType="com.oriental.manage.pojo.bank.BankInfo">
+		 <if test="bankCode != null and bankCode != ''">
+		    SELECT COUNT(1) FROM T_BANK_INFO
+			WHERE BANK_CODE = #{bankCode} 
+			<if test="id != null and id != ''">
+				AND ID != #{id}
+			</if>
+		</if>
+	</select>
+	<insert id="insertBankInfo" parameterType="com.oriental.manage.pojo.bank.BankInfo">
+		insert into T_BANK_INFO (ID, BANK_CODE, BANK_NAME,
+		BANK_LOGO, BANK_MEMO,
+		SPARE1, CREATE_TIME, LAST_UPD_TIME,
+		BANK_CARD_TYPE,ENABLE_FLAG,OLD_BANK_CODE,BANK_ABBR_NAME)
+		values (#{id}, #{bankCode}, #{bankName},
+		#{bankLogo}, #{bankMemo},
+		#{spare1}, now(), now(),#{bankCardType},#{enableFlag},#{oldBankCode},#{bankAbbrName})
+	</insert>
+	<update id="updateBankInfo" parameterType="com.oriental.manage.pojo.bank.BankInfo">
+		update T_BANK_INFO
+		set BANK_CODE = #{bankCode},
+		BANK_NAME = #{bankName},
+		BANK_LOGO = #{bankLogo},
+		BANK_MEMO = #{bankMemo},
+		SPARE1 = #{spare1},
+		LAST_UPD_TIME = now(),
+		BANK_CARD_TYPE = #{bankCardType},
+		ENABLE_FLAG = #{enableFlag},
+		OLD_BANK_CODE = #{oldBankCode},
+		BANK_ABBR_NAME = #{bankAbbrName}
+		where ID = #{id}
+	</update>
+
+	<select id="getOrgBanks" resultType="com.oriental.manage.pojo.bank.BankInfo"
+		parameterType="com.oriental.manage.pojo.bank.BankInfo">
+		SELECT DISTINCT bank.bank_code as bankCode, bank.bank_name as bankName
+        FROM T_ORG_BANK org inner join (select bank_code, bank_name from t_bank_info where enable_flag = '1') bank
+         on org.bank_code = bank.bank_code
+         where org.ENABLE_FLAG = '1'
+         AND org.ORG_CODE = #{companyCode}
+	</select>
+</mapper>

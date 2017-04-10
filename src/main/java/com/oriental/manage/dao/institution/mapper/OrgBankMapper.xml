@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.institution.OrgBankMapper">
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.institution.OrgBank"
+               extends="BaseMapper.BaseResultMap">
+        <id column="ID" property="id" jdbcType="DECIMAL"/>
+        <result column="BANK_CODE" property="bankCode" jdbcType="VARCHAR"/>
+        <result column="BANK_TYPE" property="bankType" jdbcType="VARCHAR"/>
+        <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR"/>
+        <result column="ENABLE_FLAG" property="enableFlag" jdbcType="VARCHAR"/>
+        <result column="CREATOR" property="creator" jdbcType="VARCHAR"/>
+        <result column="MODIFIER" property="modifier" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP"/>
+        <result column="REFUND_DEADLINE" property="refundDeadline" jdbcType="VARCHAR"/>
+        <result column="ORG_REFUND_LIMIT" property="orgRefundLimit" jdbcType="VARCHAR"/>
+        <result column="REFUND_OL_FLAG" property="refundOlFlag" jdbcType="VARCHAR"/>
+        <result column="ORG_BANK_CODE" property="orgBankCode" jdbcType="VARCHAR"/>
+        <result column="TRANS_AMT_UPPLIMIT" property="transAmtUpplimit" jdbcType="VARCHAR"/>
+        <result column="TRANS_AMT_LOWLIMIT" property="transAmtLowlimit" jdbcType="VARCHAR"/>
+
+        <result column="ORG_BANK_CODE_DESC" property="orgBankCodeDesc" jdbcType="VARCHAR"/>
+        <result column="BANK_CATALOG" property="bankCatalog" jdbcType="VARCHAR"/>
+        <result column="CONN_CHANNEL" property="connChannel" jdbcType="VARCHAR"/>
+        <result column="TRANS_CODE" property="transCode" jdbcType="VARCHAR"/>
+        <result column="STGY_PRIORITY" property="stgyPriority" jdbcType="VARCHAR"/>
+        <result column="PAY_LVL" property="payLvl" jdbcType="VARCHAR"/>
+        <result column="PHONE_LVL" property="phoneLvl" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		ID, BANK_CODE,BANK_TYPE, ORG_CODE, ENABLE_FLAG, CREATOR, MODIFIER,
+		CREATE_TIME,ORG_BANK_CODE_DESC,BANK_CATALOG,
+		LAST_UPD_TIME,REFUND_DEADLINE,ORG_REFUND_LIMIT,REFUND_OL_FLAG,ORG_BANK_CODE,TRANS_AMT_UPPLIMIT
+		,TRANS_AMT_LOWLIMIT,PAY_LVL,PHONE_LVL
+	</sql>
+
+    <select id="getAll" resultMap="BaseResultMap"
+            parameterType="com.oriental.manage.pojo.institution.OrgBank">
+        <include refid="BaseMapper.pageHead"/>
+        select
+        <include refid="Base_Column_List"/>
+        from
+        T_ORG_BANK T where 1 = 1
+        <if test="connChannel != null and connChannel != ''">
+            and substr(t.bank_type, 1, 2) = #{connChannel}
+        </if>
+        <if test="orgCode != null and orgCode != ''">
+            and T.ORG_CODE = #{orgCode}
+        </if>
+        <if test="orgBankCode != null and orgBankCode != ''">
+            and T.ORG_BANK_CODE like CONCAT('%', #{orgBankCode}, '%')
+        </if>
+        <if test="bankCode != null and bankCode != ''">
+            and T.BANK_CODE like CONCAT('%', #{bankCode}, '%')
+        </if>
+        order by t.org_code
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <sql id="queryCondition">
+        <if test="orgCode != null and orgCode != ''">
+            and T.ORG_CODE = #{orgCode}
+        </if>
+        <if test="bankCode != null and bankCode != ''">
+            AND T.BANK_CODE = #{bankCode}
+        </if>
+        <if test="connChannel != null and connChannel != ''">
+            AND substr(t.bank_type, 1, 2) = #{connChannel}
+        </if>
+        <if test="transCode != null and transCode != ''">
+            AND PCS.TRANS_CODE = #{transCode}
+        </if>
+        <if test='transCodeFlag == "0"'>
+            AND PCS.TRANS_CODE IS NULL
+        </if>
+        <if test='transCodeFlag == "1"'>
+            AND PCS.TRANS_CODE IS NOT NULL
+        </if>
+    </sql>
+    <select id="queryOrgBankInfoForPayChanExtendPage" resultMap="BaseResultMap">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT T.BANK_CODE,
+        substr(t.bank_type, 1, 2) AS CONN_CHANNEL,
+        T.ORG_CODE,
+        PCS.TRANS_CODE,
+        PCS.STGY_PRIORITY
+        FROM T_ORG_BANK T
+        LEFT JOIN T_PAY_CHAN_STRATEGY_CFG PCS ON PCS.ORG_CODE = T.ORG_CODE
+        AND PCS.CONN_CHANNEL = substr(t.bank_type, 1, 2)
+        AND PCS.BANK_CODE = T.BANK_CODE
+        AND PCS.STATUS = '1'
+        WHERE T.ENABLE_FLAG = '1'
+        <include refid="queryCondition"/>
+        ORDER BY T.BANK_CODE, substr(t.bank_type, 1, 2), PCS.TRANS_CODE, PCS.STGY_PRIORITY, T.ORG_CODE
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+    <select id="queryOrgBankInfoForPayChanExtendCount" parameterType="com.oriental.manage.pojo.institution.OrgBank"
+            resultType="int">
+        SELECT count(1)
+        FROM T_ORG_BANK T
+        LEFT JOIN T_PAY_CHAN_STRATEGY_CFG PCS ON PCS.ORG_CODE = T.ORG_CODE
+        AND PCS.CONN_CHANNEL = substr(t.bank_type, 1, 2)
+        AND PCS.BANK_CODE = T.BANK_CODE
+        AND PCS.STATUS = '1'
+        WHERE T.ENABLE_FLAG = '1'
+        <include refid="queryCondition"/>
+    </select>
+    <select id="searchByKey" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.institution.OrgBank">
+        select
+        <include refid="Base_Column_List"/>
+        from T_ORG_BANK where 1=1
+        <if test="orgCode != null and orgCode != ''">
+            and ORG_CODE = #{orgCode}
+        </if>
+        <if test="connChannel != null and connChannel != ''">
+            and substr(BANK_TYPE,1,2) = #{connChannel}
+        </if>
+        <if test="bankCode != null and bankCode != ''">
+            and BANK_CODE like CONCAT('%', #{bankCode}, '%')
+        </if>
+        <if test="orgCodeList != null and orgCodeList.size()>0">
+            AND ORG_CODE in
+            <foreach item="entry" index="index" collection="orgCodeList" open="("
+                     separator="," close=")">
+                #{entry}
+            </foreach>
+        </if>
+    </select>
+    <select id="searchOrgBankByKey" resultMap="BaseResultMap"
+            parameterType="com.oriental.manage.pojo.institution.OrgBank">
+        select
+        distinct ORG_BANK_CODE,ORG_BANK_CODE_DESC,ORG_CODE,BANK_CODE
+        from T_ORG_BANK where 1=1
+        <if test="orgCode != null and orgCode != ''">
+            and ORG_CODE = #{orgCode}
+        </if>
+        <if test="connChannel != null and connChannel != ''">
+            and substr(BANK_TYPE,1,2) = #{connChannel}
+        </if>
+        <if test="orgCodeList != null and orgCodeList.size()>0">
+            AND ORG_CODE in
+            <foreach item="entry" index="index" collection="orgCodeList" open="("
+                     separator="," close=")">
+                #{entry}
+            </foreach>
+        </if>
+        <if test="bankType!=null and bankType!=''">
+            AND BANK_TYPE=#{bankType}
+        </if>
+    </select>
+    <insert id="insertOrgBank" parameterType="com.oriental.manage.pojo.institution.OrgBank">
+        insert into T_ORG_BANK
+        (ID, BANK_CODE,BANK_TYPE, ORG_CODE,
+        ENABLE_FLAG, CREATOR, CREATE_TIME, LAST_UPD_TIME,
+        REFUND_DEADLINE,ORG_REFUND_LIMIT,
+        REFUND_OL_FLAG,ORG_BANK_CODE,TRANS_AMT_UPPLIMIT,
+        TRANS_AMT_LOWLIMIT,ORG_BANK_CODE_DESC,BANK_CATALOG
+        <if test="payLvl != null and payLvl != ''">
+            ,PAY_LVL
+        </if>
+        <if test="phoneLvl != null and phoneLvl != ''">
+            ,PHONE_LVL
+        </if>
+        )
+        values (#{id}, #{bankCode},#{bankType}, #{orgCode},
+        #{enableFlag}, #{creator}, now(), now(),
+        #{refundDeadline},#{orgRefundLimit},#{refundOlFlag},
+        #{orgBankCode},#{transAmtUpplimit},#{transAmtLowlimit},
+        #{orgBankCodeDesc},#{bankCatalog}
+        <if test="payLvl != null and payLvl != ''">
+            ,#{payLvl}
+        </if>
+        <if test="phoneLvl != null and phoneLvl != ''">
+            ,#{phoneLvl}
+        </if>
+        )
+    </insert>
+    <select id="getCount" parameterType="com.oriental.manage.pojo.institution.OrgBank" resultType="int">
+        select count(1)
+        from T_ORG_BANK T where 1 = 1
+        <if test="connChannel != null and connChannel != ''">
+            and substr(t.bank_type, 1, 2) = #{connChannel}
+        </if>
+        <if test="orgCode != null and orgCode != ''">
+            and T.ORG_CODE = #{orgCode}
+        </if>
+        <if test="orgBankCode != null and orgBankCode != ''">
+            and T.ORG_BANK_CODE like CONCAT('%', #{orgBankCode}, '%')
+        </if>
+        <if test="bankCode != null and bankCode != ''">
+            and T.BANK_CODE like CONCAT('%', #{bankCode}, '%')
+        </if>
+    </select>
+    <select id="checkConfig" parameterType="com.oriental.manage.pojo.institution.OrgBank" resultType="int">
+		select count(1) from t_org_bank t where t.org_code =
+		#{orgCode} and t.enable_flag = '1'
+	</select>
+    <update id="updateOrgBank" parameterType="com.oriental.manage.pojo.institution.OrgBank">
+		update T_ORG_BANK
+		set
+		BANK_CODE = #{bankCode},
+		BANK_TYPE = #{bankType},
+		ORG_CODE = #{orgCode},
+		ENABLE_FLAG = #{enableFlag},
+		MODIFIER = #{modifier},
+		LAST_UPD_TIME = now(),
+		ORG_BANK_CODE_DESC = #{orgBankCodeDesc},
+		BANK_CATALOG = #{bankCatalog},
+		REFUND_DEADLINE = #{refundDeadline}
+		where ID = #{id}
+	</update>
+    <delete id="deleteById" parameterType="com.oriental.manage.pojo.institution.OrgBank">
+		delete FROM T_ORG_BANK WHERE
+		ORG_CODE = #{orgCode}
+	</delete>
+    <update id="auditOrgBank" parameterType="com.oriental.manage.pojo.institution.OrgBank">
+		update T_ORG_BANK
+		set ENABLE_FLAG = #{enableFlag},
+		MODIFIER = #{modifier},
+		LAST_UPD_TIME =
+		now()
+		where ID = #{id}
+	</update>
+    <update id="editPhoneCfg" parameterType="com.oriental.manage.pojo.institution.OrgBank">
+        update T_ORG_BANK
+          set PHONE_LVL = #{phoneLvl},
+              PAY_LVL = #{payLvl}
+        where ORG_CODE = #{orgCode}
+          and BANK_CODE = #{bankCode}
+    </update>
+    <select id="searchByParams" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.institution.OrgBank">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_ORG_BANK T
+        where 1=1
+        <if test="orgCode != null and orgCode != ''">
+            and T.ORG_CODE = #{orgCode}
+        </if>
+        <if test="bankCode != null and bankCode != ''">
+            and T.BANK_CODE = #{bankCode}
+        </if>
+        <if test="orgBankCode != null and orgBankCode != ''">
+            and T.ORG_BANK_CODE = #{orgBankCode}
+        </if>
+        <if test="enableFlag != null and enableFlag != ''">
+            and T.ENABLE_FLAG = #{enableFlag}
+        </if>
+        <if test="bankType != null and bankType != ''">
+            and T.BANK_TYPE = #{bankType}
+        </if>
+    </select>
+    <select id="getOrgBankByBankCode" resultMap="BaseResultMap"
+            parameterType="com.oriental.manage.pojo.institution.OrgBank">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_ORG_BANK T where T.BANK_CODE = #{bankCode}
+        <if test="bankType != null and bankType != ''">
+            AND T.BANK_TYPE = #{bankType}
+        </if>
+        <if test="connChannel != null and connChannel != ''">
+            AND substr(t.bank_type,1,2) = #{connChannel}
+        </if>
+        and T.ENABLE_FLAG = '1'
+    </select>
+    <select id="getOrgBankByMchntCode" resultMap="BaseResultMap"
+            parameterType="com.oriental.manage.pojo.business.MchntBank">
+		SELECT 
+		OB.ID, OB.BANK_CODE,OB.BANK_TYPE, OB.ORG_CODE, OB.ENABLE_FLAG, OB.CREATOR, OB.MODIFIER,
+		OB.CREATE_TIME, OB.LAST_UPD_TIME,OB.REFUND_DEADLINE,OB.ORG_REFUND_LIMIT,OB.REFUND_OL_FLAG,
+		OB.ORG_BANK_CODE,OB.TRANS_AMT_UPPLIMIT,OB.TRANS_AMT_LOWLIMIT,OB.ORG_BANK_CODE_DESC,OB.BANK_CATALOG
+		FROM T_ORG_BANK OB, T_MCHNT_BANK MB
+		WHERE OB.BANK_CODE = MB.BANK_CODE
+		AND OB.ENABLE_FLAG = '1'
+		AND MB.ENABLE_FLAG = '1'
+		AND MB.MCHNT_CODE = #{mchntCode}
+	</select>
+    <select id="getBankInfoByBankType" resultMap="BaseResultMap"
+            parameterType="com.oriental.manage.pojo.institution.OrgBank">
+        SELECT
+        ORG_BANK_CODE,ORG_BANK_CODE_DESC
+        FROM T_ORG_BANK
+        WHERE 1=1
+        <if test="bankType!=null and bankType!=''">
+            AND BANK_TYPE=#{bankType}
+        </if>
+    </select>
+
+    <select id="getBankInfoAndOrgCode" resultMap="BaseResultMap"
+            parameterType="com.oriental.manage.pojo.institution.OrgBank">
+        SELECT ID,
+        BANK_CODE,
+        BANK_TYPE,
+        ORG_CODE,
+        ENABLE_FLAG,
+        CREATOR,
+        MODIFIER,
+        CREATE_TIME,
+        ORG_BANK_CODE_DESC,
+        BANK_CATALOG,
+        LAST_UPD_TIME,
+        REFUND_DEADLINE,
+        ORG_REFUND_LIMIT,
+        REFUND_OL_FLAG,
+        ORG_BANK_CODE,
+        TRANS_AMT_UPPLIMIT,
+        TRANS_AMT_LOWLIMIT
+        FROM T_ORG_BANK
+        WHERE 1=1
+        <if test="orgBankCode!=null and orgBankCode!=''">
+            AND (ORG_BANK_CODE_DESC like CONCAT('%', #{orgBankCode}, '%')) OR ORG_CODE like '%' CONCAT('%',
+            #{orgBankCode}, '%')))
+        </if>
+        AND ORG_CODE =#{orgCode}
+    </select>
+    <!-- <select id="getAll" resultMap="BaseResultMap"
+             parameterType="com.oriental.manage.pojo.institution.OrgBank">
+         SELECT
+         <include refid="Base_Column_List" />
+         FROM T_ORG_BANK T
+         ORDER BY ID
+     </select>-->
+
+    <select id="getOrgBankCode" resultType="com.oriental.manage.pojo.institution.OrgBank"
+            parameterType="com.oriental.manage.pojo.institution.OrgBank">
+		SELECT DISTINCT org.ORG_BANK_CODE as orgBankCode, org.ORG_BANK_CODE_DESC as orgBankCodeDesc
+        FROM T_ORG_BANK org
+         where org.ENABLE_FLAG = '1'
+         AND org.ORG_BANK_CODE = #{orgBankCode}
+	</select>
+
+    <delete id="deleteOrgBank" parameterType="String">
+		DELETE from t_org_bank WHERE  id=#{id}
+	</delete>
+
+    <select id="getAllInfo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_ORG_BANK T
+        WHERE 1=1
+    </select>
+
+    <select id="getRecordByBank" resultMap="BaseResultMap"
+            parameterType="com.oriental.manage.pojo.institution.OrgBank">
+        SELECT T.BANK_CODE,
+        substr(t.bank_type, 1, 2) AS CONN_CHANNEL,
+        T.ORG_CODE,
+        PCS.TRANS_CODE,
+        PCS.STGY_PRIORITY,
+        PCS.STATUS as ENABLE_FLAG
+        FROM T_ORG_BANK T
+        LEFT JOIN T_PAY_CHAN_STRATEGY_CFG PCS ON PCS.ORG_CODE = T.ORG_CODE
+        AND PCS.CONN_CHANNEL = substr(t.bank_type, 1, 2)
+        AND PCS.BANK_CODE = T.BANK_CODE
+        WHERE T.ENABLE_FLAG = '1'
+        <include refid="queryCondition"/>
+        ORDER BY T.BANK_CODE, substr(t.bank_type, 1, 2), PCS.TRANS_CODE, PCS.STGY_PRIORITY, T.ORG_CODE
+    </select>
+</mapper>

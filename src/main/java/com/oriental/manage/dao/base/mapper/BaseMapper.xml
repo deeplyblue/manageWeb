@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BaseMapper">
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.base.BaseModel">
+        <result column="ROW_COUNT" property="rowCount" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="pageHead">
+        SELECT SUB.*,@ROW_COUNT AS ROW_COUNT FROM (
+        SELECT
+        RES.*,(@ROW_COUNT := @ROW_COUNT +1)
+        FROM (select @ROW_COUNT :=0) as it,(
+    </sql>
+
+    <sql id="pageFoot">
+        ) RES ) SUB
+        limit #{startRow},#{pageSize}
+    </sql>
+</mapper>

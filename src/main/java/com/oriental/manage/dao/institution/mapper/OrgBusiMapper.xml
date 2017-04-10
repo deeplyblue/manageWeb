@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.institution.OrgBusiMapper">
+	<resultMap id="BaseResultMap" type="com.oriental.manage.pojo.institution.OrgBusi"
+               extends="BaseMapper.BaseResultMap">
+		<id column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+		<result column="BUSI_CHANNEL_DESC" property="busiChannelDesc" jdbcType="VARCHAR" />
+		<result column="BUSI_CHANNEL" property="busiChannel" jdbcType="VARCHAR" />
+        <result column="ORG_BUSI_CHANNEL" property="orgBusiChannel" jdbcType="VARCHAR" />
+        <result column="ORG_BUSI_CHANNEL_DESC" property="orgBusiChannelDesc" jdbcType="VARCHAR" />
+        <result column="SYNCHRONOUS_FLAG" property="synchronousFlag" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+		<result column="TRANS_CODE" property="transCode" jdbcType="VARCHAR" />
+        <result column="TRANS_CODE_DESC" property="transCodeDesc" jdbcType="VARCHAR" />
+		<result column="BUSI_FLAG" property="busiFlag" jdbcType="VARCHAR" />
+        <result column="CONN_CHANNEL" property="connChannel" jdbcType="VARCHAR" />
+        <result column="PRIORITY_LEVEL" property="priorityLevel" jdbcType="VARCHAR" />
+        <result column="CLASS_PATH" property="classPath" jdbcType="VARCHAR" />
+        <result column="QUOTA_FLAG" property="quotaFlag" jdbcType="VARCHAR"/>
+        <result column="ENABLE_FLAG" property="enableFlag" jdbcType="VARCHAR" />
+         <result column="TID" property="tid" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID,  ORG_CODE,BUSI_CHANNEL_DESC, BUSI_CHANNEL,ORG_BUSI_CHANNEL, ORG_BUSI_CHANNEL_DESC,SYNCHRONOUS_FLAG,TRANS_CODE,TRANS_CODE_DESC,
+		 BUSI_FLAG,CREATE_TIME, LAST_UPD_TIME,CONN_CHANNEL,QUOTA_FLAG
+	</sql>
+    <insert id="insertOrgBusi" parameterType="com.oriental.manage.pojo.institution.OrgBusi">
+		insert into T_ORG_BUSI
+		(
+		ID,  ORG_CODE,
+		BUSI_CHANNEL_DESC,
+		 BUSI_CHANNEL,
+		 ORG_BUSI_CHANNEL,
+		ORG_BUSI_CHANNEL_DESC,
+		SYNCHRONOUS_FLAG
+		,TRANS_CODE,
+		TRANS_CODE_DESC,
+		 BUSI_FLAG,
+		 CREATE_TIME,
+		  LAST_UPD_TIME,
+		  CONN_CHANNEL,
+		  QUOTA_FLAG)
+		values (#{id}, #{orgCode},
+		#{busiChannelDesc},
+		 #{busiChannel},
+		#{orgBusiChannel},
+		 #{orgBusiChannelDesc}
+		 ,#{synchronousFlag},
+		 #{transCode},
+		 #{transCodeDesc},
+		 #{busiFlag},
+		 now(), now(),
+		  #{connChannel},
+		  #{quotaFlag}
+		)
+	</insert>
+    <update id="updateOrgBusi" parameterType="com.oriental.manage.pojo.institution.OrgBusi">
+		update T_ORG_BUSI
+		<set>
+			<if test="busiChannel != null">
+		BUSI_CHANNEL = #{busiChannel},
+			</if>
+			<if test="busiChannelDesc != null">
+		BUSI_CHANNEL_DESC = #{busiChannelDesc},
+			</if>
+			<if test="orgBusiChannel != null">
+		ORG_BUSI_CHANNEL = #{orgBusiChannel},
+			</if>
+			<if test="orgBusiChannelDesc != null">
+		ORG_BUSI_CHANNEL_DESC = #{orgBusiChannelDesc},
+			</if>
+			<if test="synchronousFlag != null">
+		SYNCHRONOUS_FLAG = #{synchronousFlag},
+			</if>
+			<if test="lastUpdTime != null">
+		LAST_UPD_TIME = now(),
+			</if>
+			<if test="transCode != null">
+		TRANS_CODE = #{transCode},
+			</if>
+			<if test="transCodeDesc != null">
+		TRANS_CODE_DESC = #{transCodeDesc},
+			</if>
+			<if test="busiFlag != null">
+		BUSI_FLAG = #{busiFlag},
+			</if>
+			<if test="connChannel != null">
+		CONN_CHANNEL = #{connChannel},
+			</if>
+			<if test="quotaFlag != null">
+        QUOTA_FLAG = #{quotaFlag}
+			</if>
+		</set>
+		where ID = #{id}
+	</update>
+
+    <delete id="deleteById" parameterType="com.oriental.manage.pojo.institution.OrgBusi">
+		delete from T_ORG_BUSI WHERE ID = #{id}
+	</delete>
+
+	<select id="getPage" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.institution.OrgBusi">
+        <include refid="BaseMapper.pageHead"/>
+		select
+		<include refid="Base_Column_List"/>
+		from
+        T_ORG_BUSI T where 1 = 1
+		<if test="transCode != null and transCode != ''">
+			and TRANS_CODE = #{transCode}
+		</if>
+		<if test="orgCode != null and orgCode != ''">
+			and T.ORG_CODE = #{orgCode}
+		</if>
+        <if test="busiChannel != null and busiChannel != ''">
+
+            and  Upper(T.BUSI_CHANNEL)  like concat('%',upper(#{busiChannel}),'%')
+        </if>
+        <if test="orgBusiChannel != null and orgBusiChannel != ''">
+
+            and  Upper(T.ORG_BUSI_CHANNEL)  like concat('%',upper(#{orgBusiChannel}),'%')
+        </if>
+
+        <if test="busiFlag != null and busiFlag != ''">
+            and T.BUSI_FLAG = #{busiFlag}
+        </if>
+        <if test="connChannel != null and connChannel != ''">
+            and T.CONN_CHANNEL = #{connChannel}
+        </if>
+        <if test="synchronousFlag != null and synchronousFlag != ''">
+            and T.SYNCHRONOUS_FLAG = #{synchronousFlag}
+        </if>
+        <if test="quotaFlag != null and quotaFlag != ''">
+            and T.QUOTA_FLAG = #{quotaFlag}
+        </if>
+		order by t.ORG_CODE,t.CREATE_TIME desc
+        <include refid="BaseMapper.pageFoot"/>
+	</select>
+
+
+</mapper>

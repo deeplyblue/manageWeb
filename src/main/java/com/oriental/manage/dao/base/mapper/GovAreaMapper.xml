@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.base.GovAreaMapper" >
+
+  <sql id="Base_Column_List" >
+    AREA_CODE,AREA_NAME,CITY_CODE,CITY_NAME
+  </sql>
+
+  <select id="selectAllArea" resultType="Map">
+      SELECT <include refid="Base_Column_List"/> FROM T_GOV_AREA
+  </select>
+
+</mapper>

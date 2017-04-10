@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.merchant.itconfig.MerchantKeyInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.merchant.itconfig.KeyInfo" extends="BaseMapper.BaseResultMap">
+        <id     column="ID"                          property="id"                       jdbcType="VARCHAR"/>
+        <result column="COMPANY_TYPE"                property="companyType"              jdbcType="VARCHAR"/>
+        <result column="COMPANY_CODE"                property="companyCode"              jdbcType="VARCHAR"/>
+        <result column="TRANS_PWD"                   property="transPwd"                 jdbcType="VARCHAR"/>
+        <result column="TRANS_PWD_STATUS"            property="transPwdStatus"           jdbcType="VARCHAR"/>
+        <result column="TRANS_PWD_VALID_DATE"        property="transPwdValidDate"        jdbcType="DATE"/>
+        <result column="TRANS_PWD_UPD_DATE"          property="transPwdUpdDate"          jdbcType="DATE"/>
+        <result column="DATA_KEY"                    property="dataKey"                  jdbcType="VARCHAR"/>
+        <result column="DATA_KEY_STATUS"             property="dataKeyStatus"            jdbcType="VARCHAR"/>
+        <result column="DATA_KEY_VALID_DATE"         property="dataKeyValidDate"         jdbcType="DATE"/>
+        <result column="DATA_KEY_UPD_DATE"           property="dataKeyUpdDate"           jdbcType="DATE"/>
+        <result column="RSA_PUBLIC_KEY"              property="rsaPublicKey"             jdbcType="VARCHAR"/>
+        <result column="RSA_KEY_STATUS"              property="rsaKeyStatus"             jdbcType="VARCHAR"/>
+        <result column="RSA_KEY_VALID_DATE"          property="rsaKeyValidDate"          jdbcType="TIMESTAMP"/>
+        <result column="RSA_KEY_UPD_DATE"            property="rsaKeyUpdDate"            jdbcType="TIMESTAMP"/>
+        <result column="ENCTYPE"                     property="encType"                  jdbcType="VARCHAR"/>
+        <result column="RSA_REMOTE_ADDR"            property="rsaRemoteAddr"            jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID,COMPANY_TYPE,COMPANY_CODE,TRANS_PWD,TRANS_PWD_STATUS,TRANS_PWD_VALID_DATE,TRANS_PWD_UPD_DATE,DATA_KEY,
+        DATA_KEY_STATUS,DATA_KEY_VALID_DATE,DATA_KEY_UPD_DATE,RSA_PUBLIC_KEY,RSA_KEY_STATUS,
+        RSA_KEY_VALID_DATE,RSA_KEY_UPD_DATE,RSA_REMOTE_ADDR,ENCTYPE
+    </sql>
+
+
+    <sql id="queryCondition">
+        <if test="companyCode != null and companyCode != ''">
+            AND T.COMPANY_CODE = #{companyCode}
+        </if>
+        <if test="id != null and id != ''">
+            AND T.ID = #{id}
+        </if>
+    </sql>
+
+    <select id="queryMerchantKeyInfo" resultMap="BaseResultMap">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT <include refid="Base_Column_List" /> FROM T_KEY_INFO T WHERE 1=1
+        <include refid="queryCondition"/>
+        AND T.COMPANY_TYPE = #{companyType}
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+    <select id="queryRsaKey" resultType="com.oriental.manage.pojo.merchant.itconfig.KeyInfo">
+        SELECT ID, COMPANY_CODE, RSA_PUBLIC_KEY FROM T_KEY_INFO T where 1=1
+        <include refid="queryCondition"/>
+        AND T.COMPANY_TYPE = #{companyType}
+    </select>
+    <select id="queryDataKey" resultType="com.oriental.manage.pojo.merchant.itconfig.KeyInfo">
+        SELECT ID, COMPANY_CODE, DATA_KEY FROM T_KEY_INFO T where 1=1
+        <include refid="queryCondition"/>
+        AND T.COMPANY_TYPE = #{companyType}
+
+    </select>
+
+    <insert id="createMerchantKeyInfo">
+      INSERT INTO T_KEY_INFO (<include refid="Base_Column_List"/> ) VALUES
+        (#{id},#{companyType},#{companyCode},#{transPwd},#{transPwdStatus},#{transPwdValidDate},#{transPwdUpdDate},#{dataKey},
+         '01',#{dataKeyValidDate},#{dataKeyUpdDate},#{rsaPublicKey},#{rsaKeyStatus},#{rsaKeyValidDate},#{rsaKeyUpdDate},#{rsaRemoteAddr},#{encType})
+    </insert>
+
+    <update id="updateMerchantKeyInfo">
+        UPDATE T_KEY_INFO T
+        <set>
+            <if test="transPwd != null">
+                T.TRANS_PWD = #{transPwd},
+            </if>
+            <if test="transPwdStatus != null">
+                T.TRANS_PWD_STATUS = #{transPwdStatus},
+            </if>
+            <if test="transPwdValidDate != null">
+                T.TRANS_PWD_VALID_DATE = #{transPwdValidDate},
+            </if>
+            <if test="transPwdUpdDate != null">
+                T.TRANS_PWD_UPD_DATE = #{transPwdUpdDate},
+            </if>
+            <if test="dataKey != null">
+                T.DATA_KEY = #{dataKey},
+            </if>
+            <if test="dataKeyStatus != null">
+                T.DATA_KEY_STATUS = #{dataKeyStatus},
+            </if>
+            <if test="dataKeyValidDate != null">
+                T.DATA_KEY_VALID_DATE = #{dataKeyValidDate},
+            </if>
+            <if test="rsaKeyStatus != null">
+                T.RSA_KEY_STATUS = #{rsaKeyStatus},
+            </if>
+            <if test="rsaKeyValidDate != null">
+                T.RSA_KEY_VALID_DATE = #{rsaKeyValidDate},
+            </if>
+            <if test="encType != null">
+                T.ENCTYPE = #{encType},
+            </if>
+            <if test="rsaRemoteAddr != null">
+                T.RSA_REMOTE_ADDR = #{rsaRemoteAddr},
+            </if>
+            <if test="rsaPublicKey != null">
+                T.RSA_PUBLIC_KEY = #{rsaPublicKey},
+            </if>
+            T.LAST_UPD_TIME = CURRENT_TIMESTAMP,
+        </set>
+        WHERE T.COMPANY_CODE = #{companyCode} AND T.COMPANY_TYPE = #{companyType} AND T.ID = #{id}
+    </update>
+
+</mapper>

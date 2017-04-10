@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.institution.OrganizeInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.institution.OrganizeInfo"
+             extends="BaseMapper.BaseResultMap">
+    <id column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+    <result column="ORG_CATEGORY" property="orgCategory" jdbcType="VARCHAR" />
+    <result column="ORG_TYPE" property="orgType" jdbcType="VARCHAR" />
+    <result column="ORG_NAME" property="orgName" jdbcType="VARCHAR" />
+    <result column="ORG_ABBR_NAME" property="orgAbbrName" jdbcType="VARCHAR" />
+    <result column="ORG_INTRO" property="orgIntro" jdbcType="VARCHAR" />
+    <result column="ORG_AREA" property="orgArea" jdbcType="VARCHAR" />
+    <result column="ORG_CONN_DATE" property="orgConnDate" jdbcType="TIMESTAMP" />
+    <result column="HANDLER" property="handler" jdbcType="VARCHAR" />
+    <result column="ORG_STATUS" property="orgStatus" jdbcType="VARCHAR" />
+    <result column="ORG_ORGANIZATION_CODE" property="orgOrganizationCode" jdbcType="VARCHAR" />
+    <result column="ORG_LEGAL_PROXY" property="orgLegalProxy" jdbcType="VARCHAR" />
+    <result column="BIZ_LICENSE_NO" property="bizLicenseNo" jdbcType="VARCHAR" />
+    <result column="ORG_REG_ADDR" property="orgRegAddr" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+    <result column="ORG_FAX" property="orgFax" jdbcType="VARCHAR" />
+    <result column="ORG_ZIPCODE" property="orgZipcode" jdbcType="VARCHAR" />
+    <result column="ORG_ETC" property="orgEtc" jdbcType="VARCHAR" />
+    <result column="AUDIT_DATE" property="auditDate" jdbcType="TIMESTAMP" />
+    <result column="AUDITOR" property="auditor" jdbcType="VARCHAR" />
+    <result column="IS_ALARM" property="isAlarm" jdbcType="VARCHAR" />
+    <result column="ISFULLSETTLEMENT" property="isfullsettlement" jdbcType="VARCHAR" />
+    <result column="CERT_END_DATE" property="certEndDate" jdbcType="TIMESTAMP" />
+    <result column="INTERVAL_TIME" property="intervalTime" jdbcType="VARCHAR" />
+    <result column="ORG_REMARK" property="orgRemark" jdbcType="VARCHAR" />
+    <result column="VERIFY_CYCLE" property="verifyCycle" jdbcType="VARCHAR" />
+    <result column="FILE_SOURCE" property="fileSource" jdbcType="VARCHAR" />
+    <result column="REFUND_MODE" property="refundMode" jdbcType="VARCHAR" />
+    <result column="REFUND_CYCLE" property="refundCycle" jdbcType="VARCHAR" />
+    <result column="CERTIFICATE_FLG" property="certificateFlg" jdbcType="VARCHAR" />
+    <result column="SUCCESS_RATE" property="successRate" jdbcType="VARCHAR" />
+    <result column="ORG_RUN_STATUS" property="orgRunStatus" jdbcType="VARCHAR" />
+    <result column="REFUND_HAS_CHECK" property="refundHasCheck" jdbcType="VARCHAR" />
+    <result column="PAY_ORG_MCHNT" property="payOrgMchnt" jdbcType="VARCHAR" />
+    <result column="PAY_ORG_LEVEL" property="payOrgLevel" jdbcType="VARCHAR" />
+    <result column="PART_REFUND_FLAG" property="partRefundFlag" jdbcType="VARCHAR" />
+    <result column="FEE_COLLECT_WAY" property="feeCollectWay" jdbcType="VARCHAR"/>
+    <result column="ORG_INOROUTFLAG" property="orgInOrOutFlag" jdbcType="VARCHAR"/>
+    <result column="PAY_BANK_CODE" property="payBankCode" jdbcType="VARCHAR"/>
+    <result column="CHANNEL_TYPE" property="channelType" jdbcType="VARCHAR"/>
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    ORG_CODE, ORG_CATEGORY, ORG_TYPE, ORG_NAME, ORG_ABBR_NAME,
+    ORG_INTRO, ORG_AREA,
+    ORG_CONN_DATE,
+    HANDLER,
+    ORG_STATUS, ORG_ORGANIZATION_CODE, ORG_LEGAL_PROXY, BIZ_LICENSE_NO,
+    ORG_REG_ADDR,
+    CREATE_TIME, LAST_UPD_TIME,PART_REFUND_FLAG,PAY_ORG_LEVEL,PAY_ORG_MCHNT,
+    REFUND_HAS_CHECK,ORG_RUN_STATUS,SUCCESS_RATE,CERTIFICATE_FLG,REFUND_CYCLE,
+    REFUND_MODE,FILE_SOURCE,VERIFY_CYCLE,ORG_REMARK,INTERVAL_TIME,CERT_END_DATE,
+    ISFULLSETTLEMENT,IS_ALARM,AUDITOR,AUDIT_DATE,ORG_ETC,ORG_ZIPCODE,ORG_FAX,
+    FEE_COLLECT_WAY,ORG_INOROUTFLAG,PAY_BANK_CODE,CHANNEL_TYPE
+  </sql>
+
+   <sql id="queryCondition">
+    <if test="orgCode != null and orgCode != ''">
+      AND T.ORG_CODE = #{orgCode}
+    </if>
+    <if test="orgCategory != null and orgCategory != ''">
+      AND T.ORG_CATEGORY = #{orgCategory}
+    </if>
+  </sql>
+
+
+   <select id="selectByPay" parameterType="com.oriental.manage.pojo.institution.OrganizeInfo" resultMap="BaseResultMap" >
+     <include refid="BaseMapper.pageHead"/>
+     SELECT T.ORG_CODE, T.ORG_CATEGORY, T.ORG_TYPE, T.ORG_NAME, T.ORG_ABBR_NAME, T.ORG_INTRO,
+     T.ORG_AREA, T.ORG_CONN_DATE, T.HANDLER,T.CHANNEL_TYPE,
+     T.ORG_STATUS, T.ORG_ORGANIZATION_CODE, T.ORG_LEGAL_PROXY, T.BIZ_LICENSE_NO, T.ORG_REG_ADDR,
+     T.CREATE_TIME, T.LAST_UPD_TIME, T.PART_REFUND_FLAG, T.PAY_ORG_LEVEL, T.PAY_ORG_MCHNT,
+     T.REFUND_HAS_CHECK, T.ORG_RUN_STATUS, T.SUCCESS_RATE, T.CERTIFICATE_FLG, T.REFUND_CYCLE,
+     T.REFUND_MODE, T.FILE_SOURCE, T.VERIFY_CYCLE, T.ORG_REMARK, T.INTERVAL_TIME, T.CERT_END_DATE,
+     T.ISFULLSETTLEMENT, T.IS_ALARM,AUDITOR, T.AUDIT_DATE, T.ORG_ETC, T.ORG_ZIPCODE,
+     T.ORG_FAX, T.FEE_COLLECT_WAY,T.PAY_BANK_CODE,
+     CASE   WHEN   E.RETURN_RESULT= '0'   THEN   "成功 "
+     WHEN   E.RETURN_RESULT= '1'   THEN   "失败"
+     ELSE   "未发送 "   END AS SEND_RESULT
+     FROM T_ORGANIZE_INFO T
+     LEFT JOIN T_AUDIT_SEND_INFO E ON ORG_CODE = E.BATCH_NO
+     AND E.SEND_TYPE = 'O'
+     AND E.HIS = '0'
+     WHERE 1 = 1 <include refid="queryCondition"/>
+     ORDER BY T.ORG_CODE
+     <include refid="BaseMapper.pageFoot"/>
+   </select>
+
+  <insert id="insertOrganizeInfo" parameterType="com.oriental.manage.pojo.institution.OrganizeInfo">
+    insert into T_ORGANIZE_INFO
+    (ORG_CODE, ORG_CATEGORY, ORG_TYPE,
+    ORG_NAME, ORG_ABBR_NAME, ORG_INTRO,
+    ORG_AREA, ORG_CONN_DATE, HANDLER,
+    ORG_STATUS,
+    ORG_ORGANIZATION_CODE, ORG_LEGAL_PROXY, BIZ_LICENSE_NO,
+    ORG_REG_ADDR,
+    CREATE_TIME, LAST_UPD_TIME,REFUND_HAS_CHECK,PAY_ORG_MCHNT,PAY_ORG_LEVEL,PART_REFUND_FLAG,IS_ALARM,FEE_COLLECT_WAY,
+    ORG_INOROUTFLAG,REFUND_MODE,PAY_BANK_CODE,CHANNEL_TYPE
+    )
+    values (#{orgCode}, #{orgCategory},
+    #{orgType},
+    #{orgName}, #{orgAbbrName}, #{orgIntro},
+    #{orgArea},
+    date(now()),
+    #{handler},
+    #{orgStatus},
+    #{orgOrganizationCode},
+    #{orgLegalProxy}, #{bizLicenseNo},
+    #{orgRegAddr}, now(),
+    now(),#{refundHasCheck},#{payOrgMchnt},#{payOrgLevel},#{partRefundFlag},#{isAlarm},#{feeCollectWay,jdbcType=VARCHAR},
+    #{orgInOrOutFlag, jdbcType=VARCHAR},#{refundMode, jdbcType=VARCHAR},#{payBankCode},#{channelType}
+    )
+  </insert>
+
+  <update id="updateOrganizeInfo" parameterType="com.oriental.manage.pojo.institution.OrganizeInfo">
+    UPDATE T_ORGANIZE_INFO
+    SET
+    ORG_CATEGORY = #{orgCategory},
+    ORG_TYPE = #{orgType},
+    ORG_NAME = #{orgName},
+    ORG_ABBR_NAME = #{orgAbbrName},
+    ORG_INTRO = #{orgIntro},
+    ORG_AREA = #{orgArea},
+    ORG_CONN_DATE = #{orgConnDate},
+    HANDLER = #{handler},
+    ORG_STATUS = #{orgStatus},
+    ORG_ORGANIZATION_CODE = #{orgOrganizationCode},
+    ORG_LEGAL_PROXY = #{orgLegalProxy},
+    BIZ_LICENSE_NO = #{bizLicenseNo},
+    ORG_REG_ADDR = #{orgRegAddr},
+    REFUND_HAS_CHECK = #{refundHasCheck},
+    PAY_ORG_MCHNT = #{payOrgMchnt},
+    PAY_ORG_LEVEL = #{payOrgLevel},
+    PART_REFUND_FLAG = #{partRefundFlag},
+    LAST_UPD_TIME = now(),
+    IS_ALARM=#{isAlarm},
+    FEE_COLLECT_WAY=#{feeCollectWay},
+    ORG_INOROUTFLAG=#{orgInOrOutFlag},
+    REFUND_MODE=#{refundMode},
+    PAY_BANK_CODE=#{payBankCode},
+    CHANNEL_TYPE=#{channelType}
+    WHERE ORG_CODE = #{orgCode}
+  </update>
+  <select id="getByCompanyCode" parameterType="com.oriental.manage.pojo.institution.OrganizeInfo"
+          resultType="com.oriental.manage.pojo.institution.OrganizeInfo">
+    SELECT
+    T.ORG_CODE, T.ORG_CATEGORY, T.ORG_TYPE, T.ORG_NAME, T.ORG_ABBR_NAME, T.ORG_INTRO,
+     T.ORG_AREA
+     FROM T_ORGANIZE_INFO T
+     WHERE  1=1
+     </select>
+
+  <select id="getAll" resultMap="BaseResultMap"
+          parameterType="com.oriental.manage.pojo.institution.OrganizeInfo">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM T_ORGANIZE_INFO
+    ORDER BY ORG_CODE
+  </select>
+  <select id="checkOrg" resultType="com.oriental.manage.pojo.institution.OrganizeInfo">
+    SELECT ORG_CODE,ORG_NAME,ORG_ABBR_NAME FROM T_ORGANIZE_INFO
+    WHERE 1=1
+    <if test="orgCode != null and orgCode != ''">
+      AND ORG_CODE = #{orgCode}
+    </if>
+    <if test="orgName != null and orgName != ''">
+      AND ORG_NAME = #{orgName}
+    </if>
+    <if test="orgAbbrName != null and orgAbbrName != ''">
+      AND ORG_ABBR_NAME = #{orgAbbrName}
+    </if>
+  </select>
+  <select id="queryChannelType" resultType="com.oriental.manage.pojo.institution.OrganizeInfo">
+    SELECT  CHANNEL_TYPE ,ORG_CODE,PAY_BANK_CODE  FROM T_ORGANIZE_INFO
+    WHERE  ORG_CODE =#{orgCode,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+       DELETE FROM  T_ORGANIZE_INFO
+       WHERE ORG_CODE =#{orgCode,jdbcType=VARCHAR}
+
+  </delete>
+</mapper>

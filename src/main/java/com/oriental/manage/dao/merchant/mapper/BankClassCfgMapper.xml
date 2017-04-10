@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oriental.manage.dao.merchant.BankClassCfgMapper">
+	<resultMap id="BaseResultMap" type="com.oriental.manage.pojo.merchant.BankClassCfg"
+			   extends="BaseMapper.BaseResultMap">
+		<id     column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="TRANS_CODE" jdbcType="VARCHAR" property="transCode" />
+		<result column="PAY_ORG_CODE" jdbcType="VARCHAR" property="payOrgCode" />
+		<result column="CLASS_PATH" jdbcType="VARCHAR" property="classPath" />
+		<result column="BANK_TYPE" jdbcType="VARCHAR" property="bankType" />
+		<result column="ACTION_NAME" jdbcType="VARCHAR" property="actionName" />
+		<result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="LAST_UPD_TIME" jdbcType="TIMESTAMP" property="lastUpdTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID, TRANS_CODE, PAY_ORG_CODE, CLASS_PATH, ACTION_NAME,
+		BANK_TYPE, CREATE_TIME, LAST_UPD_TIME
+	</sql>
+    <sql id="queryCondition">
+        <if test="payOrgCode != null and payOrgCode != ''">
+            AND PAY_ORG_CODE = #{payOrgCode}
+        </if>
+        <if test="classPath != null and classPath != ''">
+            AND CLASS_PATH LIKE concat('%',#{classPath},'%')
+        </if>
+        <if test="actionName != null and actionName != ''">
+            AND ACTION_NAME LIKE concat('%',#{actionName},'%')
+        </if>
+    </sql>
+
+	<select id="queryPage" resultMap="BaseResultMap">
+		<include refid="BaseMapper.pageHead"/>
+		SELECT <include refid="Base_Column_List" />
+		  FROM T_BANK_CLASS_CFG
+         WHERE 1 = 1 <include refid="queryCondition"/>
+		<include refid="BaseMapper.pageFoot"/>
+	</select>
+
+
+	<insert id="insertBankClassCfg" parameterType="com.oriental.manage.pojo.merchant.BankClassCfg">
+		insert into
+		T_BANK_CLASS_CFG (ID, TRANS_CODE,
+		PAY_ORG_CODE,
+		CLASS_PATH,ACTION_NAME, BANK_TYPE 
+		)
+		values (#{id}, #{transCode},
+		#{payOrgCode}, #{classPath},#{actionName}, #{bankType} )
+	</insert>
+	<update id="updateBankClassCfg" parameterType="com.oriental.manage.pojo.merchant.BankClassCfg">
+		update T_BANK_CLASS_CFG
+		<set>
+			<if test="id != null">
+				ID = #{id},
+			</if>
+			<if test="transCode != null">
+				TRANS_CODE = #{transCode},
+			</if>
+			<if test="payOrgCode != null">
+				PAY_ORG_CODE = #{payOrgCode},
+			</if>
+			<if test="classPath != null">
+				CLASS_PATH = #{classPath},
+			</if>
+			<if test="actionName !=null">
+			    ACTION_NAME=#{actionName},
+			</if>
+			<if test="bankType != null">
+				BANK_TYPE = #{bankType},
+			</if>
+		</set>
+		where ID = #{id}
+	</update>
+
+	<delete id="deleteBankClassCfg" parameterType="com.oriental.manage.pojo.merchant.BankClassCfg">
+		DELETE FROM T_BANK_CLASS_CFG
+		WHERE  ID = #{id}
+
+	</delete>
+</mapper>

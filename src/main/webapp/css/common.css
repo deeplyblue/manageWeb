@@ -1,0 +1,59 @@
+.table thead {
+    font-size: 13px;
+}
+
+.table tbody {
+    font-size: 12px;
+}
+
+.table tfoot {
+    font-size: 12px;
+}
+
+select.form-control.form-control-inline {
+    width: 200px;
+}
+
+input.error {
+    border-color: #b94a48;
+    box-shadow: 0 0 6px #f8b9b7;
+}
+
+select.error {
+    border-color: #b94a48;
+    box-shadow: 0 0 6px #f8b9b7;
+}
+
+textarea.error {
+    border-color: #b94a48;
+    box-shadow: 0 0 6px #f8b9b7;
+}
+
+.myTable thead tr {
+    background-color: #CCCCCC;
+}
+
+.myTable thead tr th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.myTable tbody tr td.input-left {
+    padding-left: 20px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.myTable tbody tr td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+input.form-control-inline {
+    width: 200px;
+}
+
+.form-control-inline {
+    width: 200px;
+    display: inline;
+}

@@ -1,0 +1,280 @@
+
+a {
+    text-decoration: none;
+    color: #666666;
+}
+
+.top_box {
+    width: 100%;
+    height: 79px;
+}
+
+.top {
+    width: 1130px;
+    height: 79px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logo {
+    float: left;
+}
+
+.nav {
+    width: 738px;
+    height: 79px;
+    float: right;
+}
+
+.nav span {
+    line-height: 79px;
+    font-weight: bold;
+    color: 333333;
+    margin-left: 14px;
+    margin-right: 12px;
+    font-size: 12px;
+}
+
+.nav span:hover {
+    background-color: #ff0000;
+}
+
+/*banner*/
+.banner_box {
+    width: 100%;
+    height: 446px;
+}
+
+.banner {
+    width: 1130px;
+    height: 446px;
+    margin-left: auto;
+    margin-right: auto;
+    background-image: url(images/bg01.png);
+    background-repeat: no-repeat;
+    padding-top: 27px;
+}
+
+.dl_box {
+    width: 324px;
+    height: 355px;
+    background-color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.5);
+    margin-left: 700px;
+}
+
+.dl_top {
+    width: 304px;
+    height: 40px;
+    background-color: #FFFFFF;
+    margin-left: 700px;
+    opacity: 0.9;
+    line-height: 40px;
+    padding-left: 20px;
+    color: #b6b6b6;
+    border: 1px solid #e2e1e2;
+    border-bottom: hidden;
+}
+
+.dl_box input {
+    width: 200px;
+    height: 30px;
+    border-radius: 5px;
+    margin-top: 27px;
+    margin-left: 40px;
+    background-color: #fff9f1;
+    padding-left: 40px;
+    border: solid 1PX #333;
+}
+
+.bcmm {
+    margin-left: 40px;
+    margin-top: 15px;
+}
+
+.bcmm a {
+    margin-left: 80px;
+}
+
+.dl_box button {
+    width: 300px;
+    height: 37px;
+    background-color: #2ba9d7;
+    border-radius: 5px;
+    margin-left: 12px;
+    margin-top: 30px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    opacity: 1;
+}
+
+/*news*/
+.news_box {
+    width: 100%;
+    height: 57px;
+}
+
+.news {
+    width: 1130px;
+    height: 57px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.laba {
+    float: left;
+}
+
+.new_text {
+    float: left;
+    margin-left: 12px;
+    color: #2e2e57;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 57px;
+}
+
+.day {
+    float: left;
+    margin-left: 40px;
+    line-height: 57px;
+    color: #b0aead;
+    font-size: 9px;
+}
+
+.more_news {
+    float: left;
+    background-image: url(images/more_news.png);
+    margin-left: 40px;
+    line-height: 35px;
+    width: 70px;
+    height: 35px;
+    margin-top: 14px;
+    color: #2e2e57;
+    font-size: 12px;
+    text-align: center;
+}
+
+/*content*/
+.content_box {
+    width: 100%;
+    height: 165px;
+}
+
+.content {
+    width: 1680px;
+    height: 165px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #e0e2e4;
+}
+
+.p1 {
+    float: left;;
+}
+
+.p2 {
+    float: left;
+    margin-left: 34px
+}
+
+.p3 {
+    float: left;
+    margin-left: 26px;
+}
+
+/*name*/
+.name_box {
+    width: 100%;
+    height: 52px;
+}
+
+.name {
+    width: 1130px;
+    height: 52px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.name span {
+    width: 340px;
+    height: 52px;
+    line-height: 52px;
+    text-align: center;
+    font-size: 12px;
+    color: #333333;
+    float: left;
+    margin-left: 23px;
+    margin-right: 5px;
+}
+
+/*know*/
+.know_box {
+    width: 100%;
+    height: 37px;
+    margin-top: 27px;
+}
+
+.know {
+    width: 1130px;
+    height: 37px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.know span {
+    float: left;
+    font-size: 12px;
+    color: #2e2e57;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+.know a {
+    font-size: 12px;
+    color: #2e2e57;
+    text-decoration: none;
+}
+
+/*line*/
+.line {
+    width: 1680px;
+    height: 1px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #e0e2e4;
+    margin-top: 14px;
+}
+
+/*foot*/
+.foot_box {
+    width: 100%;
+    height: 12px;
+}
+
+.foot {
+    width: 1130px;
+    height: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 12px;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 12px;
+    color: #777778;
+}
+
+.foot2 {
+    width: 1130px;
+    height: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 12px;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 12px;
+    color: #777778;
+}
+

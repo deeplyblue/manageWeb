@@ -1,0 +1,7 @@
+关于excel生成
+请参考com.oriental.manage.controller.settlement.report.dailyReport.MchntClearRelationDayController.download
+
+--------------------------------------
+该方法，实现了ajax请求获取文件
+通过theader、data实现数据组织
+最后用fileDownAjax封装好的方法，组织返回结果实体

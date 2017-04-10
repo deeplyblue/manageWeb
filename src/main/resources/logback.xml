@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration  -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user             -->
+<!--                                                                -->
+<!-- For professional support please see                            -->
+<!--    http://www.qos.ch/shop/products/professionalSupport         -->
+<!--                                                                -->
+<configuration>
+    <appender name="core" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <!--and http://logback.qos.ch/manual/appenders.html#TimeBasedRollingPolicy-->
+        <!--for further documentation-->
+        <encoding>UTF-8</encoding>
+        <file>${LOG_PATH}/OU-core.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>[%-5level] [%d{yyyy-MM-dd HH:mm:ss.SSS}] %logger{36}[%file:%line] LOG_ID:[%X{logId}] | %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/OU-core.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36}[%file:%line] LOG_ID:[%X{logId}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="c3p0" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <!--and http://logback.qos.ch/manual/appenders.html#TimeBasedRollingPolicy-->
+        <!--for further documentation-->
+        <append>true</append>
+        <encoding>UTF-8</encoding>
+        <file>${LOG_PATH}/OU-c3p0.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss} [%-5level] [%logger{36}] %M : %L LOG_ID:[%X{logId}] -- %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/OU-c3p0.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <appender name="root" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <!--and http://logback.qos.ch/manual/appenders.html#TimeBasedRollingPolicy-->
+        <!--for further documentation-->
+        <encoding>UTF-8</encoding>
+        <File>${LOG_PATH}/OU-root.log</File>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%logger{36}] %M : %L LOG_ID:[%X{logId}] -- %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/OU-root.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="dubbo" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <!--and http://logback.qos.ch/manual/appenders.html#TimeBasedRollingPolicy-->
+        <!--for further documentation-->
+        <encoding>UTF-8</encoding>
+        <file>${LOG_PATH}/OU-dubbo.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>[%-5level] [%d{yyyy-MM-dd HH:mm:ss.SSS}] %logger{36}[%file:%line] LOG_ID:%X{logId} | %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/OU-dubbo.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <logger name="com.oriental" additivity="false" level="debug">
+        <appender-ref ref="core"/>
+        <appender-ref ref="console"/>
+    </logger>
+    <logger name="java.sql" additivity="false" level="debug">
+        <appender-ref ref="core"/>
+        <appender-ref ref="console"/>
+    </logger>
+    <logger name="com.alibaba.druid" additivity="false" level="debug">
+        <appender-ref ref="core"/>
+        <appender-ref ref="console"/>
+        <appender-ref ref="c3p0"/>
+    </logger>
+    <logger name="com.mchange.v2.resourcepool" additivity="false" level="debug">
+        <appender-ref ref="c3p0"/>
+    </logger>
+    <logger name="com.ibatis" additivity="false" level="debug">
+        <appender-ref ref="core"/>
+        <!--开发打开-->
+        <appender-ref ref="console"/>
+    </logger>
+    <logger name="com.alibaba.dubbo" additivity="false" level="debug">
+        <appender-ref ref="dubbo"/>
+    </logger>
+    <logger name="org.springframework" additivity="false" level="info">
+        <appender-ref ref="console"/>
+        <appender-ref ref="core"/>
+    </logger>
+    <logger name="jdbc.sqltiming">
+        <level value="info"/>
+    </logger>
+    <!--<logger name="com" additivity="false" level="debug">
+        <appender-ref ref="console"/>
+    </logger>
+    <logger name="org" additivity="false" level="debug">
+        <appender-ref ref="console"/>
+    </logger>
+    <logger name="java" additivity="false" level="debug">
+        <appender-ref ref="console"/>
+    </logger>
+    <logger name="jdbc" additivity="false" level="debug">
+        <appender-ref ref="console"/>
+    </logger>-->
+    <root level="error">
+        <appender-ref ref="root"/>
+        <appender-ref ref="console"/>
+    </root>
+</configuration>

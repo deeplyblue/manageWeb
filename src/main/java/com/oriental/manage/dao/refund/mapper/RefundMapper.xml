@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.refund.RefundMapper">
+    <resultMap id="OrgRefundMap" type="com.oriental.manage.pojo.refund.OrgRefundInfo"
+               extends="BaseMapper.BaseResultMap">
+        <result column="ID" property="id"/>
+        <result column="ORDER_NO" property="orderNo"/>
+        <result column="ORDER_DATE" property="orderDate"/>
+        <result column="CHANNEL" property="channel"/>
+        <result column="PAY_ORG_CODE" property="payOrgCode"/>
+        <result column="ORG_BANK_CODE" property="orgBankCode"/>
+        <result column="REFUND_AMT" property="refundAmt"/>
+        <result column="TOTAL_AMT" property="totalAmt"/>
+        <result column="BUSI_REFUND_ID" property="busiRefundId"/>
+        <result column="PAY_TRANS_NO" property="payTransNo"/>
+        <result column="OLD_PAY_TRANS_NO" property="oldPayTransNo"/>
+        <result column="OLD_OUR_TRANS_NO" property="oldOurTransNo"/>
+        <result column="OLD_PAY_REQ_NO" property="oldPayReqNo"/>
+        <result column="ORDER_ADJ_STATUS" property="orderAdjStatus"/>
+        <result column="REFUND_TYPE" property="refundType"/>
+        <result column="ERR_TYPE" property="errType"/>
+        <result column="TRANS_INFO_TYPE" property="transInfoType"/>
+        <result column="REFUND_STATUS" property="refundStatus"/>
+        <result column="REFUND_APPLICANT" property="refundApplicant"/>
+        <result column="APPLICANT_IP" property="applicantIp"/>
+        <result column="AUDITOR" property="auditor"/>
+        <result column="AUDIT_DATE" property="auditDate"/>
+        <result column="PROC_EMP_ID" property="procEmpId"/>
+        <result column="PROC_DATETIME" property="procDatetime"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="LAST_UPD_TIME" property="lastUpdTime"/>
+        <result column="MCHNT_CODE" property="mchntCode"/>
+    </resultMap>
+
+    <resultMap id="BusiRefundMap" type="com.oriental.manage.pojo.refund.BusiRefundInfo"
+               extends="BaseMapper.BaseResultMap">
+        <result column="ID" property="id"/>
+        <result column="MCHNT_CODE" property="mchntCode"/>
+        <result column="ORDER_NO" property="orderNo"/>
+        <result column="ORDER_DATE" property="orderDate"/>
+        <result column="TOTAL_AMT" property="refundAmt"/>
+        <result column="REFUND_AMT" property="totalAmt"/>
+        <result column="TOTAL_REFUND_AMOUNT" property="totalRefundAmount"/>
+        <result column="OLD_OUR_TRANS_NO" property="oldOurTransNo"/>
+        <result column="OLD_ORDER_NO" property="oldOrderNo"/>
+        <result column="SPLIT_INFO" property="splitInfo"/>
+        <result column="ORDER_ADJ_STATUS" property="orderAdjStatus"/>
+        <result column="TRANS_INFO_TYPE" property="transInfoType"/>
+        <result column="REFUND_STATUS" property="refundStatus"/>
+        <result column="REFUND_APPLICANT" property="refundApplicant"/>
+        <result column="APPLICANT_IP" property="applicantIp"/>
+        <result column="AUDITOR" property="auditor"/>
+        <result column="AUDIT_DATE" property="auditDate"/>
+        <result column="PROC_EMP_ID" property="procEmpId"/>
+        <result column="PROC_DATETIME" property="procDatetime"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="LAST_UPD_TIME" property="lastUpdTime"/>
+    </resultMap>
+
+    <sql id="column">
+        t.ID, t.ORDER_NO, t.ORG_BANK_CODE, t.REFUND_AMT, t.ORDER_DATE, t.TOTAL_AMT, t.ORDER_ADJ_STATUS, t.REFUND_STATUS,
+        t.REFUND_APPLICANT, t.APPLICANT_IP, t.AUDITOR, t.AUDIT_DATE, t.TRANS_INFO_TYPE, t.CREATE_TIME, t.LAST_UPD_TIME,
+        t.PAY_ORG_CODE, t.CHANNEL, t.OLD_OUR_TRANS_NO, t.OLD_PAY_REQ_NO, t.PAY_TRANS_NO, t.OLD_PAY_TRANS_NO,
+        t.REFUND_TYPE,t.ERR_TYPE,t.BUSI_REFUND_ID,t.PROC_EMP_ID,t.PROC_DATETIME
+    </sql>
+
+    <sql id="busiColumn">
+        B.ID, B.MCHNT_CODE, B.ORDER_NO, B.ORDER_DATE, B.TOTAL_AMT, B.REFUND_AMT, B.TOTAL_REFUND_AMOUNT,
+        B.OLD_OUR_TRANS_NO, B.OLD_ORDER_NO, B.SPLIT_INFO, B.ORDER_ADJ_STATUS, B.TRANS_INFO_TYPE, B.REFUND_STATUS,
+        B.REFUND_APPLICANT, B.APPLICANT_IP, B.AUDITOR, B.AUDIT_DATE, B.PROC_EMP_ID, B.PROC_DATETIME, B.CREATE_TIME, B.LAST_UPD_TIME
+    </sql>
+
+    <sql id="queryCondition">
+        <if test="id != null and id !=''">
+            AND t.ID = #{id}
+        </if>
+        <if test="payOrgCode !=null and payOrgCode !=''">
+            AND t.PAY_ORG_CODE = #{payOrgCode}
+        </if>
+        <if test="orgBankCode != null and orgBankCode !=''">
+            AND t.ORG_BANK_CODE = #{orgBankCode}
+        </if>
+        <if test="channel !=null and channel !=''">
+            AND t.CHANNEL = #{channel}
+        </if>
+        <if test="orderNo !=null and orderNo !=''">
+            AND t.ORDER_NO = #{orderNo}
+        </if>
+        <if test="oldPayReqNo !=null and oldPayReqNo !=''">
+            AND t.OLD_PAY_REQ_NO = #{oldPayReqNo}
+        </if>
+        <if test="refundStatus !=null and refundStatus !=''">
+            AND t.REFUND_STATUS = #{refundStatus}
+        </if>
+        <if test="refundType != null and refundType !=''">
+            AND t.REFUND_TYPE = #{refundType}
+        </if>
+        <if test="errType != null and errType !=''">
+            AND t.ERR_TYPE = #{errType}
+        </if>
+        <if test="oldOurTransNo !=null and oldOurTransNo !=''">
+            AND t.OLD_OUR_TRANS_NO = #{oldOurTransNo}
+        </if>
+        <if test="refundBeginDate != null and refundBeginDate !=''">
+            AND t.CREATE_TIME &gt;= #{refundBeginDate}
+        </if>
+        <if test="refundEndDate != null and refundEndDate !=''">
+            AND t.CREATE_TIME &lt;= DATE_ADD(#{refundEndDate}, INTERVAL 1 DAY)
+        </if>
+        <if test="auditBeginDate != null and auditBeginDate !=''">
+            AND t.AUDIT_DATE &gt;= #{auditBeginDate}
+        </if>
+        <if test="auditEndDate != null and auditEndDate !=''">
+            AND t.AUDIT_DATE &lt;= DATE_ADD(#{auditEndDate}, INTERVAL 1 DAY)
+        </if>
+        <if test="proBeginDate != null and proBeginDate !=''">
+            AND t.PROC_DATETIME &gt;= #{proBeginDate}
+        </if>
+        <if test="proEndDate != null and proEndDate !=''">
+            AND t.PROC_DATETIME &lt;= DATE_ADD(#{proEndDate}, INTERVAL 1 DAY)
+        </if>
+    </sql>
+
+    <select id="queryPage" resultMap="OrgRefundMap" parameterType="com.oriental.manage.pojo.refund.OrgRefundInfo">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT <include refid="column"/>,o.MCHNT_CODE as MCHNT_CODE
+        FROM T_ORG_REFUND_DETAIL t
+        LEFT JOIN T_ORDER_MAIN O ON O.OUR_TRANS_NO = T.OLD_OUR_TRANS_NO AND O.DELETE_FLAG = '0'
+        WHERE 1=1
+        <include refid="queryCondition"/>
+        <if test="mchntCode != null and mchntCode != ''">
+            AND O.MCHNT_CODE = #{mchntCode}
+        </if>
+        ORDER BY t.CREATE_TIME DESC
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <select id="summaryOrgRefund" resultType="Map" parameterType="com.oriental.manage.pojo.refund.OrgRefundInfo">
+        SELECT COUNT(1) AS sumCount, SUM(T.REFUND_AMT) AS sumTotalAmt
+        FROM T_ORG_REFUND_DETAIL t
+        WHERE 1=1
+        <include refid="queryCondition"/>
+    </select>
+
+    <select id="queryOrgRefundById" parameterType="String" resultMap="OrgRefundMap">
+        SELECT
+        <include refid="column"/>
+        FROM T_ORG_REFUND_DETAIL T
+        WHERE T.ID = #{ID}
+    </select>
+
+
+    <update id="updateOrgRefund" parameterType="com.oriental.manage.pojo.refund.OrgRefundInfo">
+        update t_org_refund_detail
+        <set>
+            <if test="payTransNo != null and payTransNo != ''">
+                PAY_TRANS_NO = #{payTransNo,jdbcType=VARCHAR},
+            </if>
+            <if test="oldPayTransNo != null and oldPayTransNo != ''">
+                OLD_PAY_TRANS_NO = #{oldPayTransNo,jdbcType=VARCHAR},
+            </if>
+            <if test="refundType != null and refundType != ''">
+                REFUND_TYPE = #{refundType,jdbcType=VARCHAR},
+            </if>
+            <if test="errType != null and errType != ''">
+                ERR_TYPE = #{errType,jdbcType=VARCHAR},
+            </if>
+            <if test="busiRefundId != null and busiRefundId != ''">
+                BUSI_REFUND_ID = #{busiRefundId,jdbcType=VARCHAR},
+            </if>
+            <if test="orderAdjStatus != null and orderAdjStatus != ''">
+                ORDER_ADJ_STATUS = #{orderAdjStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="refundStatus != null and refundStatus != ''">
+                REFUND_STATUS = #{refundStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="refundApplicant != null and refundApplicant != ''">
+                REFUND_APPLICANT = #{refundApplicant,jdbcType=VARCHAR},
+            </if>
+            <if test="transInfoType != null and transInfoType != ''">
+                TRANS_INFO_TYPE = #{transInfoType,jdbcType=VARCHAR},
+            </if>
+            <if test="auditor != null and auditor != ''">
+                AUDITOR = #{auditor,jdbcType=VARCHAR},
+            </if>
+            <if test="auditDate != null">
+                AUDIT_DATE = #{auditDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="procEmpId != null and procEmpId !=''">
+                PROC_EMP_ID = #{procEmpId,jdbcType=VARCHAR},
+            </if>
+            <if test="procDatetime != null">
+                PROC_DATETIME = #{procDatetime},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdTime != null">
+                LAST_UPD_TIME = #{lastUpdTime},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="queryBusiRefundInfoById" resultMap="BusiRefundMap" parameterType="String">
+        SELECT
+        <include refid="busiColumn"/>
+        FROM T_BUSI_REFUND_DETAIL B
+        WHERE B.ID = #{id,jdbcType=VARCHAR}
+    </select>
+</mapper>

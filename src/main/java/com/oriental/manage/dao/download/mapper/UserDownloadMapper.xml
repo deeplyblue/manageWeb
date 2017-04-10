@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.download.UserDownloadMapper">
+	<resultMap id="BaseResultMap"
+		type="com.oriental.manage.pojo.download.UserDownload">
+		<result column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+		<result column="FILE_NAME" property="fileName" jdbcType="VARCHAR" />
+		<result column="STATUS" property="status" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+		<result column="REMOTE_FILE_NAME" property="remoteFileName" jdbcType="VARCHAR" />
+		
+	</resultMap>
+
+	<sql id="Base_Column_List">
+	    ID, USER_NAME, FILE_NAME, STATUS, 
+	     CREATE_TIME,
+	   LAST_UPD_TIME,
+	    REMOTE_FILE_NAME
+	</sql>
+
+
+	<select id="getPage" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.download.UserDownload">
+		<include refid="BaseMapper.pageHead"/>
+		SELECT
+               <include refid="Base_Column_List" />
+		  FROM T_USER_DOWNLOAD T
+		 WHERE 1 = 1
+		<if test="userName != null and userName != ''">
+			AND T.USER_NAME = #{userName}
+		</if>
+		<if test="fileName != null and fileName != ''">
+			AND T.FILE_NAME like  CONCAT('%', #{fileName}, '%')
+		</if>
+		<if test="status != null and status != ''">
+			AND T.STATUS = #{status}
+		</if>
+		<if test="createTime != null and lastUpdTime!=''">
+			AND T.CREATE_TIME &gt;= #{createTime}
+		</if>
+		<if test="lastUpdTime != null and lastUpdTime!=''">
+			AND T.CREATE_TIME &lt;= #{lastUpdTime}
+		</if>
+		 ORDER BY CREATE_TIME DESC
+		<include refid="BaseMapper.pageFoot"/>
+	</select>
+
+	<insert id="insertUserDownload" parameterType="com.oriental.manage.pojo.download.UserDownload">
+		INSERT INTO T_USER_DOWNLOAD
+               (ID, USER_NAME, FILE_NAME,
+                STATUS, CREATE_TIME, LAST_UPD_TIME,
+                REMOTE_FILE_NAME)
+        VALUES (#{id, jdbcType=VARCHAR}, #{userName, jdbcType=VARCHAR}, #{fileName, jdbcType=VARCHAR},
+                #{status, jdbcType=VARCHAR},now(), now(),
+                #{remoteFileName, jdbcType=VARCHAR})
+	</insert>
+
+	<update id="updateUserDownload" parameterType="com.oriental.manage.pojo.download.UserDownload">
+		UPDATE T_USER_DOWNLOAD
+		   SET STATUS = #{status},
+		       REMOTE_FILE_NAME = #{remoteFileName, jdbcType=VARCHAR},
+		       LAST_UPD_TIME = now()
+		 WHERE ID = #{id}
+	</update>
+</mapper>

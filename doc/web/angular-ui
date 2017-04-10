@@ -1,0 +1,17 @@
+Typeahead:
+    输入框下拉提示,模糊匹配
+
+Pagination:
+    分页
+
+Modal:
+    模态框，弹出新窗体（遮盖原先的）
+
+Datepicker:
+    日期选择控件
+    <input type="text" class="{{vm.constant.inputClass}}" uib-datepicker-popup="yyyy-MM-dd"
+                               ng-model="vm.queryBean.clrDate" name="clrDate"/>
+
+dateTime:
+    带时间的日期控件(暂不支持时间初始化值)
+    使用：只需要在input中添加属性 date-time

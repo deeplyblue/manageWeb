@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.merchant.baseinfo.MerchantInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.merchant.baseinfo.MerchantInfo"
+               extends="BaseMapper.BaseResultMap">
+        <id     column="MCHNT_CODE"                 jdbcType="VARCHAR"          property="merchantCode"/>
+        <result column="MCHNT_ABBR_NAME"            jdbcType="VARCHAR"          property="merchantAbbrName"/>
+        <result column="MCHNT_NAME"                 jdbcType="VARCHAR"          property="merchantName"/>
+        <result column="MCC_CODE"                   jdbcType="VARCHAR"          property="mccCode"/>
+        <result column="MCHNT_TYPE"                 jdbcType="VARCHAR"          property="merchantType"/>
+        <result column="COMPANY_TYPE"               jdbcType="VARCHAR"          property="companyType"/>
+        <result column="MCHNT_STATUS"               jdbcType="VARCHAR"          property="merchantStatus"/>
+        <result column="MCHNT_ADDR"                 jdbcType="VARCHAR"          property="merchantAddress"/>
+        <result column="MCHNT_ZIPCODE"              jdbcType="VARCHAR"          property="merchantZipCode"/>
+        <result column="MCHNT_FAX"                  jdbcType="VARCHAR"          property="merchantFax"/>
+        <result column="MCHNT_AREA"                 jdbcType="VARCHAR"          property="merchantArea"/>
+        <result column="MCHNT_LVL"                  jdbcType="VARCHAR"          property="merchantLvl"/>
+        <result column="PARENT_ORG_CODE"            jdbcType="VARCHAR"          property="parentOrgCode"/>
+        <result column="CLR_ORG_CODE"               jdbcType="VARCHAR"          property="clrOrgCode"/>
+        <result column="MCHNT_URL"                  jdbcType="VARCHAR"          property="merchantUrl"/>
+        <result column="MCHNT_IVR_NO"               jdbcType="VARCHAR"          property="merchantIvrNo"/>
+        <result column="MCHNT_INTRO"                jdbcType="VARCHAR"          property="merchantIntro"/>
+        <result column="DISCOUNT_RULE_INTRO"        jdbcType="VARCHAR"          property="discountRuleIntro"/>
+        <result column="MCHNT_LOGO"                 jdbcType="VARCHAR"          property="merchantLogo"/>
+        <result column="REVOKE_DATE"                jdbcType="TIMESTAMP"        property="revokeDate"/>
+        <result column="CHK_METHOD"                 jdbcType="VARCHAR"          property="chkMethod"/>
+        <result column="DELETE_FLAG"                jdbcType="VARCHAR"          property="deleteFlag"/>
+        <result column="AUDIT_DATE"                 jdbcType="TIMESTAMP"        property="auditDate"/>
+        <result column="DEVELOP_MODE"               jdbcType="VARCHAR"          property="developMode"/>
+        <result column="OPEN_DATE"                  jdbcType="TIMESTAMP"        property="openDate"/>
+        <result column="CREATE_TIME"                jdbcType="TIMESTAMP"        property="createTime"/>
+        <result column="LAST_UPD_TIME"              jdbcType="TIMESTAMP"        property="lastUpdTime"/>
+        <result column="CHK_DEAL_FLAG"              jdbcType="VARCHAR"          property="chkDealFlag"/>
+        <result column="OPEN_USER"                  jdbcType="VARCHAR"          property="openUser"/>
+        <result column="MODIFY_USER"                jdbcType="VARCHAR"          property="modifyUser"/>
+        <result column="MCHNT_ETC"                  jdbcType="VARCHAR"          property="merchantEtc"/>
+        <result column="AUDITOR"                    jdbcType="VARCHAR"          property="auditor"/>
+        <result column="CITY_CODE"                  jdbcType="VARCHAR"          property="cityCode"/>
+        <result column="MCHNT_ONLINE_DATE"          jdbcType="TIMESTAMP"        property="merchantOnlineDate"/>
+        <result column="TEMPLATE_NO"                jdbcType="VARCHAR"          property="checkTemplateNo"/>
+        <result column="MCHNT_ISDEFINED"            jdbcType="VARCHAR"          property="merchantIsdefined"/>
+        <result column="TRANS_AMT_LIMIT"            jdbcType="DECIMAL"          property="transAmtLimit"/>
+        <result column="UNIONPAY_MCHNT_CODE"        jdbcType="VARCHAR"          property="unionPayMerchantCode"/>
+        <result column="SUSPEND_FLAG"               jdbcType="VARCHAR"          property="suspendFlag"/>
+        <result column="CONTRACT_FLAG"              jdbcType="VARCHAR"          property="contractFlag"/>
+        <result column="REPORT_TYPE"                jdbcType="VARCHAR"          property="reportType"/>
+        <result column="SERVICE_TELEPHONE"          jdbcType="VARCHAR"          property="serviceTelephone"/>
+        <result column="BUSINESS_BELONG"            jdbcType="VARCHAR"          property="businessBeLong"/>
+        <result column="ALL_EMAIL"                  jdbcType="VARCHAR"          property="allEmail"/>
+        <result column="MCHNT_SOURCE"               jdbcType="VARCHAR"          property="merchantSource"/>
+        <!--add monitor merchant type-->
+        <result column="MCHNT_MON_TYPE"             jdbcType="VARCHAR"          property="mchntMonType"/>
+        <result column="CA_APPLY_STATE"             jdbcType="VARCHAR"          property="caApplyState"/>
+        <result column="CA_APPLY_EMAIL"             jdbcType="VARCHAR"          property="caApplyEmail"/>
+        <!--<result column="SEND_RESULT"                jdbcType="VARCHAR"          property="sendResult"/>-->
+        <!--是否允许修改手机号字段-->
+        <result column="ALTER_MOBILE_FALG"          jdbcType="VARCHAR"          property="alterMobileFlag"/>
+        <result column="DEP_CHANNEL_CODE"           jdbcType="VARCHAR"          property="depChannelCode"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        MCHNT_CODE,MCHNT_AREA,MCHNT_ABBR_NAME,MCHNT_NAME,MCC_CODE,MCHNT_TYPE,MCHNT_STATUS,MCHNT_ADDR,MCHNT_ZIPCODE,MCHNT_FAX,
+        MCHNT_LVL,PARENT_ORG_CODE,CLR_ORG_CODE,MCHNT_URL,MCHNT_IVR_NO,MCHNT_INTRO,DISCOUNT_RULE_INTRO,
+        REVOKE_DATE,CHK_METHOD,DELETE_FLAG,AUDIT_DATE,DEVELOP_MODE,CREATE_TIME,LAST_UPD_TIME,COMPANY_TYPE,
+        MCHNT_ETC,AUDITOR,CITY_CODE,MCHNT_ONLINE_DATE,TEMPLATE_NO,CHK_DEAL_FLAG,MCHNT_ISDEFINED,TRANS_AMT_LIMIT,
+        MODIFY_USER,UNIONPAY_MCHNT_CODE,OPEN_DATE,SUSPEND_FLAG,REPORT_TYPE,SERVICE_TELEPHONE,ALL_EMAIL,MCHNT_SOURCE,
+        CA_APPLY_EMAIL,DEP_CHANNEL_CODE,BUSINESS_BELONG
+    </sql>
+
+    <sql id="queryCondition">
+        <if test="merchantStatus != null and merchantStatus != '' ">
+            AND T.MCHNT_STATUS = #{merchantStatus}
+        </if>
+
+        <if test="merchantName != null and merchantName != '' ">
+            AND T.MCHNT_NAME = #{merchantName}
+        </if>
+        <if test="businessBeLong !=null and businessBeLong !=''">
+            AND BUSINESS_BELONG =#{businessBeLong}
+        </if>
+
+        <if test="merchantCode != null and merchantCode != '' ">
+            AND T.MCHNT_CODE = #{merchantCode}
+        </if>
+        <if test="companyType != null and companyType != ''">
+            AND T.COMPANY_TYPE = #{companyType}
+        </if>
+        <if test="beginTime !=null and beginTime!=''">
+            AND T.OPEN_DATE &gt;= str_to_date(#{beginTime},'%Y-%m-%d')
+        </if>
+        <if test="endTime !=null and endTime!=''">
+            AND T.OPEN_DATE &lt;= str_to_date(#{endTime},'%Y-%m-%d')
+        </if>
+
+    </sql>
+
+    <insert id="insertMerchantInfo">
+        INSERT INTO T_MCHNT_INFO (<include refid="Base_Column_List"/> ) VALUES
+        (#{merchantCode},#{merchantArea},#{merchantAbbrName},#{merchantName},#{mccCode},#{merchantType},#{merchantStatus},#{merchantAddress},
+        #{merchantZipCode},#{merchantFax},#{merchantLvl},#{parentOrgCode},#{clrOrgCode},#{merchantUrl},#{merchantIvrNo},
+        #{merchantIntro},#{discountRuleIntro},#{revokeDate},#{chkMethod},'0',#{auditDate},#{developMode},
+        CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,#{companyType},#{merchantEtc},#{auditor},#{cityCode},#{merchantOnlineDate},
+        #{checkTemplateNo},#{chkDealFlag},#{merchantIsdefined},#{transAmtLimit},#{modifyUser},#{unionPayMerchantCode},
+        #{openDate},#{suspendFlag},#{reportType},#{serviceTelephone},#{allEmail},#{merchantSource},
+        #{caApplyEmail},#{depChannelCode},#{businessBeLong} )
+    </insert>
+
+    <select id="queryPage" resultMap="BaseResultMap">
+        <include refid="BaseMapper.pageHead"/>
+        <!--SELECT <include refid="Base_Column_List"/>-->
+        <!--FROM T_MCHNT_INFO T-->
+        <!--WHERE 1 = 1 <include refid="queryCondition"/>-->
+        SELECT T.MCHNT_SOURCE,
+        T.MCHNT_MON_TYPE,
+        T.ALTER_MOBILE_FALG,
+        T.REPORT_TYPE,
+        T.MCHNT_CODE,
+        T.MCHNT_ABBR_NAME,
+        T.MCHNT_NAME,
+        T.MCC_CODE,
+        T.MCHNT_TYPE,
+        T.MCHNT_STATUS,
+        T.MCHNT_ADDR,
+        T.MCHNT_ZIPCODE,
+        T.MCHNT_FAX,
+        T.MCHNT_AREA,
+        T.MCHNT_LVL,
+        T.PARENT_ORG_CODE,
+        T.CLR_ORG_CODE,
+        T.MCHNT_URL,
+        T.MCHNT_IVR_NO,
+        T.MCHNT_INTRO,
+        T.DISCOUNT_RULE_INTRO,
+        T.MCHNT_LOGO,
+        T.REVOKE_DATE,
+        T.CHK_METHOD,
+        T.MCHNT_ISDEFINED,
+        T.GUARANTEE_FLAG,
+        T.TRANS_AMT_LIMIT,
+        T.DELETE_FLAG,
+        T.AUDIT_DATE,
+        T.DEVELOP_MODE,
+        T.CHK_RANK,
+        T.CREATE_TIME,
+        T.LAST_UPD_TIME,
+        T.CLR_RANK,
+        T.COMPANY_TYPE,
+        T.MCHNT_ETC,
+        T.AUDITOR,
+        T.BUSINESS_BELONG,
+        T.CITY_CODE,
+        T.MCHNT_WARN_LVL,
+        T.MCHNT_ONLINE_DATE,
+        T.OLD_MCHNT_FLAG,
+        T.TEMPLATE_NO,
+        T.CHK_DEAL_FLAG,
+        T.OPEN_USER,
+        T.MODIFY_USER,
+        T.AFTER_SPLIT_FLAG,
+        T.UNIONPAY_MCHNT_CODE,
+        T.OPEN_DATE,
+        T.SUSPEND_FLAG,
+        T.SERVICE_TELEPHONE,
+        CASE
+        WHEN T1.CONT_BGN_DATE IS NOT NULL THEN
+        CASE
+        WHEN now() BETWEEN T1.CONT_BGN_DATE AND T1.CONT_END_DATE THEN '1'
+        ELSE '2'
+        END
+        ELSE '0'
+        END AS CONTRACT_FLAG,
+        T.CA_APPLY_STATE,
+        CASE   WHEN   E.RETURN_RESULT= '0'   THEN   "成功 "
+        WHEN   E.RETURN_RESULT= '1'   THEN   "失败"
+        ELSE   "未发送 "   END AS SEND_RESULT
+        FROM T_MCHNT_INFO T
+        LEFT JOIN T_CONTRACT_INFO T1 ON T.MCHNT_CODE = T1.COMPANY_CODE AND T1.COMPANY_CODE='03'
+        LEFT JOIN T_AUDIT_SEND_INFO E ON T.MCHNT_CODE = E.BATCH_NO
+        AND E.SEND_TYPE = 'M'
+        AND E.HIS = '0'
+        WHERE 1 = 1
+        <include refid="queryCondition"/>
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <update id="updateMerchantInfo">
+        UPDATE T_MCHNT_INFO T
+        <set>
+            <if test="merchantAbbrName != null">
+                T.MCHNT_ABBR_NAME = #{merchantAbbrName},
+            </if>
+            <if test="merchantName != null">
+                T.MCHNT_NAME = #{merchantName},
+            </if>
+            <if test="mccCode != null">
+                T.MCC_CODE = #{mccCode},
+            </if>
+            <if test="merchantType != null">
+                T.MCHNT_TYPE = #{merchantType},
+            </if>
+            <if test="companyType != null">
+                T.COMPANY_TYPE = #{companyType},
+            </if>
+            <if test="merchantStatus != null">
+                T.MCHNT_STATUS = #{merchantStatus},
+            </if>
+            <if test="merchantAddress != null">
+                T.MCHNT_ADDR = #{merchantAddress},
+            </if>
+            <if test="merchantZipCode != null">
+                T.MCHNT_ZIPCODE = #{merchantZipCode},
+            </if>
+            <if test="merchantFax != null">
+                T.MCHNT_FAX = #{merchantFax},
+            </if>
+            <if test="merchantArea != null">
+                T.MCHNT_AREA = #{merchantArea},
+            </if>
+            <if test="merchantLvl != null">
+                T.MCHNT_LVL = #{merchantLvl},
+            </if>
+            <if test="parentOrgCode != null">
+                T.PARENT_ORG_CODE = #{parentOrgCode},
+            </if>
+            <if test="clrOrgCode != null">
+                T.CLR_ORG_CODE = #{clrOrgCode},
+            </if>
+            <if test="merchantUrl != null">
+                T.MCHNT_URL = #{merchantUrl},
+            </if>
+            <if test="merchantIvrNo != null">
+                T.MCHNT_IVR_NO = #{merchantIvrNo},
+            </if>
+            <if test="merchantIntro != null">
+                T.MCHNT_INTRO = #{merchantIntro},
+            </if>
+            <if test="discountRuleIntro != null">
+                T.DISCOUNT_RULE_INTRO = #{discountRuleIntro},
+            </if>
+            <if test="merchantLogo != null">
+                T.MCHNT_LOGO = #{merchantLogo},
+            </if>
+            <if test="revokeDate != null">
+                T.REVOKE_DATE = #{revokeDate},
+            </if>
+            <if test="chkMethod != null">
+                T.CHK_METHOD = #{chkMethod},
+            </if>
+            <if test="deleteFlag != null">
+                T.DELETE_FLAG = #{deleteFlag},
+            </if>
+            <if test="auditDate != null">
+                T.AUDIT_DATE = #{auditDate},
+            </if>
+            <if test="developMode != null">
+                T.DEVELOP_MODE = #{developMode},
+            </if>
+            <if test="openDate != null">
+                T.OPEN_DATE = #{openDate},
+            </if>
+            <if test="createTime != null">
+                T.CREATE_TIME = #{createTime},
+            </if>
+            <if test="lastUpdTime != null">
+                T.LAST_UPD_TIME = #{lastUpdTime},
+            </if>
+            <if test="chkDealFlag != null">
+                T.CHK_DEAL_FLAG = #{chkDealFlag},
+            </if>
+            <if test="openUser != null">
+                T.OPEN_USER = #{openUser},
+            </if>
+            <if test="modifyUser != null">
+                T.MODIFY_USER = #{modifyUser},
+            </if>
+            <if test="merchantEtc != null">
+                T.MCHNT_ETC = #{merchantEtc},
+            </if>
+            <if test="auditor != null">
+                T.AUDITOR = #{auditor},
+            </if>
+            <if test="cityCode != null">
+                T.CITY_CODE = #{cityCode},
+            </if>
+            <if test="merchantOnlineDate != null">
+                T.MCHNT_ONLINE_DATE = #{merchantOnlineDate},
+            </if>
+            <if test="checkTemplateNo != null">
+                T.TEMPLATE_NO = #{checkTemplateNo},
+            </if>
+            <if test="merchantIsdefined != null">
+                T.MCHNT_ISDEFINED = #{merchantIsdefined},
+            </if>
+            <if test="transAmtLimit != null">
+                T.TRANS_AMT_LIMIT = #{transAmtLimit},
+            </if>
+            <if test="unionPayMerchantCode != null">
+                T.UNIONPAY_MCHNT_CODE = #{unionPayMerchantCode},
+            </if>
+            <if test="suspendFlag != null">
+                T.SUSPEND_FLAG = #{suspendFlag},
+            </if>
+            <!--<if test="contractFlag != null">-->
+                <!--T.CONTRACT_FLAG = #{contractFlag},-->
+            <!--</if>-->
+            <if test="reportType != null">
+                T.REPORT_TYPE = #{reportType},
+            </if>
+            <if test="serviceTelephone != null">
+                T.SERVICE_TELEPHONE = #{serviceTelephone},
+            </if>
+            <if test="businessBeLong != null">
+                T.BUSINESS_BELONG = #{businessBeLong},
+            </if>
+            <if test="allEmail != null">
+                T.ALL_EMAIL = #{allEmail},
+            </if>
+            <if test="merchantSource != null">
+                T.MCHNT_SOURCE = #{merchantSource},
+            </if>
+            <if test="caApplyState != null">
+                T.CA_APPLY_STATE = #{caApplyState},
+            </if>
+            <if test="caApplyEmail != null">
+                T.CA_APPLY_EMAIL = #{caApplyEmail},
+            </if>
+            <!--<if test="sendResult != null">-->
+                <!--T.SEND_RESULT = #{sendResult},-->
+            <!--</if>-->
+            <if test="alterMobileFlag != null">
+                T.ALTER_MOBILE_FALG = #{alterMobileFlag},
+            </if>
+            <if test="depChannelCode != null">
+                T.DEP_CHANNEL_CODE = #{depChannelCode},
+            </if>
+        </set>
+        WHERE T.MCHNT_CODE = #{merchantCode}
+    </update>
+
+
+    <update id="updateMerchantInfoByStatus">
+        UPDATE T_MCHNT_INFO T
+        <set>
+            <if test="merchantStatus != null">
+                T.MCHNT_STATUS = #{merchantStatus},
+            </if>
+
+            <if test="openUser != null">
+                T.OPEN_USER = #{openUser},
+            </if>
+
+            <if test="lastUpdTime != null">
+                T.LAST_UPD_TIME = #{lastUpdTime},
+            </if>
+        </set>
+        WHERE T.MCHNT_CODE = #{merchantCode}
+    </update>
+
+    <select id="check" resultMap="BaseResultMap">
+        SELECT MCHNT_CODE ,MCHNT_ABBR_NAME,MCHNT_NAME FROM t_mchnt_info WHERE 1=1
+
+        <if test="merchantCode != null">
+            AND  MCHNT_CODE = #{merchantCode}
+        </if>
+
+        <if test="merchantAbbrName != null">
+            and MCHNT_ABBR_NAME = #{merchantAbbrName}
+        </if>
+
+        <if test="merchantName != null">
+            and MCHNT_NAME = #{merchantName}
+        </if>
+
+    </select>
+</mapper>

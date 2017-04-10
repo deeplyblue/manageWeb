@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.payment.PaymentInfoMapper">
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.payment.PaymentInfo" extends="BaseMapper.BaseResultMap">
+        <result column="ORDER_NO"               property="orderNo"/>
+        <result column="BATCH_NO"               property="batchNo"/>
+        <result column="MCHNT_CODE"             property="mchntCode"/>
+        <result column="AMOUNT"                 property="amount"/>
+        <result column="REQ_TIME"               property="reqTime"/>
+        <result column="STATUS"                 property="status"/>
+        <result column="CREATOR"                property="creator"/>
+        <result column="CREATE_TIME"            property="createTime"/>
+        <result column="LAST_UPD_TIME"          property="lastUpdTime"/>
+        <result column="AUDITOR"                property="auditor"/>
+        <result column="AUDIT_TIME"             property="auditTime"/>
+        <result column="OPERATOR"               property="operator"/>
+        <result column="OPERATE_TIME"           property="operateTime"/>
+        <!--支付要素-->
+        <result column="QUERY_ORDER_NO"         property="queryOrderNo"/>
+        <result column="USER_ID"                property="userId"/>
+        <result column="USER_NAME"              property="userName"/>
+        <result column="PHONE_NO"               property="phoneNo"/>
+        <result column="BANK_CARD_NO"           property="bankCardNo"/>
+        <result column="IDENTITY_CARD_NO"       property="identityCardNo"/>
+        <result column="BONUS_LEVEL"            property="bonusLevel"/>
+
+        <result column="SUM_NUM"                property="sumNum"/>
+        <result column="SUM_AMT"                property="sumAmt"/>
+        <result column="TRANS_STATUS"           property="transStatus"/>
+        <result column="RESP_DESC"              property="respDesc"/>
+        <result column="REFUND_FLAG"            property="refundFlag"/>
+    </resultMap>
+
+
+    <sql id="queryCondition">
+        <if test="batchNo != null and batchNo != ''">
+            AND B.BATCH_NO = #{batchNo}
+        </if>
+        <if test="queryOrderNo != null and queryOrderNo != ''">
+            AND B.QUERY_ORDER_NO = #{queryOrderNo}
+        </if>
+        <if test="mchntCode != null and mchntCode != ''">
+            AND B.MCHNT_CODE = #{mchntCode}
+        </if>
+        <if test="orderNo != null and orderNo != ''">
+            AND B.ORDER_NO = #{orderNo}
+        </if>
+        <if test="phoneNo != null and phoneNo != ''">
+            AND B.PHONE_NO = #{phoneNo}
+        </if>
+        <if test="status != null and status != ''">
+            AND B.STATUS = #{status}
+        </if>
+        <if test="userId != null and userId != ''">
+            AND B.USER_ID = #{userId}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND B.REQ_TIME &gt;= #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND B.REQ_TIME &lt;= DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+        </if>
+        <if test="operateBeginDate != null and operateBeginDate != ''">
+            AND B.OPERATE_TIME &gt;= #{operateBeginDate}
+        </if>
+        <if test="operateEndDate != null and operateEndDate != ''">
+            AND B.OPERATE_TIME &lt;= DATE_ADD(#{operateEndDate}, INTERVAL 1 DAY)
+        </if>
+    </sql>
+
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO T_BATCH_RECHARGE_DETAIL(
+            MCHNT_CODE,
+            ORDER_NO,
+            QUERY_ORDER_NO,
+            BATCH_NO,
+            AMOUNT,
+            CREATOR,
+            REQ_TIME,
+            CREATE_TIME,
+            LAST_UPD_TIME,
+            USER_ID,
+            USER_NAME,
+            PHONE_NO,
+            BANK_CARD_NO,
+            IDENTITY_CARD_NO,
+            BONUS_LEVEL
+        )
+        <foreach collection="list" item="item" index="index" separator="union all">
+            (SELECT
+                #{item.mchntCode},
+                #{item.orderNo},
+                #{item.queryOrderNo},
+                #{item.batchNo},
+                #{item.amount},
+                #{item.creator},
+                #{item.reqTime},
+                now(),
+                now(),
+                #{item.userId},
+                #{item.userName},
+                #{item.phoneNo},
+                #{item.bankCardNo},
+                #{item.identityCardNo},
+                #{item.bonusLevel}
+                FROM DUAL
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectBatchList" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.payment.PaymentInfo" >
+        <include refid="BaseMapper.pageHead"/>
+        SELECT B.BATCH_NO,
+               B.MCHNT_CODE,
+               B.QUERY_ORDER_NO,
+               B.STATUS,
+               SUM(B.AMOUNT) AS SUM_AMT,
+               SUM(1) AS SUM_NUM,
+               B.CREATOR,
+               date_format(MIN(B.REQ_TIME), '%Y-%m-%d %H:%i:%S') AS REQ_TIME,
+               date_format(MAX(B.LAST_UPD_TIME), '%Y-%m-%d %H:%i:%S') AS LAST_UPD_TIME,
+               B.AUDITOR,
+               date_format(MIN(B.AUDIT_TIME), '%Y-%m-%d %H:%i:%S') AS AUDIT_TIME,
+               B.OPERATOR,
+               date_format(MIN(B.OPERATE_TIME), '%Y-%m-%d %H:%i:%S') AS OPERATE_TIME
+          FROM T_BATCH_RECHARGE_DETAIL B
+          LEFT JOIN T_ORDER_MAIN O ON B.ORDER_NO = O.ORDER_NO
+                <if test="beginDate != null and beginDate != ''">
+                  AND O.SETTLE_DATE &gt;= #{beginDate}
+                </if>
+                <if test="endDate != null and endDate != ''">
+                  AND O.SETTLE_DATE &lt; DATE_ADD(#{endDate}, INTERVAL 7 DAY)
+                </if>
+                AND O.DELETE_FLAG = '0'
+        WHERE 1=1
+          <include refid="queryCondition"/>
+        GROUP BY B.BATCH_NO, B.QUERY_ORDER_NO, B.CREATOR, B.AUDITOR, B.OPERATOR, B.STATUS, B.MCHNT_CODE
+        ORDER BY B.BATCH_NO DESC
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <select id="queryPaymentDetail" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.payment.PaymentInfo" >
+        <include refid="BaseMapper.pageHead"/>
+        SELECT * FROM (
+            SELECT B.MCHNT_CODE, B.BATCH_NO, B.ORDER_NO, B.AMOUNT,
+                CASE
+                    WHEN O.TRANS_STATUS = 'C' THEN 'C'
+                    WHEN O.TRANS_STATUS = 'B' THEN 'B'
+                    ELSE 'A'
+                END AS TRANS_STATUS,
+                O.PAY_RESP_DESC AS RESP_DESC,
+                O.REFUND_FLAG AS REFUND_FLAG,
+                date_format(B.REQ_TIME, '%Y-%m-%d %H:%i:%S') AS REQ_TIME,
+                B.STATUS,
+                B.USER_ID,
+                B.USER_NAME,
+                B.BANK_CARD_NO,
+                B.PHONE_NO,
+                B.IDENTITY_CARD_NO,
+                B.BONUS_LEVEL
+            FROM T_BATCH_RECHARGE_DETAIL B
+            LEFT JOIN T_PAY_TRANS_DETAIL O ON B.ORDER_NO = O.ORDER_NO
+                    AND O.DELETE_FLAG = '0'
+                    AND O.TRANS_CODE = '100E001'
+                    AND O.SETTLE_DATE &gt;= #{beginDate}
+            WHERE 1 = 1
+              <include refid="queryCondition"/>
+            ORDER BY B.ORDER_NO
+        ) temp
+        WHERE 1 = 1
+        <if test="transStatus != null and transStatus != ''">
+            AND TRANS_STATUS = #{transStatus}
+        </if>
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <select id="checkAuditState" parameterType="String" resultType="String">
+        SELECT DISTINCT B.STATUS
+          FROM T_BATCH_RECHARGE_DETAIL B
+         WHERE B.BATCH_NO = #{batchNo}
+    </select>
+
+    <update id="updateAuditStateByBatchNo" parameterType="com.oriental.manage.pojo.payment.PaymentInfo">
+        UPDATE T_BATCH_RECHARGE_DETAIL
+           SET STATUS = #{status},
+                <if test="auditor != null and auditor != ''">
+                    AUDITOR = #{auditor},
+                    AUDIT_TIME = now(),
+                </if>
+                <if test="operator != null and operator != ''">
+                    OPERATOR = #{operator},
+                    OPERATE_TIME = now(),
+                </if>
+               LAST_UPD_TIME = now()
+        WHERE BATCH_NO = #{batchNo}
+    </update>
+
+    <select id="getCountByBatchNo" parameterType="com.oriental.manage.pojo.payment.PaymentInfo" resultType="Integer">
+         SELECT COUNT(1)
+          FROM T_BATCH_RECHARGE_DETAIL B
+         WHERE B.BATCH_NO = #{batchNo}
+    </select>
+
+    <update id="updateBatchPaymentDetail" parameterType="com.oriental.manage.pojo.payment.PaymentInfo">
+        UPDATE T_BATCH_RECHARGE_DETAIL
+           SET LAST_UPD_TIME = now()
+        WHERE ORDER_NO = #{orderNo}
+          AND BATCH_NO = #{batchNo}
+    </update>
+
+    <select id="isQueryOrderNoExist" parameterType="String" resultType="int">
+         SELECT COUNT(1)
+          FROM T_BATCH_RECHARGE_DETAIL B
+         WHERE B.QUERY_ORDER_NO = #{queryOrderNo}
+    </select>
+
+    <select id="queryMaxBatchNo" parameterType="String" resultType="String">
+        SELECT MAX(BATCH_NO)
+          FROM T_BATCH_RECHARGE_DETAIL
+         WHERE BATCH_NO LIKE #{batchNo}
+    </select>
+
+
+    <select id="queryListForDownLoad" parameterType="com.oriental.manage.pojo.payment.PaymentInfo" resultMap="BaseResultMap">
+        SELECT * FROM (
+            SELECT  B.BATCH_NO, B.ORDER_NO, B.AMOUNT, B.QUERY_ORDER_NO, B.MCHNT_CODE,
+                    CASE
+                    WHEN O.TRANS_STATUS = 'C' THEN '失败'
+                    WHEN O.TRANS_STATUS = 'B' THEN '成功'
+                    ELSE '请求'
+                    END AS TRANS_STATUS,
+                    date_format(B.REQ_TIME, '%Y-%m-%d %H:%i:%S') AS REQ_TIME,
+                    O.PAY_RESP_DESC AS RESP_DESC,
+                    O.REFUND_FLAG AS REFUND_FLAG,
+                    B.STATUS,
+                    B.USER_ID,
+                    B.USER_NAME,
+                    B.PHONE_NO,
+                    B.BANK_CARD_NO,
+                    B.IDENTITY_CARD_NO,
+                    B.BONUS_LEVEL
+            FROM T_BATCH_RECHARGE_DETAIL B
+            LEFT JOIN T_PAY_TRANS_DETAIL O ON B.ORDER_NO = O.ORDER_NO
+                    AND O.DELETE_FLAG = '0'
+                    AND O.TRANS_CODE = '100E001'
+                    AND O.SETTLE_DATE &gt;= #{beginDate}
+            WHERE 1 = 1
+              AND B.BATCH_NO = #{batchNo}
+            ORDER BY B.ORDER_NO
+        ) temp
+        WHERE 1 = 1
+    </select>
+
+
+    <select id="paymentAgain" parameterType="com.oriental.manage.pojo.payment.PaymentInfo" resultMap="BaseResultMap">
+        SELECT * FROM (
+            SELECT  B.BATCH_NO,
+                    B.MCHNT_CODE,
+                    B.ORDER_NO,
+                    B.AMOUNT,
+                    CASE
+                        WHEN O.TRANS_STATUS = 'C' THEN 'C'
+                        WHEN O.TRANS_STATUS = 'B' THEN 'B'
+                        WHEN O.TRANS_STATUS = 'A' THEN 'A'
+                        ELSE NULL
+                    END AS TRANS_STATUS,
+                    date_format(B.REQ_TIME, '%Y-%m-%d %H:%i:%S') AS REQ_TIME,
+                    O.PAY_RESP_DESC AS RESP_DESC,
+                    B.STATUS,
+                    B.USER_ID,
+                    B.USER_NAME,
+                    B.PHONE_NO,
+                    B.BANK_CARD_NO,
+                    B.IDENTITY_CARD_NO
+            FROM T_BATCH_RECHARGE_DETAIL B
+            LEFT JOIN T_PAY_TRANS_DETAIL O ON B.ORDER_NO = O.ORDER_NO
+            AND O.DELETE_FLAG = '0'
+            AND O.TRANS_CODE = '100E001'
+            AND O.SETTLE_DATE &gt;= #{beginDate}
+            WHERE 1 = 1
+              <include refid="queryCondition"/>
+            ORDER BY B.ORDER_NO
+            ) temp
+        WHERE TRANS_STATUS IS NULL
+    </select>
+
+    <select id="queryCheckDate" parameterType="String" resultMap="BaseResultMap">
+        SELECT MAX(B.OPERATE_TIME) AS OPERATE_TIME FROM T_BATCH_RECHARGE_DETAIL B WHERE B.BATCH_NO = #{batchNo}
+    </select>
+</mapper>

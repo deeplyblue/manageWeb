@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.merchant.ContractMapper">
+	<resultMap id="BaseResultMap" type="com.oriental.manage.pojo.merchant.ContractInfo"
+			   extends="BaseMapper.BaseResultMap">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="CONT_CODE" property="contCode" jdbcType="VARCHAR" />
+		<result column="CONT_NAME" property="contName" jdbcType="VARCHAR" />
+		<result column="CONT_SUMMARY" property="contSummary" jdbcType="VARCHAR" />
+		<result column="CONT_DURATION" property="contDuration" jdbcType="DECIMAL" />
+		<result column="CONT_SIGNED_DATE" property="contSignedDate" jdbcType="TIMESTAMP" />
+		<result column="CONT_BGN_DATE" property="contBgnDate" jdbcType="TIMESTAMP" />
+		<result column="CONT_END_DATE" property="contEndDate" jdbcType="TIMESTAMP" />
+		<result column="COMPANY_TYPE" property="companyType" jdbcType="VARCHAR" />
+		<result column="COMPANY_CODE" property="companyCode" jdbcType="VARCHAR" />
+		<result column="SIGNED_ORG_CODE" property="signedOrgCode" jdbcType="VARCHAR" />
+		<result column="BIZ_LICENSE_NO" property="bizLicenseNo" jdbcType="VARCHAR" />
+		<result column="ENTERPRISE_CODE" property="enterpriseCode" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+		<result column="AUDIT_STATUS" property="auditStatus" jdbcType="VARCHAR"/>
+		<result column="DFS_CONT_ATTACH" property="dfsContAttach" jdbcType="VARCHAR" />
+		<result column="DFS_OPEN_BANK_CERT" property="dfsOpenBankCert" jdbcType="VARCHAR" />
+		<result column="DFS_RATE_PAYER_CERT" property="dfsRatePayerCert" jdbcType="VARCHAR" />
+		<result column="DFS_TAX_REGISTER_CERT" property="dfsTaxRegisterCert" jdbcType="VARCHAR" />
+		<result column="DFS_BIZ_LICENSE_CERT" property="dfsBizLicenseCert" jdbcType="VARCHAR" />
+		<result column="DFS_ORGANIZATION_CODE_CERT" property="dfsOrganizationCodeCert" jdbcType="VARCHAR" />
+		<result column="DFS_BANK_FILE" property="dfsBankFile" jdbcType="VARCHAR" />
+		<result column="MCHNT_ABBR_NAME" property="mchntAbbrName" jdbcType="VARCHAR" />
+		<result column="MCHNT_CODE" property="mchntCode" jdbcType="VARCHAR" />
+		<result column="CTT_NAME" property="cttName" jdbcType="VARCHAR" />
+		<result column="CTT_EMAIL" property="cttEmail" jdbcType="VARCHAR" />
+		<result column="CTT_MOBILE" property="cttMobile" jdbcType="VARCHAR" />
+		<result column="PARENT_ORG_CODE" property="parentOrgCode" jdbcType="VARCHAR" />
+		<result column="MODIFIER" property="modifier" jdbcType="VARCHAR"/>
+
+		<result column="PAYER_CERT_END_DATE" property="payerCertEndDate" jdbcType="TIMESTAMP" />
+		<result column="TAX_REGISTER_END_DATE" property="taxRegisterEndDate" jdbcType="TIMESTAMP" />
+		<result column="BIZ_LICENSE_END_DATE" property="bizLicenseEndDate" jdbcType="TIMESTAMP" />
+		<result column="TAX_REGISTER_ID" property="taxRegisterId" jdbcType="VARCHAR"/>
+		<result column="ORGANIZATION_END_DATE" property="organizationEndDate" jdbcType="VARCHAR"/>
+		<result column="ORGANIZATION_CODE_ID" property="organizationCodeId" jdbcType="VARCHAR"/>
+
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID, CONT_CODE, CONT_NAME, CONT_SUMMARY, CONT_DURATION,
+		CONT_SIGNED_DATE,
+		CONT_BGN_DATE,CONT_END_DATE,
+		COMPANY_TYPE, COMPANY_CODE, SIGNED_ORG_CODE, BIZ_LICENSE_NO,
+		ENTERPRISE_CODE,
+		CREATE_TIME, LAST_UPD_TIME,
+		AUDIT_STATUS,
+		DFS_CONT_ATTACH,MODIFIER,
+		DFS_OPEN_BANK_CERT, DFS_RATE_PAYER_CERT, DFS_TAX_REGISTER_CERT,
+		DFS_BIZ_LICENSE_CERT, DFS_ORGANIZATION_CODE_CERT, DFS_BANK_FILE,
+		PAYER_CERT_END_DATE,TAX_REGISTER_END_DATE,BIZ_LICENSE_END_DATE,TAX_REGISTER_ID,
+		ORGANIZATION_END_DATE,ORGANIZATION_CODE_ID
+	</sql>
+	<sql id="queryCondition">
+		<if test="companyType != null and companyType != ''">
+			AND CI.COMPANY_TYPE = #{companyType}
+		</if>
+		<if test="id !=null and id !=''">
+			and ci.ID=#{id}
+		</if>
+		<if test="companyCode != null and companyCode != ''">
+			AND CI.COMPANY_CODE = #{companyCode}
+		</if>
+		<if test="contCode != null and contCode != ''">
+			AND CI.CONT_CODE = #{contCode}
+		</if>
+		<if test="auditStatus != null and auditStatus != ''">
+			AND CI.AUDIT_STATUS = #{auditStatus}
+		</if>
+		<if test="contBgnDate != null and contBgnDate != ''">
+			AND CI.CONT_BGN_DATE &gt;= #{contBgnDate}
+		</if>
+		<if test="contEndDate != null and contEndDate != ''">
+			AND CI.CONT_END_DATE &lt;= #{contEndDate}
+		</if>
+	</sql>
+
+	<insert id="insertContractInfo" parameterType="com.oriental.manage.pojo.merchant.ContractInfo">
+		INSERT INTO
+		T_CONTRACT_INFO
+		(ID,MODIFIER,CONT_CODE, CONT_NAME, CONT_SUMMARY,
+		CONT_DURATION,
+		CONT_SIGNED_DATE,
+		CONT_BGN_DATE,
+		CONT_END_DATE,
+		SIGNED_ORG_CODE,
+		COMPANY_TYPE,COMPANY_CODE, BIZ_LICENSE_NO, ENTERPRISE_CODE,
+		CREATE_TIME,
+		LAST_UPD_TIME,
+		<if test="auditStatus != null and auditStatus != ''">
+			AUDIT_STATUS,
+		</if>
+		DFS_CONT_ATTACH, DFS_OPEN_BANK_CERT,
+		DFS_RATE_PAYER_CERT, DFS_TAX_REGISTER_CERT, DFS_BIZ_LICENSE_CERT,
+		DFS_ORGANIZATION_CODE_CERT, DFS_BANK_FILE,
+		PAYER_CERT_END_DATE,TAX_REGISTER_END_DATE,
+		BIZ_LICENSE_END_DATE,TAX_REGISTER_ID,
+		ORGANIZATION_END_DATE,ORGANIZATION_CODE_ID)
+		VALUES (#{id},#{modifier},#{contCode},
+		#{contName,jdbcType=VARCHAR},
+		#{contSummary,jdbcType=VARCHAR},
+		#{contDuration,jdbcType=VARCHAR},
+		#{contSignedDate,jdbcType=VARCHAR},
+		#{contBgnDate},
+		#{contEndDate},
+		#{signedOrgCode,jdbcType=VARCHAR},#{companyType},
+		#{companyCode}, #{bizLicenseNo,jdbcType=VARCHAR},
+		#{enterpriseCode,jdbcType=VARCHAR},
+		now(), now(),
+		<if test="auditStatus != null and auditStatus != ''">
+			#{auditStatus},
+		</if>
+		#{dfsContAttach,jdbcType=VARCHAR}, #{dfsOpenBankCert,jdbcType=VARCHAR},
+		#{dfsRatePayerCert,jdbcType=VARCHAR}, #{dfsTaxRegisterCert,jdbcType=VARCHAR}, #{dfsBizLicenseCert,jdbcType=VARCHAR},
+		#{dfsOrganizationCodeCert,jdbcType=VARCHAR}, #{dfsBankFile,jdbcType=VARCHAR},
+		#{payerCertEndDate},#{taxRegisterEndDate},
+		#{bizLicenseEndDate},#{taxRegisterId},
+		#{organizationEndDate},#{organizationCodeId})
+	</insert>
+	<update id="updateContractInfo" parameterType="com.oriental.manage.pojo.merchant.ContractInfo">
+		update
+		T_CONTRACT_INFO
+		set
+		CONT_CODE = #{contCode},
+		MODIFIER=#{modifier},
+		CONT_NAME = #{contName},
+		CONT_SUMMARY = #{contSummary},
+		CONT_DURATION = #{contDuration},
+		CONT_SIGNED_DATE =#{contSignedDate},
+		CONT_BGN_DATE=#{contBgnDate},
+		CONT_END_DATE =#{contEndDate},
+		SIGNED_ORG_CODE = #{signedOrgCode},
+		COMPANY_CODE = #{companyCode},
+		COMPANY_TYPE = #{companyType},
+		BIZ_LICENSE_NO = #{bizLicenseNo},
+		ENTERPRISE_CODE = #{enterpriseCode},
+		OPEN_DATETIME = null,
+		AUDIT_STATUS = #{auditStatus},
+		DFS_CONT_ATTACH = #{dfsContAttach,jdbcType=VARCHAR},
+		DFS_OPEN_BANK_CERT = #{dfsOpenBankCert,jdbcType=VARCHAR},
+		DFS_RATE_PAYER_CERT = #{dfsRatePayerCert,jdbcType=VARCHAR},
+		DFS_TAX_REGISTER_CERT = #{dfsTaxRegisterCert,jdbcType=VARCHAR},
+		DFS_BIZ_LICENSE_CERT = #{dfsBizLicenseCert,jdbcType=VARCHAR},
+		DFS_ORGANIZATION_CODE_CERT = #{dfsOrganizationCodeCert,jdbcType=VARCHAR},
+		DFS_BANK_FILE = #{dfsBankFile,jdbcType=VARCHAR},
+		LAST_UPD_TIME = now(),
+		PAYER_CERT_END_DATE =  #{payerCertEndDate},TAX_REGISTER_END_DATE=#{taxRegisterEndDate},
+		BIZ_LICENSE_END_DATE=#{bizLicenseEndDate},TAX_REGISTER_ID=#{taxRegisterId},
+		ORGANIZATION_END_DATE=#{organizationEndDate},ORGANIZATION_CODE_ID=#{organizationCodeId}
+		where  ID = #{id}
+	</update>
+	<update id="synContractInfoByFeeCfg" parameterType="com.oriental.manage.pojo.merchant.ContractInfo">
+		update t_contract_info a
+		set (cont_bgn_date,cont_end_date) =
+		(select min(b.validate_begin_date), max(b.validate_end_date)
+		from t_fee_cfg b
+		where a.company_code = b.org_code
+		group by b.org_code)
+		where exists (select 1
+		from t_fee_cfg b
+		where a.company_code = b.org_code and b.enable_flag = '1')
+	</update>
+
+	<select id="queryPage" resultMap="BaseResultMap">
+		<include refid="BaseMapper.pageHead"/>
+		SELECT <include refid="Base_Column_List" />
+		FROM T_CONTRACT_INFO CI
+		WHERE 1 = 1 <include refid="queryCondition"/>
+		ORDER BY CI.COMPANY_CODE
+		<include refid="BaseMapper.pageFoot"/>
+	</select>
+	<delete id="deleteContract" parameterType="com.oriental.manage.pojo.merchant.ContractInfo">
+		DELETE   FROM T_CONTRACT_INFO  WHERE  ID = #{id}
+
+	</delete>
+
+
+</mapper>

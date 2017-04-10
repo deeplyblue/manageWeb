@@ -1,0 +1,12 @@
+this is a custom module
+=========================
+
+1、属性
+-------------------------
+* _my-color=" "_  传入一个变量(vm.*)
+* _my-color-true=" "_  传入字符串(变量等于这个值时,改变tr的backgroundcolor为下面参数所指定值)
+* _my-color-code=" "_
+
+
+
+\*当前仅支持table中tr的背景色改变，如有其余需求请联系修改\*

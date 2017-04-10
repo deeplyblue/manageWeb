@@ -1,0 +1,33 @@
+表单校验采用angular-w5c-validator实现
+=========================================
+
+使用步骤
+----------------------
+1. 在form元素中添加如下属性  name="queryForm" novalidate w5c-form-validate
+
+2. 处理需要校验的表单元素
+   ① 添加name属性
+   ② 校验规则
+>    必填 required
+     最大长度 maxlength=0
+     最小长度 minlength=10
+     邮箱地址 type='email'
+     纯数字 type='number'
+     最大数字 max=''
+     最小数字 min=''
+     自定义正则校验 ng-pattern=''
+>>   自定义正则校验时，建议将规则说明写在placeholder中，校验失败使用通用的提示
+
+3. 在校验不通过时，不允许提交表单
+    只需要在提交按钮上添加 ng-disabled="queryForm.$invalid"   (即 表单名.$invalid)
+
+>  ps:
+    不建议使用,如果有强烈需求，请联系我
+    一般情况下，使用默认错误信息足矣。如果需要定制错误信息，请在nav-angular.js中添加
+    eg:   userName: {
+                        required: "输入的用户名不能为空",
+                        pattern: "用户名必须输入字母、数字、下划线,以字母开头",
+                        w5cuniquecheck: "输入用户名已经存在，请重新输入"
+                    }
+
+

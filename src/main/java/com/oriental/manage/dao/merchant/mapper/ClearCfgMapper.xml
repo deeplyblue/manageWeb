@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.merchant.ClearCfgMapper" >
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.merchant.ClearCfg"
+               extends="BaseMapper.BaseResultMap">
+        <id     column="ID" property="id" jdbcType="DECIMAL" />
+        <result column="ORG_TYPE" property="orgType" jdbcType="VARCHAR" />
+        <result column="TRANS_CODE" property="transCode" jdbcType="VARCHAR" />
+        <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+        <result column="CONN_CHANNEL" property="connChannel" jdbcType="VARCHAR" />
+        <result column="LONGEST_ALLOCATE_DAYS" property="longestAllocateDays" jdbcType="DECIMAL" />
+        <result column="MUST_ALLOCATE_DATE" property="mustAllocateDate" jdbcType="TIMESTAMP" />
+        <result column="FIN_CLR_DATE" property="finClrDate" jdbcType="TIMESTAMP" />
+        <result column="ENABLE_FLAG" property="enableFlag" jdbcType="VARCHAR" />
+        <result column="CLR_POINT" property="clrPoint" jdbcType="VARCHAR" />
+        <result column="CLR_CYCLE" property="clrCycle" jdbcType="VARCHAR" />
+        <result column="CLR_METHOD" property="clrMethod" jdbcType="VARCHAR" />
+        <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+        <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+        <result column="AUDIT_STATUS" property="auditStatus" jdbcType="VARCHAR" />
+        <result column="AUDITOR" property="auditor" jdbcType="VARCHAR" />
+        <result column="AUDIT_DATE" property="auditDate" jdbcType="TIMESTAMP" />
+        <result column="CLR_ACCOUNT" property="clrAccount" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+        <result column="CLR_TYPE" property="clrType" jdbcType="VARCHAR" />
+        <result column="CLR_RANGE" property="clrRange" jdbcType="VARCHAR" />
+        <result column="EFFECT_AMT" property="effectAmt" jdbcType="DECIMAL" />
+        <result column="FEE_METHOD" property="feeMethod" jdbcType="VARCHAR" />
+        <result column="MANDATORY_CLR_DATE" property="mandatoryClrDate" jdbcType="DECIMAL" />
+        <result column="LEAST_ALLOCATE_AMT" property="leastAllocateAmt" jdbcType="DECIMAL" />
+
+        <result column="IS_ADD_PREAUTH_JS" property="isAddPreauthJs" jdbcType="VARCHAR" />
+        <result column="CLR_BGN_DATE" property="clrBgnDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        ID, ORG_TYPE, TRANS_CODE, ORG_CODE, CONN_CHANNEL, LONGEST_ALLOCATE_DAYS, DATE_FORMAT(MUST_ALLOCATE_DATE,'%Y%m%d') MUST_ALLOCATE_DATE,
+        DATE_FORMAT(FIN_CLR_DATE,'%Y%m%d') FIN_CLR_DATE, ENABLE_FLAG, CLR_POINT, CLR_CYCLE, CLR_METHOD, CREATOR,
+        MODIFIER, AUDIT_STATUS, AUDITOR, AUDIT_DATE, CLR_ACCOUNT, CREATE_TIME, LAST_UPD_TIME, MANDATORY_CLR_DATE,
+        CLR_TYPE, EFFECT_AMT, LEAST_ALLOCATE_AMT,IS_ADD_PREAUTH_JS,DATE_FORMAT(CLR_BGN_DATE,'%Y%m%d') CLR_BGN_DATE,CLR_RANGE
+    </sql>
+    <sql id="queryCondition">
+        <if test="orgType != null and orgType != ''" >
+            AND CC.ORG_TYPE = #{orgType}
+        </if>
+        <if test="orgCode != null and orgCode != ''" >
+            AND CC.ORG_CODE = #{orgCode}
+        </if>
+        <if test="connChannel != null and connChannel != ''" >
+            AND CC.CONN_CHANNEL = #{connChannel}
+        </if>
+        <if test="transCode != null and transCode != ''" >
+            AND CC.TRANS_CODE = #{transCode}
+        </if>
+        <if test="clrCycle != null and clrCycle != ''" >
+            AND CC.CLR_CYCLE = #{clrCycle}
+        </if>
+        <if test="clrPoint != null and clrPoint != ''" >
+            AND CC.CLR_POINT like '%'#{clrPoint}'%'
+        </if>
+        <if test="auditStatus != null and auditStatus != ''" >
+            AND CC.AUDIT_STATUS = #{auditStatus}
+        </if>
+    </sql>
+
+  <insert id="insertClearCfg" parameterType="com.oriental.manage.pojo.merchant.ClearCfg" >
+    insert into T_CLEAR_CFG (ID, ORG_TYPE, TRANS_CODE, 
+      ORG_CODE, CONN_CHANNEL, LONGEST_ALLOCATE_DAYS, 
+      MUST_ALLOCATE_DATE, FIN_CLR_DATE,  
+      ENABLE_FLAG, CLR_POINT, CLR_CYCLE, 
+      CLR_METHOD, CREATOR, 
+      <if test="clrAccount != null and clrAccount != ''" >
+    	CLR_ACCOUNT,
+   	  </if>
+      AUDIT_STATUS,CREATE_TIME, LAST_UPD_TIME, 
+      CLR_TYPE, EFFECT_AMT, LEAST_ALLOCATE_AMT,IS_ADD_PREAUTH_JS,CLR_BGN_DATE,CLR_RANGE,MANDATORY_CLR_DATE
+      )
+    values (#{id, jdbcType=VARCHAR}, #{orgType, jdbcType=VARCHAR}, #{transCode, jdbcType=VARCHAR},
+      #{orgCode, jdbcType=VARCHAR}, #{connChannel, jdbcType=VARCHAR}, #{longestAllocateDays, jdbcType=VARCHAR},
+      STR_TO_DATE(#{mustAllocateDate,jdbcType=VARCHAR},'%Y%m%d'), STR_TO_DATE(#{finClrDate,jdbcType=VARCHAR},'%Y%m%d'),
+      #{enableFlag, jdbcType=VARCHAR}, #{clrPoint}, #{clrCycle,jdbcType=VARCHAR},
+      #{clrMethod}, #{creator},  
+      <if test="clrAccount != null and clrAccount != ''" >
+    	#{clrAccount},
+   	  </if>
+      #{auditStatus},  
+      now(), now(),
+      #{clrType}, #{effectAmt,jdbcType=VARCHAR}, #{leastAllocateAmt},#{isAddPreauthJs,jdbcType=VARCHAR},
+      STR_TO_DATE(#{clrBgnDate,jdbcType=VARCHAR},'%Y%m%d'),#{clrRange},#{mandatoryClrDate,jdbcType=VARCHAR}
+      )
+  </insert>
+
+    <select id="queryPage" resultMap="BaseResultMap" parameterType="com.oriental.manage.pojo.merchant.ClearCfg">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT <include refid="Base_Column_List"/>
+          FROM T_CLEAR_CFG CC
+         WHERE 1 = 1 <include refid="queryCondition"/>
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+
+
+
+  <update id="updateClearCfg" parameterType="com.oriental.manage.pojo.merchant.ClearCfg" >
+    update T_CLEAR_CFG
+    set  
+      ORG_TYPE = #{orgType},
+      TRANS_CODE = #{transCode},
+      ORG_CODE = #{orgCode},
+      CONN_CHANNEL = #{connChannel},
+      LONGEST_ALLOCATE_DAYS = #{longestAllocateDays},
+      MUST_ALLOCATE_DATE = STR_TO_DATE(#{mustAllocateDate},'%Y%m%d'),
+      FIN_CLR_DATE = STR_TO_DATE(#{finClrDate},'%Y%m%d'),
+<!--       RE_FEE_FLAG = #{reFeeFlag}, -->
+      ENABLE_FLAG = #{enableFlag},
+      CLR_POINT = #{clrPoint},
+      CLR_CYCLE = #{clrCycle},
+      CLR_METHOD = #{clrMethod},
+      MODIFIER = #{modifier},
+      AUDIT_STATUS = #{auditStatus},
+      <if test="clrAccount != null and clrAccount != ''">
+	      CLR_ACCOUNT = #{clrAccount},
+      </if>
+      LAST_UPD_TIME = now(),
+      CLR_TYPE = #{clrType},
+      EFFECT_AMT = #{effectAmt},
+      CLR_RANGE = #{clrRange},
+		
+	  IS_ADD_PREAUTH_JS = #{isAddPreauthJs},
+	  CLR_BGN_DATE = STR_TO_DATE(#{clrBgnDate},'%Y%m%d'),
+      MANDATORY_CLR_DATE = #{mandatoryClrDate},
+      LEAST_ALLOCATE_AMT = #{leastAllocateAmt}
+    where ID = #{id}
+  </update>
+
+
+    <delete id="deleteOldCfg" parameterType="com.oriental.manage.pojo.merchant.ClearCfg">
+        DELETE FROM T_CLEAR_CFG WHERE  ID = #{id}
+    </delete>
+
+
+</mapper>

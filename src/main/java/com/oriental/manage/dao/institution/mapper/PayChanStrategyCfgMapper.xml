@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.institution.PayChanStrategyCfgMapper">
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.institution.PayChanStrategyCfg"
+               extends="BaseMapper.BaseResultMap">
+        <id column="ID" property="id" jdbcType="DECIMAL"/>
+        <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR"/>
+        <result column="BANK_CODE" property="bankCode" jdbcType="DECIMAL"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="STGY_PRIORITY" property="stgyPriority" jdbcType="DECIMAL"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP"/>
+        <result column="TRANS_CODE" property="transCode" jdbcType="VARCHAR"/>
+        <result column="CONN_CHANNEL" property="connChannel" jdbcType="VARCHAR"/>
+        <result column="BANK_NAME" property="bankInfo.bankName" jdbcType="VARCHAR"/>
+        <result column="BANKCODE" property="bankInfo.bankCode" jdbcType="VARCHAR"/>
+        <result column="BANK_CARD_TYPE" property="bankInfo.bankCardType" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		ID, ORG_CODE, TRANS_CODE, CONN_CHANNEL, BANK_CODE, STATUS, STGY_PRIORITY,
+		CREATE_TIME, LAST_UPD_TIME
+	</sql>
+    <sql id="queryCondition">
+        <if test="bankCode != null and bankCode != ''">
+            AND T.BANK_CODE = #{bankCode}
+        </if>
+        <if test="transCode != null and transCode !=''">
+            AND T.TRANS_CODE = #{transCode}
+        </if>
+        <if test="connChannel != null and connChannel !=''">
+            AND T.CONN_CHANNEL = #{connChannel}
+        </if>
+        <if test="orgCode != null and orgCode !=''">
+            AND T.ORG_CODE = #{orgCode}
+        </if>
+    </sql>
+
+    <insert id="insertPayChan" parameterType="com.oriental.manage.pojo.institution.PayChanStrategyCfg">
+        INSERT INTO T_PAY_CHAN_STRATEGY_CFG(
+            ID, ORG_CODE,
+            BANK_CODE, STGY_PRIORITY, CREATE_TIME, LAST_UPD_TIME,
+            TRANS_CODE, CONN_CHANNEL, STATUS
+        ) VALUES (
+            #{id}, #{orgCode},
+            #{bankCode}, #{stgyPriority}, now(), now(),
+            #{transCode}, #{connChannel}, #{status}
+        )
+    </insert>
+
+    <delete id="deletePayChanByBankCode">
+        DELETE FROM T_PAY_CHAN_STRATEGY_CFG
+         WHERE BANK_CODE = #{bankCode}
+           AND TRANS_CODE = #{transCode}
+           AND CONN_CHANNEL = #{connChannel}
+    </delete>
+
+    <update id="updatePayChan" parameterType="com.oriental.manage.pojo.institution.PayChanStrategyCfg">
+        UPDATE T_PAY_CHAN_STRATEGY_CFG
+           SET ORG_CODE = #{orgCode},
+               BANK_CODE = #{bankCode},
+               STGY_PRIORITY = #{stgyPriority},
+               LAST_UPD_TIME = now(),
+               TRANS_CODE = #{transCode},
+               CONN_CHANNEL = #{connChannel},
+               STATUS = #{status}
+         WHERE ID = #{id}
+    </update>
+
+
+    <select id="queryPage" resultMap="BaseResultMap"
+            parameterType="com.oriental.manage.pojo.institution.PayChanStrategyCfg">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT T.ID, T.ORG_CODE, T.TRANS_CODE,T.CONN_CHANNEL,
+        T.BANK_CODE, T.STATUS, T.STGY_PRIORITY,
+        T.CREATE_TIME, T.LAST_UPD_TIME,
+        BI.BANK_NAME, BI.BANK_CODE AS BANKCODE, BI.BANK_CARD_TYPE
+        FROM T_PAY_CHAN_STRATEGY_CFG T
+        INNER JOIN T_BANK_INFO BI ON BI.BANK_CODE = T.BANK_CODE
+        WHERE 1 = 1
+        <include refid="queryCondition"/>
+        ORDER BY T.BANK_CODE, T.TRANS_CODE, T.CONN_CHANNEL, T.STGY_PRIORITY
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.merchant.itconfig.MerchantClearPointMapper">
+
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.merchant.itconfig.ClearPoint" extends="BaseMapper.BaseResultMap">
+        <id     column="ID"                     property="id"                jdbcType="VARCHAR"/>
+        <result column="ITEM_KEY"               property="itemKey"           jdbcType="VARCHAR"/>
+        <result column="ITEM_DESC"              property="itemDesc"          jdbcType="VARCHAR"/>
+        <result column="ITEM_VALUE"             property="itemValue"         jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID,ITEM_KEY,ITEM_DESC,ITEM_VALUE
+    </sql>
+
+
+    <sql id="queryCondition">
+        <if test="id != null and id != ''">
+            AND T.ID = #{id}
+        </if>
+        <if test="itemKey != null and itemKey != ''">
+            AND T.ITEM_KEY = #{itemKey}
+        </if>
+        <if test="itemValue != null and itemValue != ''">
+            AND T.ITEM_VALUE = #{itemValue}
+        </if>
+    </sql>
+
+    <select id="queryClearPoint" resultMap="BaseResultMap">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT <include refid="Base_Column_List" /> FROM T_CLR_POINT_CFG T WHERE 1=1
+        <include refid="queryCondition"/>
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <insert id="addClearPoint">
+      INSERT INTO T_CLR_POINT_CFG (<include refid="Base_Column_List"/> ) VALUES
+        (#{id},#{itemKey},#{itemDesc},#{itemValue})
+    </insert>
+
+    <update id="updateClearPoint">
+        UPDATE T_CLR_POINT_CFG T
+        <set>
+            <if test="itemKey != null and itemKey != ''">
+                T.ITEM_KEY = #{itemKey},
+            </if>
+            <if test="itemDesc != null and itemDesc != ''">
+                T.ITEM_DESC = #{itemDesc},
+            </if>
+            <if test="itemValue != null and itemValue != ''">
+                T.ITEM_VALUE = #{itemValue},
+            </if>
+            T.LAST_UPD_TIME = CURRENT_TIMESTAMP,
+        </set>
+        WHERE T.ID = #{id}
+    </update>
+
+    <delete id="deleteClearPoint">
+        DELETE FROM T_CLR_POINT_CFG WHERE ID = #{id}
+    </delete>
+
+    <select id="check" resultType="com.oriental.manage.pojo.merchant.itconfig.ClearPoint">
+        SELECT <include refid="Base_Column_List" />
+        FROM T_CLR_POINT_CFG T WHERE 1=1
+        <if test="id != null and id != ''">
+            AND T.ID = #{id}
+        </if>
+
+    </select>
+</mapper>

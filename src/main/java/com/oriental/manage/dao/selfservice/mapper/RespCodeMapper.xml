@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.selfservice.RespCodeMapper" >
+  <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.selfservice.RespCode" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="RESP_CODE" property="respCode" jdbcType="VARCHAR" />
+    <result column="RESP_DESC" property="respDesc" jdbcType="VARCHAR" />
+    <result column="ORG_TYPE" property="orgType" jdbcType="VARCHAR" />
+    <result column="ORG_CODE" property="orgCode" jdbcType="DECIMAL" />
+    <result column="ORG_RESP_CODE" property="orgRespCode" jdbcType="VARCHAR" />
+    <result column="ORG_RESP_DESC" property="orgRespDesc" jdbcType="VARCHAR" />
+    <result column="OLD_BANK_ERR_CODE" property="oldBankErrCode" jdbcType="VARCHAR" />
+    <result column="OLD_BANK_ERR_DESC" property="oldBankErrDesc" jdbcType="VARCHAR" />
+    
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+
+  <!-- beasecolu -->
+  <sql id="Base_Column_List">
+		ID,RESP_CODE, RESP_DESC, ORG_TYPE, ORG_CODE,ORG_RESP_CODE,ORG_RESP_DESC,
+		CREATE_TIME, LAST_UPD_TIME,OLD_BANK_ERR_CODE,OLD_BANK_ERR_DESC
+  </sql>
+	
+
+	<select id="queryAllRespCode" resultMap="BaseResultMap">
+		<include refid="BaseMapper.pageHead"/>
+		select
+		<include refid="Base_Column_List" />
+		from T_RESP_CODE where 1=1
+		<if test="respCode != null and respCode != ''">
+			and RESP_CODE = #{respCode}
+		</if>
+		<if test="orgCode != null and orgCode != ''">
+			and ORG_CODE = #{orgCode}
+		</if>
+		<if test="orgType != null and orgType != ''">
+			and ORG_TYPE = #{orgType}
+		</if>
+		<if test="orgRespCode != null and orgRespCode != ''">
+			and ORG_RESP_CODE = #{orgRespCode}
+		</if>
+		<if test="oldBankErrCode != null and oldBankErrCode != ''">
+			and OLD_BANK_ERR_CODE = #{oldBankErrCode}
+		</if>
+		<include refid="BaseMapper.pageFoot"/>
+	</select>
+  
+  <insert id="insertModel" parameterType="com.oriental.manage.pojo.selfservice.RespCode">
+  	insert into T_RESP_CODE 
+  	(ID,RESP_CODE, RESP_DESC, ORG_TYPE, ORG_CODE,ORG_RESP_CODE,ORG_RESP_DESC,
+		CREATE_TIME, LAST_UPD_TIME,OLD_BANK_ERR_CODE,OLD_BANK_ERR_DESC)
+  	values
+  	(#{id},#{respCode}, #{respDesc}, #{orgType}, #{orgCode}, #{orgRespCode}, #{orgRespDesc},
+  	 now(), now(),#{oldBankErrCode},#{oldBankErrDesc})
+  </insert>
+  
+  <update id="update" parameterType="com.oriental.manage.pojo.selfservice.RespCode">
+  		update T_RESP_CODE
+  		set
+  		RESP_DESC = #{respDesc}, 
+  		ORG_TYPE = #{orgType},
+  		ORG_CODE = #{orgCode},
+  		ORG_RESP_CODE = #{orgRespCode},
+  		ORG_RESP_DESC = #{orgRespDesc},
+  		OLD_BANK_ERR_CODE = #{oldBankErrCode},
+  		OLD_BANK_ERR_DESC = #{oldBankErrDesc},
+		LAST_UPD_TIME = now()
+		where id = #{id}
+  </update>
+	<delete id="delete" parameterType="com.oriental.manage.pojo.selfservice.RespCode">
+		delete from T_RESP_CODE where id=#{id}
+
+	</delete>
+  <!--<delete id="delete" parameterType="List">-->
+  	<!--delete from T_RESP_CODE where id in-->
+  	<!--<foreach collection="list" item="respCode" index="index" open="(" separator="," close=")">-->
+  		<!--#{respCode}-->
+  	<!--</foreach>-->
+  <!--</delete>-->
+</mapper>

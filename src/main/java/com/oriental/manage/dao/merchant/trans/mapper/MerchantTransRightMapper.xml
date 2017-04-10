@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oriental.manage.dao.merchant.trans.MerchantTransRightMapper">
+
+    <resultMap id="BaseResultMap" type="com.oriental.manage.pojo.institution.TransRight"
+               extends="BaseMapper.BaseResultMap">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="CONN_CHANNEL" property="connChannel" jdbcType="VARCHAR"/>
+        <result column="TRANS_CODE" property="transCode" jdbcType="VARCHAR"/>
+        <result column="COMPANY_TYPE" property="companyType" jdbcType="VARCHAR"/>
+        <result column="COMPANY_CODE" property="companyCode" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR"/>
+        <result column="CLOSE_DATE" property="closeDate" jdbcType="VARCHAR"/>
+        <result column="RIGHT_STATUS" property="rightStatus" jdbcType="VARCHAR"/>
+        <result column="REVERSE_FLAG" property="reverseFlag" jdbcType="VARCHAR"/>
+        <result column="REFUND_FLAG" property="refundFlag" jdbcType="VARCHAR"/>
+        <result column="SPLIT_RIGHT_FLAG" property="splitRightFlag" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR"/>
+        <result column="LAST_UPD_TIME" property="lastUpdTime" jdbcType="VARCHAR"/>
+        <result column="TEMPLATE_NO" property="templateNo" jdbcType="VARCHAR"/>
+        <result column="CREATOR" property="creator" jdbcType="VARCHAR"/>
+        <result column="MODIFY_USER" property="modifyUser" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID,CONN_CHANNEL,TRANS_CODE,COMPANY_TYPE,COMPANY_CODE,ACQ_ORG_CODE,CREATE_DATE,CLOSE_DATE,RIGHT_STATUS,
+        REVERSE_FLAG,REFUND_FLAG,SPLIT_RIGHT_FLAG,CREATE_TIME,LAST_UPD_TIME,TEMPLATE_NO,CREATOR,MODIFY_USER
+    </sql>
+
+
+    <sql id="queryCondition">
+        <if test="companyCode != null and companyCode != ''">
+            AND T.COMPANY_CODE = #{companyCode}
+        </if>
+        <if test="splitRightFlag != null and splitRightFlag != '' ">
+            AND T.SPLIT_RIGHT_FLAG = #{splitRightFlag}
+        </if>
+        <if test="reverseFlag != null and reverseFlag != '' ">
+            AND T.REVERSE_FLAG = #{reverseFlag}
+        </if>
+        AND T.COMPANY_TYPE = #{companyType}
+    </sql>
+
+    <select id="searchMerchantTransRight" resultMap="BaseResultMap">
+        <include refid="BaseMapper.pageHead"/>
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_TRANS_RIGHT T WHERE 1=1
+        <include refid="queryCondition"/>
+        order by T.COMPANY_CODE
+        <include refid="BaseMapper.pageFoot"/>
+    </select>
+
+    <delete id="deleteTransRightByCompanyCode">
+        delete from T_TRANS_RIGHT
+        where COMPANY_CODE = #{companyCode}
+    </delete>
+
+    <insert id="insertTransRightList" parameterType="map">
+        insert into T_TRANS_RIGHT
+        (ID, CONN_CHANNEL, TRANS_CODE,
+        COMPANY_TYPE, COMPANY_CODE,
+        CREATE_DATE,REVERSE_FLAG,
+            ACQ_ORG_CODE,
+            TEMPLATE_NO,
+            CREATOR,
+            MODIFY_USER,
+        CLOSE_DATE, RIGHT_STATUS, REFUND_FLAG,
+        SPLIT_RIGHT_FLAG,
+        CREATE_TIME,
+        LAST_UPD_TIME)
+        values
+        <foreach collection="list" index="index" separator="," item="item">
+            (#{item.id}, #{item.connChannel},
+            #{item.transCode},
+            #{item.companyType}, #{item.companyCode}, now(),#{item.reverseFlag},
+                #{item.acqOrgCode},
+                #{item.templateNo},
+                #{item.creator},
+                #{item.modifyUser},
+            now(), #{item.rightStatus},
+            #{item.refundFlag},#{item.splitRightFlag},
+            now(), now())
+        </foreach>
+
+    </insert>
+
+    <insert id="insertTransRight" parameterType="com.oriental.manage.pojo.institution.TransRight">
+        insert into T_TRANS_RIGHT
+        (ID, CONN_CHANNEL, TRANS_CODE,
+        COMPANY_TYPE, COMPANY_CODE,
+        CREATE_DATE,REVERSE_FLAG,
+        <if test="acqOrgCode != null and acqOrgCode != ''">
+            ACQ_ORG_CODE,
+        </if>
+        <if test="templateNo != null and templateNo != ''">
+            TEMPLATE_NO,
+        </if>
+        <if test="creator != null and creator != ''">
+            CREATOR,
+        </if>
+        <if test="modifyUser != null and modifyUser != ''">
+            MODIFY_USER,
+        </if>
+        CLOSE_DATE, RIGHT_STATUS, REFUND_FLAG,
+        SPLIT_RIGHT_FLAG,
+        CREATE_TIME,
+        LAST_UPD_TIME)
+        values (#{id}, #{connChannel},
+        #{transCode},
+        #{companyType}, #{companyCode}, now(),#{reverseFlag},
+        <if test="acqOrgCode != null and acqOrgCode != ''">
+            #{acqOrgCode},
+        </if>
+        <if test="templateNo != null and templateNo != ''">
+            #{templateNo},
+        </if>
+        <if test="creator != null and creator != ''">
+            #{creator},
+        </if>
+        <if test="modifyUser != null and modifyUser != ''">
+            #{modifyUser},
+        </if>
+        now(), #{rightStatus},
+        #{refundFlag},#{splitRightFlag},
+        now(), now())
+    </insert>
+
+    <delete id="deleteTransRight" parameterType="com.oriental.manage.pojo.institution.TransRight">
+        DELETE FROM T_TRANS_RIGHT WHERE COMPANY_CODE = #{companyCode}
+    </delete>
+
+</mapper>
